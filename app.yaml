@@ -1,0 +1,25 @@
+application: snptzapp
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /static
+  static_dir: static
+
+- url: /_ah/mail/.+
+  script: handle_email.py
+
+- url: /scheduledtask
+  script: task.py
+  login: admin
+
+- url: /main
+  script: logged_in.py
+  login: required
+
+- url: /.*
+  script: index.py
+
+inbound_services:
+- mail

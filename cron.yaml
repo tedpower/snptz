@@ -1,0 +1,5 @@
+cron:
+- description: Daily email
+  url: /scheduledtask
+  schedule: every day 9:00
+  timezone: America/New_York

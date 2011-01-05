@@ -1,0 +1,84 @@
+{% extends "_base.htm" %}
+{% block bodycontent %}
+
+<div id="header">
+	<div id="nav">
+		<div id="presence">
+			{% ifnotequal logoutURL None %}
+				<a href="{{ logoutURL }}">Logout</a>
+			{% endifnotequal %}
+			<a href="#">Info</a>
+			<splan id="user">{{ userNickname }}</splan>
+		</div>
+		<img src="./static/logo.png" width="88" height="50" alt="SNPTZ" id="logo">
+	</div>
+</div>
+
+<div id="bg"></div>
+
+<div id="content">
+	
+<div id="thisWeek">
+	<div class="plans">
+		<ul>
+			{% for message in message_list %}
+				<li>{{ message.sender }}</li>
+				<li>{{ message.created|date:"D d M Y H i A O" }}</li>
+				<li>{{ message.created_est|date:"D d M Y H i A O" }}</li>
+				<li>{{ message.body }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
+	
+	<div id="history">
+		<div class="weekChunk clearfix">
+			<div class="plans">
+				<div class="timeStamp">
+					Week of <em>Dec 20 2010</em>
+				</div>
+				<ul>
+					<li>one</li>
+					<li>two</li>
+					<li>three</li>
+				</ul>
+			</div>
+			<div class="review">
+				<div class="timeStamp">
+					How'd it go?
+				</div>
+				<ul>
+					<li>one</li>
+					<li>two</li>
+					<li>three</li>
+				</ul>
+			</div>
+		</div>
+			<div class="weekChunk clearfix">
+				<div class="plans">
+					<div class="timeStamp">
+						Week of <em>Dec 20, 2010</em>
+					</div>
+					<ul>
+						<li>one</li>
+						<li>two</li>
+						<li>three</li>
+					</ul>
+				</div>
+				<div class="review">
+					<div class="timeStamp">
+						How'd it go?
+					</div>
+					<ul>
+						<li>one</li>
+						<li>two</li>
+						<li>three</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+{% endblock %}
