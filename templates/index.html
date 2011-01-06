@@ -1,0 +1,10 @@
+{% extends "_base.htm" %}
+{% block bodycontent %}
+
+<h1>Check it out!</h1>
+	{% ifnotequal loginURL None %}
+		<p>
+			<a href="{{ loginURL }}">Sign in or sign up</a>
+		</p>
+	{% endifnotequal %}
+{% endblock %}

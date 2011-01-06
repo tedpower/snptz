@@ -1,0 +1,130 @@
+body {
+	font-family: "Droid Sans", Helvetica, Arial, sans-serif;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	font-size: 12px;
+}
+
+#header {
+	height: 51px;
+	color: #fff;
+	-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .4);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: #000 url(navbar.png) repeat-x;
+	z-index: 3;
+}
+
+a {
+	text-decoration: none;
+}
+
+#nav {
+	width: 760px;
+	text-align: left;
+	margin: 0 auto;
+}
+
+#bg {
+	position: fixed;
+	top: 51px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #F2F2F2 url(dots.png) repeat;
+	z-index: 0;
+}
+
+#content {
+	background-color: white;
+	z-index: 2;
+	position: relative;
+	width: 760px;
+	margin: 51px auto;
+	text-align: left;
+}
+
+#logo {
+	margin: 0 0 0 24px;
+}
+
+#thisWeek {
+	padding: 20px 24px 24px 24px;
+}
+
+#thisWeek, .weekChunk {
+	border-bottom: 1px solid #D9D9D9;
+	display: block;
+}
+
+#thisWeek .plans{
+	font-size: 24px;
+}
+
+.weekChunk .plans, .weekChunk .review {
+	padding: 16px 0 20px 24px;
+	width: 344px;
+	float: left;
+}
+
+.weekChunk ul {
+	font-size: 14px;
+}
+#presence {
+	float: right;
+	text-shadow: 0 -1px 0 #000;
+	line-height: 51px;
+}
+
+#user {
+	color: #919191;
+}
+
+#presence a {
+	color: #CCC;
+}
+
+#presence #user, #presence a {
+	padding: 0 12px;
+	border-right: 1px solid rgba(0, 0, 0, .7);
+	-webkit-box-shadow: 1px 0 rgba(255, 255, 255, .1);
+	float: right;
+}
+
+#presence a:hover {
+	color: #FFF;
+}
+
+#presence a:active {
+	background-color: black;
+	background-image: none;
+}
+
+.timeStamp {
+	text-transform: uppercase;
+	padding: 0 0 15px 0;
+	color: ;
+}
+
+ul {
+	margin: 0;
+}
+
+em {
+	font-weight: bold;
+	font-style: normal;
+}
+
+/* Clearfix */
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
