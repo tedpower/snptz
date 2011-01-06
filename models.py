@@ -4,6 +4,7 @@ from google.appengine.ext import db
 import logging
 import datetime
 
+# TODO move to separate file?
 # subclasses of datetime.tzinfo to define timezones we want to use
 # and how they relate to UTC
 class UtcTzinfo(datetime.tzinfo):
@@ -36,7 +37,7 @@ class Message(db.Model):
   sender = db.StringProperty()
 #  userRef = db.ReferenceProperty()
   body = db.TextProperty()
-  created = db.DateTimeProperty(auto_now=True)
+  created = db.DateTimeProperty(auto_now_add=True)
   
   # the property decorator allows a method to be called as if it were 
   # a read-only attribute of Message
@@ -67,3 +68,16 @@ class Message(db.Model):
 # User model
 class User(db.Model):
   googUser = db.StringProperty()
+
+
+# TODO break apart incoming messages into tasklists of tasks?
+'''
+class TaskList(db.Model):
+  user = db.ReferenceProperty(User)
+  created = db.DateTimeProperty(auto_now_add=True)
+
+
+class Task(db.Model):
+  task_list = db.ReferenceProperty(TaskList)
+  completed = db.BooleanProperty()
+'''
