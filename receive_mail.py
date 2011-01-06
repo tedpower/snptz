@@ -37,7 +37,6 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
     
     # find the user
     
-    
     newmessage = models.Message(sender=cleanedEmail[0], thisWeek=thisWeek, lastWeek=lastWeek)
     newmessage.put()
 
