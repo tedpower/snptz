@@ -2,39 +2,41 @@ import logging
 import datetime
 from google.appengine.api import mail
 from google.appengine.api import users
+import models
 
 logging.info('Scheduled task ran.')
 
 message_body = '''
 
-Hi Ted,
+Hi USERRRRR,
 
------------------------------------------
-WHAT'RE YOU GOING TO DO THIS WEEK?
------------------------------------------
-
-
-
-
------------------------------------------
+-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
 HOW DID LAST WEEK GO?
------------------------------------------
+Edit your stated goals from last week:
+~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+
+- A
+- B
+- D
+
+--~~--~~--~~--~~--~~--~~--~~--~~--~~--~
+WHAT'RE YOU GOING TO DO THIS WEEK?
+~~--~~--~~--~~--~~--~~--~~--~~--~~--~--
 
 
-
-
------------------------------------------
-
-Your last snippet:
-- 
 
 '''
 
-message = mail.EmailMessage(
-  sender='SNPTZ <ted@snptz.com>',
-  to='tedpower@gmail.com',
-  reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
-  subject='SNPTZ',
-  body=message_body)
+que = db.Query(models.User)
+user_list = que.fetch(limit=100)
 
-message.send()
+for user in user_list:
+
+  message = mail.EmailMessage(
+    sender='SNPTZ <ted@snptz.com>',
+    to=user.googUser,
+    reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
+    subject='SNPTZ',
+    body=message_body)
+
+  message.send()
