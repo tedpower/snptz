@@ -4,17 +4,6 @@ from google.appengine.ext import db
 import logging
 import datetime
 
-# A Model for a message
-class Message(db.Model):
-  sender = db.EmailProperty()
-  thisWeek = db.StringListProperty()
-  lastWeek = db.StringListProperty()
-  created = db.DateTimeProperty(auto_now=True)
-
-# User model
-class User(db.Model):
-  googUser = db.EmailProperty()
-
 # TODO move to separate file?
 # subclasses of datetime.tzinfo to define timezones we want to use
 # and how they relate to UTC
@@ -47,6 +36,8 @@ TZINFOS = {
 class Message(db.Model):
   sender = db.StringProperty()
 #  userRef = db.ReferenceProperty()
+  thisWeek = db.StringListProperty()
+  lastWeek = db.StringListProperty()
   body = db.TextProperty()
   created = db.DateTimeProperty(auto_now_add=True)
   
@@ -81,14 +72,9 @@ class User(db.Model):
   googUser = db.StringProperty()
 
 
-# TODO break apart incoming messages into tasklists of tasks?
-'''
-class TaskList(db.Model):
+class TaskWeek(db.Model):
   user = db.ReferenceProperty(User)
   created = db.DateTimeProperty(auto_now_add=True)
+  this_week = db.StringListProperty()
+  last_week = db.StringListProperty()
 
-
-class Task(db.Model):
-  task_list = db.ReferenceProperty(TaskList)
-  completed = db.BooleanProperty()
-'''
