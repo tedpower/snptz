@@ -24,7 +24,6 @@ WHAT'RE YOU GOING TO DO THIS WEEK?
 ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
 
-
 '''
 
 que = db.Query(models.User)

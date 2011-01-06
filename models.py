@@ -72,14 +72,9 @@ class User(db.Model):
   googUser = db.StringProperty()
 
 
-# TODO break apart incoming messages into tasklists of tasks?
-'''
-class TaskList(db.Model):
+class TaskWeek(db.Model):
   user = db.ReferenceProperty(User)
   created = db.DateTimeProperty(auto_now_add=True)
+  this_week = db.StringListProperty()
+  last_week = db.StringListProperty()
 
-
-class Task(db.Model):
-  task_list = db.ReferenceProperty(TaskList)
-  completed = db.BooleanProperty()
-'''
