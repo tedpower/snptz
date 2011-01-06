@@ -22,7 +22,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
     logging.info('the user is %s' % (cleanedEmail[0]))
     
     #find the good bits of the email
-    breakingString = "-----------------------------------------"
+    breakingString = "~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-"
     start = decoded_html.find(breakingString)
     start = decoded_html.find(breakingString, start + 1)
     end = decoded_html.find(breakingString, start + 1)
@@ -36,7 +36,6 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
     lastWeek = cleanLines(lastWeek)
     
     # find the user
-    
     
     newmessage = models.Message(sender=cleanedEmail[0], thisWeek=thisWeek, lastWeek=lastWeek)
     newmessage.put()
