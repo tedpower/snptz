@@ -45,7 +45,6 @@ def cleanLines(weekList):
   tempList = []
   for i in weekList:
     if (len(i) != 0) and (i.isspace() == False):
-      # if(i[])
       tempList.append(i)
   return tempList
 

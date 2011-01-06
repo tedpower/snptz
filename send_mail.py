@@ -15,20 +15,18 @@ WHAT'RE YOU GOING TO DO THIS WEEK?
 
 
 
+
 -----------------------------------------
 HOW DID LAST WEEK GO?
 -----------------------------------------
 
 
 
+
 -----------------------------------------
 
 Your last snippet:
-- Add location experiments to tedpower.org
-- Aeroflot letter
-- 4sq design exercise
-- call the people who never sent me that hair stuff
-- Chat with Noah
+- 
 
 '''
 
