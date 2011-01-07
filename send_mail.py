@@ -10,20 +10,27 @@ import models
 
 logging.info('Scheduled task ran.')
 
-message_template = '''
+plaintext_template = '''
 
 Hi %(username),
 
-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+-----------------------------------------
 HOW DID LAST WEEK GO?
-Edit your stated goals from last week:
-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+Edit your goals from last week:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 %(tasks)
---~~--~~--~~--~~--~~--~~--~~--~~--~~--~
+-----------------------------------------
 WHAT'RE YOU GOING TO DO THIS WEEK?
-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+'''
+
+html_template = '''
+
+<img src="http://www.snptz.com/static/logoEmail.png" width="174" height="50" alt="SNPTZ">
+<p>Hi %(username)!</p>
 
 '''
 
@@ -39,13 +46,15 @@ for user in user_list:
     # join all the tasks with linebreaks
     tasks_as_lines = "\n".join(last_tasks)
     # personalize the message_template
-    personalized_message = message_template % {"username": user.first_name, "tasks": tasks_as_lines}
+    personalized_plaintext_message = plaintext_template % {"username": user.first_name, "tasks": tasks_as_lines}
+    personalized_html_message = html_template % {"username": user.first_name, "tasks": tasks_as_lines}
 
     message = mail.EmailMessage(
       sender='SNPTZ <ted@snptz.com>',
       to=user.email,
       reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
       subject='SNPTZ',
-      body=personalized_message)
+      body=personalized_plaintext_message,
+      htmo=personalized_html_message)
 
     message.send()

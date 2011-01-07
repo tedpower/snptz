@@ -19,14 +19,14 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
         logging.info('Received email message from %s: %s' % (message.sender,
                                                                  decoded_html))
 
-        #clean up the email address
+        # clean up the email address
         pattern = re.compile(r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}')
         cleanedEmail = pattern.findall(message.sender)
         from_email = cleanedEmail[0]
         logging.info('the user is %s' % (cleanedEmail[0]))
 
-        #find the good bits of the email
-        breakingString = "~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-"
+        # find the good bits of the email
+        breaking_string = "~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-"
         start = decoded_html.find(breakingString)
         start = decoded_html.find(breakingString, start + 1)
         end = decoded_html.find(breakingString, start + 1)

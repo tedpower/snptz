@@ -66,7 +66,6 @@ def year_and_week_num_of(dt):
 
 # User model
 class User(db.Model):
-    # TODO rename email to email?
     email = db.StringProperty()
     first_name = db.StringProperty()
 
