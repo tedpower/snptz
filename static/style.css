@@ -18,7 +18,7 @@ body {
 	z-index: 3;
 }
 
-a {
+#loggedIn a {
 	text-decoration: none;
 }
 
@@ -116,6 +116,16 @@ ul {
 em {
 	font-weight: bold;
 	font-style: normal;
+}
+
+/* Homepage */
+
+#loggedOut #logoBig {
+	padding: 80px 0;
+}
+
+#loggedOut a {
+	font-size: 24px;
 }
 
 /* Clearfix */
