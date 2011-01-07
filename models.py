@@ -69,7 +69,6 @@ class User(db.Model):
     # TODO rename googUser to email?
     googUser = db.StringProperty()
     first_name = db.StringProperty()
-    last_name = db.StringProperty()
 
     @classmethod
     def find_by_email(klass, str):
