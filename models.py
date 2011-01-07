@@ -61,8 +61,7 @@ class Message(db.Model):
 
 # User model
 class User(db.Model):
-    # TODO rename googUser to email?
-    googUser = db.StringProperty()
+    email = db.StringProperty()
     first_name = db.StringProperty()
     last_name = db.StringProperty()
 
@@ -71,7 +70,7 @@ class User(db.Model):
         # start with all users
         user_query = klass.all()
         # filter users by email equalling str
-        user_query.filter("googUser = ", str)
+        user_query.filter("email = ", str)
         # fetch and return one match (or None)
         matches = user_query.fetch(1)
         if len(matches) != 0:

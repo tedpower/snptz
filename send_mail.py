@@ -40,7 +40,7 @@ for user in user_list:
 
     message = mail.EmailMessage(
       sender='SNPTZ <ted@snptz.com>',
-      to=user.googUser,
+      to=user.email,
       reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
       subject='SNPTZ',
       body=personalized_message)
