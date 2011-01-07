@@ -19,6 +19,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
     #clean up the email address
     pattern = re.compile(r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}')
     cleanedEmail = pattern.findall(message.sender)
+    from_email = cleanedEmail[0]
     logging.info('the user is %s' % (cleanedEmail[0]))
     
     #find the good bits of the email
@@ -34,10 +35,37 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
     lastWeek = decoded_html[start + len(breakingString):end]
     lastWeek = lastWeek.splitlines()
     lastWeek = cleanLines(lastWeek)
+
+    # create a Message object to store the email, etc
+    # don't put yet because we may add a user reference
+    newmessage = models.Message(sender=cleanedEmail[0], body=decoded_html)
     
     # find the user
-    
-    newmessage = models.Message(sender=cleanedEmail[0], thisWeek=thisWeek, lastWeek=lastWeek)
+    user = models.User.find_by_email(from_email)
+    if user is not None:
+      newmessage.userRef = user
+
+      # deal with last_past_taskweek before creating a new one!
+      # (otherwise user.last_past_taskweek will return the newly
+      # created taskweek created by user.this_weeks_taskweek)
+      last_taskweek = user.last_past_taskweek
+      if last_taskweek is not None:
+        last_taskweek.realistic = lastWeek
+        last_taskweek.put()
+      # TODO do something if there are no past taskweeks?
+
+      # get or create a new taskweek for this week
+      # ... meaning we will overwrite the tasks if this is the
+      # second email from this user this week
+      new_taskweek = user.this_weeks_taskweek
+      new_taskweek.optimistic = thisWeek
+      new_taskweek.put()
+    else:
+      # TODO user is not known -- tell them to sign up
+      pass
+
+    # save the incoming message, which has had a user reference
+    # added (if the user is known)
     newmessage.put()
 
 def cleanLines(weekList):

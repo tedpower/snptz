@@ -35,9 +35,7 @@ TZINFOS = {
 # A Model for a message
 class Message(db.Model):
   sender = db.StringProperty()
-#  userRef = db.ReferenceProperty()
-  thisWeek = db.StringListProperty()
-  lastWeek = db.StringListProperty()
+  userRef = db.ReferenceProperty()
   body = db.TextProperty()
   created = db.DateTimeProperty(auto_now_add=True)
   
@@ -69,12 +67,71 @@ class Message(db.Model):
 
 # User model
 class User(db.Model):
+  # TODO rename googUser to email?
   googUser = db.StringProperty()
+  first_name = db.StringProperty()
+  last_name = db.StringProperty()
+
+  @classmethod
+  def find_by_email(klass, str):
+    # start with all users
+    user_query = klass.all()
+    # filter users by email equalling str
+    user_query.filter("googUser = ", str)
+    # fetch and return one match (or None)
+    return user_query.fetch(1)[0]
+
+  @property
+  def this_weeks_taskweek(self):
+    # when are we?
+    now_now = datetime.datetime.now()
+    # get year, week number (1-52 or 53), and day number (1-7) for today
+    year, week_num, day_num = now_now.date().isocalendar()
+    # get all of this user's taskweeks
+    taskweeks = self.taskweek_set
+    # limit these taskweeks to those from this year & week
+    taskweek = [tw for tw in taskweeks if tw.year_and_week_num == (year, week_num)]
+    if len(taskweek) == 1:
+      # if there is exactly one, return it
+      return taskweek[0]
+    if len(taskweek) == 0:
+      # if there are none, create one
+      created_tw = TaskWeek(user=self)
+      created_tw.put()
+      return created_tw
+    else:
+      # TODO if there are more than one ...
+      return "WTF"
+
+  @property
+  def last_past_taskweek(self):
+    # when are we?
+    now_now = datetime.datetime.now()
+    # get year, week number (1-52 or 53), and day number (1-7) for today
+    year, week_num, day_num = now_now.date().isocalendar()
+    # get all of this user's taskweeks
+    last_past_q = TaskWeek.all()
+    last_past_q.order("-created")
+    last_past_q.filter("user = ", self)
+    last_past = last_past_q.fetch(1)
+    if len(last_past) == 1:
+      return last_past
+    else:
+      return None
 
 
 class TaskWeek(db.Model):
   user = db.ReferenceProperty(User)
   created = db.DateTimeProperty(auto_now_add=True)
-  this_week = db.StringListProperty()
-  last_week = db.StringListProperty()
+  # what they hoped to accomplish
+  optimistic = db.StringListProperty()
+  # what they actually accomplished
+  realistic = db.StringListProperty()
+
+  @property
+  def year_and_week_num(self):
+    # get year, week number (1-52 or 53), and day number (1-7) for created date
+    year, week_num, day_num = self.created.date().isocalendar()
+    # return a tuple of year and week number
+    return (year, week_num)
 
