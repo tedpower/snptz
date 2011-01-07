@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# vim: ai ts=4 sts=4 et sw=4 coding=utf-8
+
 import logging
 import datetime
 from google.appengine.api import mail
@@ -31,10 +34,10 @@ Your last snippet:
 '''
 
 message = mail.EmailMessage(
-  sender='SNPTZ <ted@snptz.com>',
-  to='tedpower@gmail.com',
-  reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
-  subject='SNPTZ',
-  body=message_body)
+    sender='SNPTZ <ted@snptz.com>',
+    to='tedpower@gmail.com',
+    reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
+    subject='SNPTZ',
+    body=message_body)
 
 message.send()
