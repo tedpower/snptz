@@ -21,29 +21,27 @@
 
 	<div id="content">
 		<div id="thisWeek">
-			{% for message in message_list %}
-				<div class="timeStamp">
-					<em>This week</em> {{ message.created_est|date:"M j" }} - 
-				</div>
-				<div class="plans">
-					<ul>
-						{% for thing in message.thisWeek %}
-							<li>{{ thing }}</li>
-						{% endfor %}				
-					</ul>
-				</div>
-			{% endfor %}
+                        <div class="timeStamp">
+                                <em>This week</em> {{ this_week.created|date:"M j" }} -
+                        </div>
+                        <div class="plans">
+                                <ul>
+                                        {% for t in this_week.optimistic %}
+                                                <li>{{ t }}</li>
+                                        {% endfor %}
+                                </ul>
+                        </div>
 		</div>
 		<div id="history">
 			<div class="weekChunk clearfix">
 				<div class="plans">
 					<div class="timeStamp">
-						Week of <em>Dec 20 2010</em>
+						Week of <em>{{ last_past.created|date:"M j" }}</em>
 					</div>
 					<ul>
-						<li>one</li>
-						<li>two</li>
-						<li>three</li>
+                                            {% for t in last_past.optimistic %}
+						<li>{{ t }}</li>
+                                            {% endfor %}
 					</ul>
 				</div>
 				<div class="review">
@@ -51,35 +49,36 @@
 						How'd it go?
 					</div>
 					<ul>
-						<li>one</li>
-						<li>two</li>
-						<li>three</li>
+                                            {% for t in last_past.realistic %}
+						<li>{{ t }}</li>
+                                            {% endfor %}
 					</ul>
 				</div>
 			</div>
-				<div class="weekChunk clearfix">
-					<div class="plans">
-						<div class="timeStamp">
-							Week of <em>Dec 20, 2010</em>
-						</div>
-						<ul>
-							<li>one</li>
-							<li>two</li>
-							<li>three</li>
-						</ul>
+                        {% for tw in all_other_past %}
+			<div class="weekChunk clearfix">
+				<div class="plans">
+					<div class="timeStamp">
+						Week of <em>{{ tw.created|date:"M j" }}</em>
 					</div>
-					<div class="review">
-						<div class="timeStamp">
-							How'd it go?
-						</div>
-						<ul>
-							<li>one</li>
-							<li>two</li>
-							<li>three</li>
-						</ul>
+					<ul>
+                                            {% for t in tw.optimistic %}
+						<li>{{ t }}</li>
+                                            {% endfor %}
+					</ul>
+				</div>
+				<div class="review">
+					<div class="timeStamp">
+						How'd it go?
 					</div>
+					<ul>
+                                            {% for t in tw.realistic %}
+						<li>{{ t }}</li>
+                                            {% endfor %}
+					</ul>
 				</div>
 			</div>
+                        {% endfor %}
 		</div>
 	</div>
 </body>

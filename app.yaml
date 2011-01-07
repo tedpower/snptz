@@ -18,6 +18,10 @@ handlers:
   script: logged_in.py
   login: required
 
+- url: /fixtures
+  script: load_data.py
+  login: required
+
 - url: /.*
   script: index.py
 

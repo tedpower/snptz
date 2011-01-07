@@ -15,23 +15,21 @@ class MainPage(webapp.RequestHandler):
 
         # check to see if the user is already in the datastore
         que = db.Query(models.User)
-        que = que.filter('email =',user.email())
         results = que.fetch(limit=1)
 
-        # if not, add the user to the datastore
-        if len(results) == 0 :
-            newUser = models.User(email=user.email())
-            newUser.put()
-            # self.redirect('/')
+        # we want to deal with our models.User class
+        # rather than the object returned by the get_current_user api call
+        user = results[0]
 
-        userEmail = user.email()
         logoutURL = users.create_logout_url("/")
 
-        que = db.Query(models.Message)
-        que.filter("sender =", userEmail)
-        message_list = que.fetch(limit=100)
+        last_past = user.last_past_taskweek
+        all_other_past = user.all_other_past_taskweeks
+        this_week = user.this_weeks_taskweek
 
-        doRender(self, 'main.html', {'userNickname' : userEmail, 'logoutURL' : logoutURL, 'message_list':message_list})
+        doRender(self, 'main.html', {'userNickname' : user.email,
+            'logoutURL' : logoutURL, 'this_week' : this_week,
+            'last_past' : last_past, 'all_other_past' : all_other_past})
 
 # A helper to do the rendering and to add the necessary
 # variables for the _base.htm template
