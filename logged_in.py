@@ -15,12 +15,12 @@ class MainPage(webapp.RequestHandler):
 
         # check to see if the user is already in the datastore
         que = db.Query(models.User)
-        que = que.filter('googUser =',user.email())
+        que = que.filter('email =',user.email())
         results = que.fetch(limit=1)
 
         # if not, add the user to the datastore
         if len(results) == 0 :
-            newUser = models.User(googUser=user.email())
+            newUser = models.User(email=user.email())
             newUser.put()
             user = newUser
             # self.redirect('/')
