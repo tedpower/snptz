@@ -13,7 +13,9 @@ a img {
 #header {
 	height: 51px;
 	color: #fff;
+	box-shadow: 0 3px 5px rgba(0, 0, 0, .4);
 	-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .4);
+	-moz-box-shadow: 0 3px 5px rgba(0, 0, 0, .4);
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -94,7 +96,9 @@ a img {
 #presence #user, #presence a {
 	padding: 0 12px;
 	border-right: 1px solid rgba(0, 0, 0, .7);
+	box-shadow: 1px 0 rgba(255, 255, 255, .1);
 	-webkit-box-shadow: 1px 0 rgba(255, 255, 255, .1);
+	-moz-box-shadow: 1px 0 rgba(255, 255, 255, .1);
 	float: right;
 }
 
