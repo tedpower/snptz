@@ -31,9 +31,9 @@ class MainPage(webapp.RequestHandler):
 
         logoutURL = users.create_logout_url("/")
 
-        this_week = user.this_weeks_taskweek
         last_past = user.last_past_taskweek
         all_other_past = user.all_other_past_taskweeks
+        this_week = user.this_weeks_taskweek
 
         doRender(self, 'main.html', {'userNickname' : user.googUser,
             'logoutURL' : logoutURL, 'this_week' : this_week,
