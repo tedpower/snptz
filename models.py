@@ -73,7 +73,11 @@ class User(db.Model):
         # filter users by email equalling str
         user_query.filter("googUser = ", str)
         # fetch and return one match (or None)
-        return user_query.fetch(1)[0]
+        matches = user_query.fetch(1)
+        if len(matches) != 0:
+            return matches[0]
+        else:
+            return None
 
     @property
     def this_weeks_taskweek(self):
@@ -109,7 +113,7 @@ class User(db.Model):
         last_past_q.filter("user = ", self)
         last_past = last_past_q.fetch(1)
         if len(last_past) == 1:
-            return last_past
+            return last_past[0]
         else:
             return None
 
