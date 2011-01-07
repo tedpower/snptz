@@ -6,6 +6,10 @@ body {
 	font-size: 12px;
 }
 
+a img {
+	border: none;
+}
+
 #header {
 	height: 51px;
 	color: #fff;
