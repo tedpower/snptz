@@ -90,17 +90,22 @@ class User(db.Model):
         now_now = datetime.datetime.now()
         # get all of this user's taskweeks
         taskweeks = self.taskweek_set
-        # limit these taskweeks to those from this year & week
+
+        if taskweeks.count() == 0:
+            # if there are none, create one
+            created_tw = TaskWeek(user=self)
+            created_tw.created=now_now
+            created_tw.put()
+            return created_tw
+
+        logging.info(taskweeks)
+        # otherwise limit these taskweeks to those from this year & week
         taskweek = [tw for tw in taskweeks
                 if year_and_week_num_of(tw.created) == year_and_week_num_of(now_now)]
+        logging.info(taskweek)
         if len(taskweek) == 1:
             # if there is exactly one, return it
             return taskweek[0]
-        if len(taskweek) == 0:
-            # if there are none, create one
-            created_tw = TaskWeek(user=self)
-            created_tw.put()
-            return created_tw
         else:
             # TODO if there are more than one ...
             return "WTF"
@@ -115,12 +120,12 @@ class User(db.Model):
         # fetch the most recent two
         last_past_res = last_past_q.fetch(2)
         # don't include any from this week
-        last_past = [tw for tw in last_past_res
-            if year_and_week_num_of(tw.created) != year_and_week_num_of(datetime.datetime.now())]
-        if len(last_past) > 0:
-            return last_past[0]
-        else:
-            return None
+        if len(last_past_res) > 0:
+            last_past = [tw for tw in last_past_res
+                if year_and_week_num_of(tw.created) != year_and_week_num_of(datetime.datetime.now())]
+            if len(last_past) > 0:
+                return last_past[0]
+        return None
 
     @property
     def all_other_past_taskweeks(self):
@@ -149,7 +154,8 @@ class User(db.Model):
 
 class TaskWeek(db.Model):
     user = db.ReferenceProperty(User)
-    created = db.DateTimeProperty(auto_now_add=True)
+    #created = db.DateTimeProperty(auto_now_add=True)
+    created = db.DateTimeProperty()
     # what they hoped to accomplish
     optimistic = db.StringListProperty()
     # what they actually accomplished
