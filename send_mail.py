@@ -10,7 +10,7 @@ message_template = '''
 
 Hi %(username),
 
--~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~
+~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 HOW DID LAST WEEK GO?
 Edit your stated goals from last week:
 ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
@@ -18,8 +18,7 @@ Edit your stated goals from last week:
 %(tasks)
 --~~--~~--~~--~~--~~--~~--~~--~~--~~--~
 WHAT'RE YOU GOING TO DO THIS WEEK?
-~~--~~--~~--~~--~~--~~--~~--~~--~~--~--
-
+~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-
 
 
 '''
