@@ -32,7 +32,10 @@ user_list = que.fetch(limit=100)
 
 for user in user_list:
     # get the list of what the user planned to do last time
-    last_tasks = user.last_past_taskweek.optimistic
+    last_past = user.last_past_taskweek
+    last_tasks = []
+    if last_past is not None:
+        last_tasks = user.last_past_taskweek.optimistic
     # join all the tasks with linebreaks
     tasks_as_lines = "\n".join(last_tasks)
     # personalize the message_template
