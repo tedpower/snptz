@@ -61,7 +61,6 @@ class Message(db.Model):
 
 # User model
 class User(db.Model):
-    # TODO rename email to email?
     email = db.StringProperty()
     first_name = db.StringProperty()
     last_name = db.StringProperty()
