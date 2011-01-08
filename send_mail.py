@@ -34,7 +34,7 @@ html_template = '''
 
 '''
 
-que = db.Query(models.User)
+que = db.Query(models.Profile)
 user_list = que.fetch(limit=100)
 
 for user in user_list:
@@ -46,8 +46,8 @@ for user in user_list:
     # join all the tasks with linebreaks
     tasks_as_lines = "\n".join(last_tasks)
     # personalize the message_template
-    personalized_plaintext_message = plaintext_template % {"username": user.first_name, "tasks": tasks_as_lines}
-    personalized_html_message = html_template % {"username": user.first_name, "tasks": tasks_as_lines}
+    personalized_plaintext_message = plaintext_template % {"username": user.nickname, "tasks": tasks_as_lines}
+    personalized_html_message = html_template % {"username": user.nickname, "tasks": tasks_as_lines}
 
     message = mail.EmailMessage(
       sender='SNPTZ <ted@snptz.com>',

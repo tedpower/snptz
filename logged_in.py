@@ -12,22 +12,18 @@ from google.appengine.ext import db
 class MainPage(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
-
-        # check to see if the user is already in the datastore
-        que = db.Query(models.User)
-        results = que.fetch(limit=1)
-
-        # we want to deal with our models.User class
-        # rather than the object returned by the get_current_user api call
-        user = results[0]
+        profile = models.Profile.get_by_key_name(user.user_id())
+        if profile is None:
+            profile = models.Profile(key_name=user.user_id(), email=user.email())
+            profile.put()
 
         logoutURL = users.create_logout_url("/")
 
-        last_past = user.last_past_taskweek
-        all_other_past = user.all_other_past_taskweeks
-        this_week = user.this_weeks_taskweek
+        last_past = profile.last_past_taskweek
+        all_other_past = profile.all_other_past_taskweeks
+        this_week = profile.this_weeks_taskweek
 
-        doRender(self, 'main.html', {'userNickname' : user.email,
+        doRender(self, 'main.html', {'userNickname' : profile.email,
             'logoutURL' : logoutURL, 'this_week' : this_week,
             'last_past' : last_past, 'all_other_past' : all_other_past})
 

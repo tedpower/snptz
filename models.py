@@ -35,28 +35,6 @@ TZINFOS = {
   'pst': PstTzinfo(),
 }
 
-# A Model for a message
-class Message(db.Model):
-    sender = db.StringProperty()
-    userRef = db.ReferenceProperty()
-    body = db.TextProperty()
-    created = db.DateTimeProperty(auto_now_add=True)
-
-    # the property decorator allows a method to be called as if it were
-    # a read-only attribute of Message
-    # (e.g., that_message.my_property rather than that_message.my_property() )
-    # this allows us to use created_est within a django template just like
-    # any of the Message attributes
-    @property
-    def created_est(self):
-        # datetime stored in created is timezone naive
-        created_utc_naive = self.created
-        # make it timezone aware -- datetime.datetime.now() on google appengine
-        # will always be in UTC, so add our UtzTzinfo class as its tzinfo attribute
-        created_utc_aware = created_utc_naive.replace(tzinfo=TZINFOS['utc'])
-        # use the astimezone method to convert the timezone aware datetime
-        # to EST timezone (as defined by our EstTzinfo class)
-        return created_utc_aware.astimezone(TZINFOS['est'])
 
 def year_and_week_num_of(dt):
     # get year, week number (1-52 or 53), and day number (1-7) for given datetime
@@ -64,10 +42,11 @@ def year_and_week_num_of(dt):
     # return a tuple of year and week number
     return (year, week_num)
 
-# User model
-class User(db.Model):
-    email = db.StringProperty()
-    first_name = db.StringProperty()
+class Profile(db.Model):
+    user = db.UserProperty(auto_current_user_add=True)
+    # XXX note that user.email() could return a different email
+    # address if the user changes their google account's email handle
+    email = db.EmailProperty()
 
     @classmethod
     def find_by_email(klass, str):
@@ -83,6 +62,10 @@ class User(db.Model):
             return None
 
     @property
+    def nickname(self):
+        return self.user.nickname()
+
+    @property
     def this_weeks_taskweek(self):
         # TODO rename to get_or_create_...?
         # when are we?
@@ -92,7 +75,7 @@ class User(db.Model):
 
         if taskweeks.count() == 0:
             # if there are none, create one
-            created_tw = TaskWeek(user=self)
+            created_tw = TaskWeek(profile=self)
             created_tw.created=now_now
             created_tw.put()
             return created_tw
@@ -115,7 +98,7 @@ class User(db.Model):
         # order by most recent first
         last_past_q.order("-created")
         # limit to this user's taskweeks
-        last_past_q.filter("user = ", self)
+        last_past_q.filter("profile = ", self)
         # fetch the most recent two
         last_past_res = last_past_q.fetch(2)
         # don't include any from this week
@@ -132,7 +115,7 @@ class User(db.Model):
         # order by most recent first
         past_q.order("-created")
         # limit to this user's taskweeks
-        past_q.filter("user = ", self)
+        past_q.filter("profile = ", self)
         # fetch the most recent dozen
         all_past = past_q.fetch(12)
         # exclude this week's and last past week's taskweeks,
@@ -152,10 +135,33 @@ class User(db.Model):
 
 
 class TaskWeek(db.Model):
-    user = db.ReferenceProperty(User)
+    profile = db.ReferenceProperty(Profile)
     #created = db.DateTimeProperty(auto_now_add=True)
     created = db.DateTimeProperty()
     # what they hoped to accomplish
     optimistic = db.StringListProperty()
     # what they actually accomplished
     realistic = db.StringListProperty()
+
+# A Model for a received email message
+class Message(db.Model):
+    sender = db.StringProperty()
+    userRef = db.ReferenceProperty(Profile)
+    body = db.TextProperty()
+    created = db.DateTimeProperty(auto_now_add=True)
+
+    # the property decorator allows a method to be called as if it were
+    # a read-only attribute of Message
+    # (e.g., that_message.my_property rather than that_message.my_property() )
+    # this allows us to use created_est within a django template just like
+    # any of the Message attributes
+    @property
+    def created_est(self):
+        # datetime stored in created is timezone naive
+        created_utc_naive = self.created
+        # make it timezone aware -- datetime.datetime.now() on google appengine
+        # will always be in UTC, so add our UtzTzinfo class as its tzinfo attribute
+        created_utc_aware = created_utc_naive.replace(tzinfo=TZINFOS['utc'])
+        # use the astimezone method to convert the timezone aware datetime
+        # to EST timezone (as defined by our EstTzinfo class)
+        return created_utc_aware.astimezone(TZINFOS['est'])

@@ -15,8 +15,12 @@ import models
 
 class LoadData(webapp.RequestHandler):
     def get(self):
-        mister = models.User(email=users.get_current_user().email())
-        mister.put()
+        user = users.get_current_user()
+        mister = models.Profile.get_by_key_name(user.user_id())
+        if mister is None:
+            mister = models.Profile(key_name=user.user_id(), email=user.email())
+            mister.put()
+
 
         one = models.TaskWeek(user=mister, created=datetime.datetime(2011, 1, 3),
                 optimistic=['eat', 'pray', 'love'])

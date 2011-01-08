@@ -44,7 +44,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
         newmessage = models.Message(sender=cleanedEmail[0], body=decoded_html)
 
         # find the user
-        user = models.User.find_by_email(from_email)
+        user = models.Profile.find_by_email(from_email)
         if user is not None:
             newmessage.userRef = user
 
