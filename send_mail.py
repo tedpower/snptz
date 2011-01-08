@@ -32,6 +32,8 @@ html_template = '''
 <img src="http://www.snptz.com/static/logoEmail.png" width="174" height="50" alt="SNPTZ">
 <p>Good morning %(username)s!</p>
 
+<p>BETA BETA BETA BETA BETA</p>
+
 <pre>
 -----------------------------------------
 HOW DID LAST WEEK GO?
@@ -65,10 +67,11 @@ for user in user_list:
     personalized_html_message = html_template % {"username": user.nickname, "tasks": tasks_as_lines}
 
     message = mail.EmailMessage(
-      sender='SNPTZ <ted@snptz.com>',
+      sender='SNPTZ <weekly@snptz.com>',
       to=user.email,
       reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
-      subject='SNPTZ',
+      # TODO make the subject of the email include the date
+      subject='SNPTZ for date',
       body=personalized_plaintext_message,
       html=personalized_html_message)
 
