@@ -12,14 +12,14 @@ logging.info('Scheduled task ran.')
 
 plaintext_template = '''
 
-Hi %(username),
+Hi %(username)s,
 
 -----------------------------------------
 HOW DID LAST WEEK GO?
 Edit your goals from last week:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-%(tasks)
+%(tasks)s
 -----------------------------------------
 WHAT'RE YOU GOING TO DO THIS WEEK?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -30,7 +30,22 @@ WHAT'RE YOU GOING TO DO THIS WEEK?
 html_template = '''
 
 <img src="http://www.snptz.com/static/logoEmail.png" width="174" height="50" alt="SNPTZ">
-<p>Hi %(username)!</p>
+<p>Good morning %(username)s!</p>
+
+<pre>
+-----------------------------------------
+HOW DID LAST WEEK GO?
+Edit your goals from last week:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</pre>
+
+%(tasks)s
+<pre>
+-----------------------------------------
+WHAT'RE YOU GOING TO DO THIS WEEK?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</pre>
+
 
 '''
 
@@ -55,6 +70,6 @@ for user in user_list:
       reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
       subject='SNPTZ',
       body=personalized_plaintext_message,
-      htmo=personalized_html_message)
+      html=personalized_html_message)
 
     message.send()
