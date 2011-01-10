@@ -22,6 +22,10 @@ handlers:
   script: logged_in.py
   login: required
 
+- url: /robots.txt
+  static_files: static/robots.txt
+  upload: static/robot.txt
+
 - url: /fixtures
   script: load_data.py
   login: required
