@@ -26,18 +26,18 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
         logging.info('the user is %s' % (cleanedEmail[0]))
 
         # find the good bits of the email
-        breaking_string = "~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-"
+        breaking_string = "-----------------------------------------"
         start = decoded_html.find(breakingString)
         start = decoded_html.find(breakingString, start + 1)
-        end = decoded_html.find(breakingString, start + 1)
-        thisWeek = decoded_html[start + len(breakingString):end]
-        thisWeek = thisWeek.splitlines()
-        thisWeek = cleanLines(thisWeek)
-        start = decoded_html.find(breakingString, end + 1)
         end = decoded_html.find(breakingString, start + 1)
         lastWeek = decoded_html[start + len(breakingString):end]
         lastWeek = lastWeek.splitlines()
         lastWeek = cleanLines(lastWeek)
+        start = decoded_html.find(breakingString, end + 1)
+        end = decoded_html.find(breakingString, start + 1)
+        thisWeek = decoded_html[start + len(breakingString):end]
+        thisWeek = thisWeek.splitlines()
+        thisWeek = cleanLines(thisWeek)
 
         # create a Message object to store the email, etc
         # don't put yet because we may add a user reference

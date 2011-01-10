@@ -38,17 +38,15 @@ html_template = '''
 -----------------------------------------
 HOW DID LAST WEEK GO?
 Edit your goals from last week:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------
 </pre>
 
 %(tasks)s
 <pre>
 -----------------------------------------
 WHAT'RE YOU GOING TO DO THIS WEEK?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------
 </pre>
-
-
 '''
 
 que = db.Query(models.Profile)
@@ -71,7 +69,7 @@ for user in user_list:
       to=user.email,
       reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
       # TODO make the subject of the email include the date
-      subject='SNPTZ for date',
+      subject='SNPTZ for %s' % now.strftime("%m-%d-%Y"),
       body=personalized_plaintext_message,
       html=personalized_html_message)
 
