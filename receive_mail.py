@@ -15,7 +15,6 @@ from stripper import stripHTML
 class MyMailHandler(mail_handlers.InboundMailHandler):
     def receive(self, message):
         
-
         # # Check to see if the message is plaintext or HTML        
         # content_type = message.original.get_content_type()
         # logging.info("the content type is %s" % content_type)

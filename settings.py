@@ -18,6 +18,7 @@ class Settings(webapp.RequestHandler):
         doRender(self, 'settings.html', {'email' : profile.email,
                                          'firstName' : profile.first_name,
                                          'lastName' : profile.last_name,
+                                         'weeklyEmail' : profile.weekly_email,
                                          'logoutURL' : logoutURL})
 
     def post(self):
@@ -27,6 +28,9 @@ class Settings(webapp.RequestHandler):
         
         profile.first_name = self.request.get('firstname')
         profile.last_name = self.request.get('lastname')
+        
+        profile.weekly_email = self.request.get('weeklyEmailsToggle', '').lower() in ['true', 'yes', 't', '1', 'on', 'checked']
+        
         profile.put()
         self.redirect('/settings')
 
