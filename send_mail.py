@@ -32,8 +32,6 @@ html_template = '''
 <img src="http://www.snptz.com/static/logoEmail.png" width="174" height="50" alt="SNPTZ">
 <p>Good morning %(username)s!</p>
 
-<p>BETA BETA BETA BETA BETA</p>
-
 <pre>
 -----------------------------------------
 HOW DID LAST WEEK GO?
@@ -56,12 +54,14 @@ for user in user_list:
     # get the list of what the user planned to do last time
     last_past = user.last_past_taskweek
     last_tasks = []
+    if user.first_name is not None:
+        first_name = user.first_name
     if last_past is not None:
         last_tasks = user.last_past_taskweek.optimistic
     # join all the tasks with linebreaks
     tasks_as_lines = "\n".join(last_tasks)
     # personalize the message_template
-    personalized_plaintext_message = plaintext_template % {"username": user.nickname, "tasks": tasks_as_lines}
+    personalized_plaintext_message = plaintext_template % {"username": first_name, "tasks": tasks_as_lines}
     personalized_html_message = html_template % {"username": user.nickname, "tasks": tasks_as_lines}
 
     message = mail.EmailMessage(
