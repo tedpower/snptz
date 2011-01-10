@@ -54,6 +54,17 @@ class Team(db.Model):
             str_list = str_list + (p.email) + ', '
         return str_list
 
+    @classmethod
+    def find_by_name(klass, str):
+        team_q = klass.all()
+        team_q.filter("name = ", str)
+        team_q.filter("owner = ", users.get_current_user())
+        matches = team_q.fetch(1)
+        if len(matches) != 0:
+            return matches[0]
+        else:
+            return None
+
 class Profile(db.Model):
     user = db.UserProperty(auto_current_user_add=True)
     # XXX note that user.email() could return a different email

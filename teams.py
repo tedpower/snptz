@@ -30,28 +30,55 @@ class Teams(webapp.RequestHandler):
         teammembers = self.request.get('teammembers')
         logging.info(teammembers)
         # split contents of teammembers into a list
-        team_members = teammembers.split(',')
-        logging.info(team_members)
+        # and strip leading and/or trailing whitespace
+        new_team_members = [tm.strip() for tm in teammembers.split(',')]
+        logging.info(new_team_members)
 
         if team_name is not None:
-            # create and put new Team
-            team = models.Team(name=team_name, owner=profile.user)
-            team.put()
-            members_added = []
-            emails_to_invite = []
-            for member in team_members:
-                # strip leading and/or trailing whitespace
-                email = member.strip() 
+            team = models.Team.find_by_name(team_name)
+            old_team_members = []
+            if team is not None:
+                for t in team.profile_set:
+                    old_team_members.append(str(t.email))
+            if team is None:
+                team = models.Team(name=team_name, owner=profile.user)
+                team.put()
+            new_members_added = []
+            new_emails_to_invite = []
+            for email in new_team_members:
                 prof = models.Profile.find_by_email(email)
                 if prof is not None:
                     prof.team = team
                     prof.put()
-                    members_added.append(email)
+                    if email not in old_team_members:
+                        # XXX this list is just for debugging
+                        new_members_added.append(email)
+                    if email in old_team_members:
+                        # remove from old_team_members list
+                        # (remaining old_team_members will be removed
+                        # from this team below)
+                        old_team_members.remove(email)
                 else:
-                    emails_to_invite.append(email)
-            logging.info(members_added)
-            logging.info(emails_to_invite)
+                    new_emails_to_invite.append(email)
+            logging.info("OLD MEMBERS:")
+            logging.info(old_team_members)
+            logging.info("NEW ADDED:")
+            logging.info(new_members_added)
+            logging.info("NEW TO INVITE:")
+            logging.info(new_emails_to_invite)
             # TODO email invitations to emails_to_invite!
+
+            removed_members = []
+            for email in old_team_members:
+                prof = models.Profile.find_by_email(email)
+                if prof is not None:
+                    prof.team = None
+                    prof.put()
+                    removed_members.append(email)
+                else:
+                    logging.info("WTF")
+            logging.info("REMOVED:")
+            logging.info(removed_members)
 
         self.redirect('/teams')
 
