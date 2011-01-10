@@ -14,9 +14,18 @@ from stripper import stripHTML
 
 class MyMailHandler(mail_handlers.InboundMailHandler):
     def receive(self, message):
-        html_bodies = message.bodies('text/html')
-        for content_type, body in html_bodies:
-            decoded_html = stripHTML(body.decode())
+        
+        logging.info("the content type is %s" % message.original.get_content_type())
+        
+        # Check to see if the message is plaintext or HTML
+        if message.original.get_content_type() == 'text/html':
+            html_bodies = message.bodies('text/html')         
+            for content_type, body in html_bodies:
+                decoded_html = stripHTML(body.decode())
+        elif message.original.get_content_type() == 'text/plain':
+            plaintext_bodies = message.bodies('text/plain')
+            for content_type, body in plaintext_bodies:
+                decoded_html = body.decode()
 
         logging.info('Received email message from %s: %s' % (message.sender,
                                                                  decoded_html))
