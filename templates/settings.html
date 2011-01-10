@@ -35,11 +35,14 @@
                     {% endifnotequal %}/></div>
                 <div>Last name</div>
                 <div><input type="text" name="lastname" 
-                    {% ifnotequal lastName None %} 
+                    {% ifnotequal lastName None %}
                         value="{{ lastName }}"
                     {% endifnotequal %}/></div>
                 <div>
-                    <input type="checkbox" id="weeklyEmailsToggle" checked="yes" />
+                    <input type="checkbox" name="weeklyEmailsToggle" id="weeklyEmailsToggle"
+                    {% if weeklyEmail %}
+                        checked="yes"
+                    {% endif %} />
                     <label for="weeklyEmailsToggle">Subscribe to weekly reminder emails</label>
                 </div>
                 <div>

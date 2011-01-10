@@ -77,6 +77,7 @@ WHAT'RE YOU GOING TO DO THIS WEEK?
 '''
 
 que = db.Query(models.Profile)
+que = que.filter('weekly_email= ', 'True')
 user_list = que.fetch(limit=100)
 
 for user in user_list:

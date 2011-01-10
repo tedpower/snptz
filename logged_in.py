@@ -14,7 +14,7 @@ class MainPage(webapp.RequestHandler):
         user = users.get_current_user()
         profile = models.Profile.get_by_key_name(user.user_id())
         if profile is None:
-            profile = models.Profile(key_name=user.user_id(), email=user.email())
+            profile = models.Profile(key_name=user.user_id(), email=user.email(), weekly_email=True)
             profile.put()
 
         logoutURL = users.create_logout_url("/")
