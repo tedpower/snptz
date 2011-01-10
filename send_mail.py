@@ -17,12 +17,12 @@ Hi %(username)s,
 -----------------------------------------
 HOW DID LAST WEEK GO?
 Edit your goals from last week:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------
 
 %(tasks)s
 -----------------------------------------
 WHAT'RE YOU GOING TO DO THIS WEEK?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------------
 
 
 '''
@@ -62,14 +62,14 @@ for user in user_list:
     tasks_as_lines = "\n".join(last_tasks)
     # personalize the message_template
     personalized_plaintext_message = plaintext_template % {"username": first_name, "tasks": tasks_as_lines}
-    personalized_html_message = html_template % {"username": user.nickname, "tasks": tasks_as_lines}
+    personalized_html_message = html_template % {"username": first_name, "tasks": tasks_as_lines}
 
     message = mail.EmailMessage(
       sender='SNPTZ <weekly@snptz.com>',
       to=user.email,
       reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
       # TODO make the subject of the email include the date
-      subject='SNPTZ for %s' % now.strftime("%m-%d-%Y"),
+      subject='SNPTZ for %s' % datetime.datetime.now().strftime("%m-%d-%Y"),
       body=personalized_plaintext_message,
       html=personalized_html_message)
 

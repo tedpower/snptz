@@ -12,9 +12,18 @@ import re
 
 class MyMailHandler(mail_handlers.InboundMailHandler):
     def receive(self, message):
-        html_bodies = message.bodies('text/html')
-        for content_type, body in html_bodies:
-            decoded_html = body.decode()
+        
+        logging.info("the content type is %s" % message.original.get_content_type())
+        
+        # Check to see if the message is plaintext or HTML
+        if message.original.get_content_type() == 'text/html':
+            html_bodies = message.bodies('text/html')         
+            for content_type, body in html_bodies:
+                decoded_html = body.decode()
+        elif message.original.get_content_type() == 'text/plain':
+            plaintext_bodies = message.bodies('text/plain')
+            for content_type, body in plaintext_bodies:
+                decoded_html = body.decode()
 
         logging.info('Received email message from %s: %s' % (message.sender,
                                                                  decoded_html))
@@ -27,15 +36,15 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
 
         # find the good bits of the email
         breaking_string = "-----------------------------------------"
-        start = decoded_html.find(breakingString)
-        start = decoded_html.find(breakingString, start + 1)
-        end = decoded_html.find(breakingString, start + 1)
-        lastWeek = decoded_html[start + len(breakingString):end]
+        start = decoded_html.find(breaking_string)
+        start = decoded_html.find(breaking_string, start + 1)
+        end = decoded_html.find(breaking_string, start + 1)
+        lastWeek = decoded_html[start + len(breaking_string):end]
         lastWeek = lastWeek.splitlines()
         lastWeek = cleanLines(lastWeek)
-        start = decoded_html.find(breakingString, end + 1)
-        end = decoded_html.find(breakingString, start + 1)
-        thisWeek = decoded_html[start + len(breakingString):end]
+        start = decoded_html.find(breaking_string, end + 1)
+        end = decoded_html.find(breaking_string, start + 1)
+        thisWeek = decoded_html[start + len(breaking_string):end]
         thisWeek = thisWeek.splitlines()
         thisWeek = cleanLines(thisWeek)
 
