@@ -94,6 +94,10 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
 def cleanLines(weekList):
     tempList = []
     for i in weekList:
+        # remove quote mark
+        i.strip('>')
+        # remove any leading/trailing spaces
+        i.strip()
         if (len(i) != 0) and (i.isspace() == False):
             tempList.append(i)
     return tempList
