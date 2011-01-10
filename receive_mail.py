@@ -10,11 +10,13 @@ from google.appengine.ext import db
 import models
 import re
 
+from stripper import stripHTML
+
 class MyMailHandler(mail_handlers.InboundMailHandler):
     def receive(self, message):
         html_bodies = message.bodies('text/html')
         for content_type, body in html_bodies:
-            decoded_html = body.decode()
+            decoded_html = stripHTML(body.decode())
 
         logging.info('Received email message from %s: %s' % (message.sender,
                                                                  decoded_html))
@@ -27,17 +29,19 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
 
         # find the good bits of the email
         breaking_string = "-----------------------------------------"
-        start = decoded_html.find(breakingString)
-        start = decoded_html.find(breakingString, start + 1)
-        end = decoded_html.find(breakingString, start + 1)
-        lastWeek = decoded_html[start + len(breakingString):end]
+        start = decoded_html.find(breaking_string)
+        start = decoded_html.find(breaking_string, start + 1)
+        end = decoded_html.find(breaking_string, start + 1)
+        lastWeek = decoded_html[start + len(breaking_string):end]
         lastWeek = lastWeek.splitlines()
         lastWeek = cleanLines(lastWeek)
-        start = decoded_html.find(breakingString, end + 1)
-        end = decoded_html.find(breakingString, start + 1)
-        thisWeek = decoded_html[start + len(breakingString):end]
+        logging.info("last week: %s" % lastWeek)
+        start = decoded_html.find(breaking_string, end + 1)
+        end = decoded_html.find(breaking_string, start + 1)
+        thisWeek = decoded_html[start + len(breaking_string):end]
         thisWeek = thisWeek.splitlines()
         thisWeek = cleanLines(thisWeek)
+        logging.info("this week: %s" % thisWeek)
 
         # create a Message object to store the email, etc
         # don't put yet because we may add a user reference
@@ -45,6 +49,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
 
         # find the user
         user = models.Profile.find_by_email(from_email)
+        logging.info("user is %s" % user)
         if user is not None:
             newmessage.userRef = user
 
@@ -65,7 +70,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
             new_taskweek.put()
         else:
             # TODO user is not known -- tell them to sign up
-            pass
+            logging.info("OOPS. UNKNOWN USER: %s" % from_email)
 
         # save the incoming message, which has had a user reference
         # added (if the user is known)
