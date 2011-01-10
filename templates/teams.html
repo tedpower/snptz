@@ -1,0 +1,43 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+<div id="loggedIn">
+    
+    <div id="header">
+        <div id="nav">
+            <div id="presence">
+                {% ifnotequal logoutURL None %}
+                    <a href="{{ logoutURL }}">Logout</a>
+                {% endifnotequal %}
+                <a href="/settings">Settings</a>
+                <a href="#">Info</a>
+                <splan id="user">{{ email }}</splan>
+            </div>
+            <a href="/main" id="logo">
+                <img src="./static/logoMain.png" width="88" height="50" alt="SNPTZ">
+            </a>
+        </div>
+    </div>
+    
+    <!-- Empty div for the background -->
+    <div id="bg"></div>
+
+    <div id="content">
+        <div id="secondaryPage">
+            <h1>Esteemed colleagues</h1>
+            <form action="/teams" method="post">
+
+                <div>Team name</div>
+                <div><input type="text" name="teamname"
+                    {% ifnotequal team.name None %}
+                        value="{{ team.name }}"
+                    {% endifnotequal %}/></div>
+                <div>
+                    <input type="text" name="teammembers" value="{{ team.emails_of_members }}"/>
+                    <label for="teammembers">email addresses, comma separated</label>
+                </div>
+                <div><input type="submit" value="Save Team"></div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

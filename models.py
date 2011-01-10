@@ -41,6 +41,19 @@ def year_and_week_num_of(dt):
     # return a tuple of year and week number
     return (year, week_num)
 
+
+class Team(db.Model):
+    name = db.StringProperty()
+    owner = db.UserProperty(auto_current_user_add=True)
+    created = db.DateTimeProperty(auto_now_add=True)
+
+    @property
+    def emails_of_members(self):
+        str_list = ""
+        for p in self.profile_set:
+            str_list = str_list + (p.email) + ', '
+        return str_list
+
 class Profile(db.Model):
     user = db.UserProperty(auto_current_user_add=True)
     # XXX note that user.email() could return a different email
@@ -50,6 +63,7 @@ class Profile(db.Model):
     last_name = db.StringProperty()
     weekly_email = db.BooleanProperty()
     timezone_offset = db.IntegerProperty()
+    team = db.ReferenceProperty(Team)
 
     @classmethod
     def find_by_email(klass, str):
@@ -93,6 +107,7 @@ class Profile(db.Model):
             return taskweek[0]
         else:
             # TODO if there are more than one ...
+            logging.info("OOPS. USER HAS MORE THAN ONE TASKWEEK FOR THIS WEEK")
             return "WTF"
 
     @property

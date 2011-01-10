@@ -18,6 +18,10 @@ handlers:
   script: settings.py
   login: required
 
+- url: /teams
+  script: teams.py
+  login: required
+
 - url: /main
   script: logged_in.py
   login: required
