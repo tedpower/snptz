@@ -16,22 +16,26 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
     def receive(self, message):
         
 
-        # Check to see if the message is plaintext or HTML        
-        content_type = message.original.get_content_type()
-        logging.info("the content type is %s" % content_type)
-        
-        if content_type == 'text/html' or content_type == 'multipart/alternative' :
-            html_bodies = message.bodies('text/html')         
-            for content_type, body in html_bodies:
-                decoded_html = stripHTML(body.decode())
-        elif content_type == 'text/plain':
-            plaintext_bodies = message.bodies('text/plain')
-            for content_type, body in plaintext_bodies:
-                decoded_html = body.decode()
+        # # Check to see if the message is plaintext or HTML        
+        # content_type = message.original.get_content_type()
+        # logging.info("the content type is %s" % content_type)
+        # 
+        # if content_type == 'text/html' or content_type == 'multipart/alternative':
+        #     html_bodies = message.bodies('text/html')
+        #     for content_type, body in html_bodies:
+        #         decoded_message = stripHTML(body.decode())
+        # elif content_type == 'text/plain':
+        #     plaintext_bodies = message.bodies('text/plain')
+        #     for content_type, body in plaintext_bodies:
+        #         decoded_message = body.decode()
 
+        plaintext_bodies = message.bodies('text/plain')
+        for content_type, body in plaintext_bodies:
+            decoded_message = body.decode()
+            
         logging.info('Received email message from %s: %s' % (message.sender,
-                                                                 decoded_html))
-
+                                                                 decoded_message))
+        
         # clean up the email address
         pattern = re.compile(r'[\w\-][\w\-\.]+@[\w\-][\w\-\.]+[a-zA-Z]{1,4}')
         cleanedEmail = pattern.findall(message.sender)
@@ -40,23 +44,23 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
 
         # find the good bits of the email
         breaking_string = "-----------------------------------------"
-        start = decoded_html.find(breaking_string)
-        start = decoded_html.find(breaking_string, start + 1)
-        end = decoded_html.find(breaking_string, start + 1)
-        lastWeek = decoded_html[start + len(breaking_string):end]
+        start = decoded_message.find(breaking_string)
+        start = decoded_message.find(breaking_string, start + 1)
+        end = decoded_message.find(breaking_string, start + 1)
+        lastWeek = decoded_message[start + len(breaking_string):end]
         lastWeek = lastWeek.splitlines()
         lastWeek = cleanLines(lastWeek)
         logging.info("last week: %s" % lastWeek)
-        start = decoded_html.find(breaking_string, end + 1)
-        end = decoded_html.find(breaking_string, start + 1)
-        thisWeek = decoded_html[start + len(breaking_string):end]
+        start = decoded_message.find(breaking_string, end + 1)
+        end = decoded_message.find(breaking_string, start + 1)
+        thisWeek = decoded_message[start + len(breaking_string):end]
         thisWeek = thisWeek.splitlines()
         thisWeek = cleanLines(thisWeek)
         logging.info("this week: %s" % thisWeek)
 
         # create a Message object to store the email, etc
         # don't put yet because we may add a user reference
-        newmessage = models.Message(sender=cleanedEmail[0], body=decoded_html)
+        newmessage = models.Message(sender=cleanedEmail[0], body=decoded_message)
 
         # find the user
         user = models.Profile.find_by_email(from_email)

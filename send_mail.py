@@ -69,7 +69,7 @@ for user in user_list:
       to=user.email,
       reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
       # TODO make the subject of the email include the date
-      subject='SNPTZ for %s' % datetime.datetime.now().strftime("%m-%d-%Y"),
+      subject='SNPTZ for %s' % datetime.datetime.now().strftime("%b %d"),
       body=personalized_plaintext_message,
       html=personalized_html_message)
 
