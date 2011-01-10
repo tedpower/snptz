@@ -9,23 +9,26 @@ import models
 from google.appengine.ext.webapp import template
 from google.appengine.ext import db
 
-class MainPage(webapp.RequestHandler):
+class Settings(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
         profile = models.Profile.get_by_key_name(user.user_id())
-        if profile is None:
-            profile = models.Profile(key_name=user.user_id(), email=user.email())
-            profile.put()
+        logoutURL = users.create_logout_url("/")    
+        
+        doRender(self, 'settings.html', {'email' : profile.email,
+                                         'firstName' : profile.first_name,
+                                         'lastName' : profile.last_name,
+                                         'logoutURL' : logoutURL})
 
+    def post(self):
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
         logoutURL = users.create_logout_url("/")
-
-        last_past = profile.last_past_taskweek
-        all_other_past = profile.all_other_past_taskweeks
-        this_week = profile.this_weeks_taskweek
-
-        doRender(self, 'main.html', {'userNickname' : profile.email,
-            'logoutURL' : logoutURL, 'this_week' : this_week,
-            'last_past' : last_past, 'all_other_past' : all_other_past})
+        
+        profile.first_name = self.request.get('firstname')
+        profile.last_name = self.request.get('lastname')
+        profile.put()
+        self.redirect('/settings')
 
 # A helper to do the rendering and to add the necessary
 # variables for the _base.htm template
@@ -45,7 +48,7 @@ def doRender(handler, tname, values = { }):
     return True
 
 application = webapp.WSGIApplication([
-   ('/main', MainPage)],
+   ('/settings', Settings)],
    debug=True)
 
 def main():

@@ -1,85 +1,93 @@
-{% extends "_base.htm" %}
+{% extends "_base.html" %}
 {% block bodycontent %}
-<body id="loggedIn">
-	<div id="header">
-		<div id="nav">
-			<div id="presence">
-				{% ifnotequal logoutURL None %}
-					<a href="{{ logoutURL }}">Logout</a>
-				{% endifnotequal %}
-				<a href="#">Settings</a>
-				<a href="#">Info</a>
-				<splan id="user">{{ userNickname }}</splan>
-			</div>
-			<a href="/main" id="logo">
-				<img src="./static/logoMain.png" width="88" height="50" alt="SNPTZ">
-			</a>
-		</div>
-	</div>
+<div id="loggedIn">
+    
+    <div id="header">
+        <div id="nav">
+            <div id="presence">
+                {% ifnotequal logoutURL None %}
+                    <a href="{{ logoutURL }}">Logout</a>
+                {% endifnotequal %}
+                <a href="/settings">Settings</a>
+                <a href="#">Info</a>
+                <splan id="user">{{ userNickname }}</splan>
+            </div>
+            <a href="/main" id="logo">
+                <img src="./static/logoMain.png" width="88" height="50" alt="SNPTZ">
+            </a>
+        </div>
+    </div>
+    
+    <!-- Empty div for the background -->
+    <div id="bg"></div>
 
-	<div id="bg"></div>
-
-	<div id="content">
-		<div id="thisWeek">
-                        <div class="timeStamp">
-                                <em>This week</em> {{ this_week.created|date:"M j" }} -
-                        </div>
-                        <div class="plans">
-                                <ul>
-                                        {% for t in this_week.optimistic %}
-                                                <li>{{ t }}</li>
-                                        {% endfor %}
-                                </ul>
-                        </div>
-		</div>
-		<div id="history">
-			<div class="weekChunk clearfix">
-				<div class="plans">
-					<div class="timeStamp">
-						Week of <em>{{ last_past.created|date:"M j" }}</em>
-					</div>
-					<ul>
-                                            {% for t in last_past.optimistic %}
-						<li>{{ t }}</li>
-                                            {% endfor %}
-					</ul>
-				</div>
-				<div class="review">
-					<div class="timeStamp">
-						How'd it go?
-					</div>
-					<ul>
-                                            {% for t in last_past.realistic %}
-						<li>{{ t }}</li>
-                                            {% endfor %}
-					</ul>
-				</div>
-			</div>
-                        {% for tw in all_other_past %}
-			<div class="weekChunk clearfix">
-				<div class="plans">
-					<div class="timeStamp">
-						Week of <em>{{ tw.created|date:"M j" }}</em>
-					</div>
-					<ul>
-                                            {% for t in tw.optimistic %}
-						<li>{{ t }}</li>
-                                            {% endfor %}
-					</ul>
-				</div>
-				<div class="review">
-					<div class="timeStamp">
-						How'd it go?
-					</div>
-					<ul>
-                                            {% for t in tw.realistic %}
-						<li>{{ t }}</li>
-                                            {% endfor %}
-					</ul>
-				</div>
-			</div>
+    <div id="content">
+        
+        <div id="thisWeek">
+                <div class="timeStamp">
+                    <em>This week</em> {{ this_week.created|date:"M j" }} -
+                </div>
+                <div class="plans">
+                    <ul>
+                        {% for t in this_week.optimistic %}
+                            <li>{{ t }}</li>
                         {% endfor %}
-		</div>
-	</div>
-</body>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div id="history">
+            
+            <div class="weekChunk clearfix">
+                <div class="plans">
+                    <div class="timeStamp">
+                        Week of <em>{{ last_past.created|date:"M j" }}</em>
+                    </div>
+                    <ul>
+                        {% for t in last_past.optimistic %}
+                            <li>{{ t }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="review">
+                    <div class="timeStamp">
+                        How'd it go?
+                    </div>
+                    <ul>
+                        {% for t in last_past.realistic %}
+                            <li>{{ t }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        
+            {% for tw in all_other_past %}
+                <div class="weekChunk clearfix">
+                    <div class="plans">
+                        <div class="timeStamp">
+                            Week of <em>{{ tw.created|date:"M j" }}</em>
+                        </div>
+                        <ul>
+                            {% for t in tw.optimistic %}
+                                <li>{{ t }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="review">
+                        <div class="timeStamp">
+                            How'd it go?
+                        </div>
+                        <ul>
+                            {% for t in tw.realistic %}
+                                <li>{{ t }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% endfor %}
+            
+        </div>
+    </div>
+</div>
 {% endblock %}

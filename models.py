@@ -35,7 +35,6 @@ TZINFOS = {
   'pst': PstTzinfo(),
 }
 
-
 def year_and_week_num_of(dt):
     # get year, week number (1-52 or 53), and day number (1-7) for given datetime
     year, week_num, day_num = dt.date().isocalendar()
@@ -47,6 +46,10 @@ class Profile(db.Model):
     # XXX note that user.email() could return a different email
     # address if the user changes their google account's email handle
     email = db.EmailProperty()
+    first_name = db.StringProperty()
+    last_name = db.StringProperty()
+    weekly_email = db.BooleanProperty()
+    timezone_offset = db.IntegerProperty()
 
     @classmethod
     def find_by_email(klass, str):

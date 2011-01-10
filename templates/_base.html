@@ -1,0 +1,31 @@
+<!doctype html>
+<head>
+
+    <title>SNPTZ</title>
+    <meta name="description" content="Weekly lists">
+    <link href="./static/style.css" media="screen" rel="Stylesheet" type="text/css"/>
+    <link rel="icon" type="image/png" href="./static/favicon.png">
+    
+    <!-- Google Analytics tracking -->
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-20629691-1']);
+      _gaq.push(['_trackPageview']);
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+
+</head>
+<body>
+
+    {% block bodycontent %}
+       Content in here
+    {% endblock %}
+    
+        <!-- Include JQuery, not using it yet... -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.js"></script>
+    </body>
+</html>

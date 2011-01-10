@@ -14,6 +14,10 @@ handlers:
   script: send_mail.py
   login: admin
 
+- url: /settings
+  script: settings.py
+  login: required
+
 - url: /main
   script: logged_in.py
   login: required

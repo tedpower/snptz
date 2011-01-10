@@ -1,0 +1,53 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+<div id="loggedIn">
+    
+    <div id="header">
+        <div id="nav">
+            <div id="presence">
+                {% ifnotequal logoutURL None %}
+                    <a href="{{ logoutURL }}">Logout</a>
+                {% endifnotequal %}
+                <a href="/settings">Settings</a>
+                <a href="#">Info</a>
+                <splan id="user">{{ email }}</splan>
+            </div>
+            <a href="/main" id="logo">
+                <img src="./static/logoMain.png" width="88" height="50" alt="SNPTZ">
+            </a>
+        </div>
+    </div>
+    
+    <!-- Empty div for the background -->
+    <div id="bg"></div>
+
+    <div id="content">
+        <div id="secondaryPage">
+            <h1>Settings</h1>
+            <form action="/settings" method="post">
+
+                <div>Email</div>
+                <div>{{ email }}</div>
+                <div>First name</div>
+                <div><input type="text" name="firstname" value="{{ firstName }}" /></div>
+                <div>Last name</div>
+                <div><input type="text" name="lastname" value="{{ lastName }}" /></div>
+                <div>
+                    <input type="checkbox" name="weeklyEmailsToggle" checked="yes" />
+                    Subscribe to weekly reminder emails
+                </div>
+                <div>
+                    <select>
+                      <option value="pst">(GMT-5:00) Eastern Time</option>
+                      <option value="cst">(GMT-6:00) Central Time</option>
+                      <option value="mst">(GMT-7:00) Mountain Time</option>
+                      <option value="pst">(GMT-8:00) Pacific Time</option>
+                    </select>
+                </div>
+                <div><input type="submit" value="Save Settings"></div>
+            </form>
+            <a href="#">Delete account (this cannot be undone)</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -53,6 +53,11 @@ a img {
 	text-align: left;
 }
 
+#secondaryPage {
+    padding: 20px 24px 24px 24px;
+    border-bottom: 1px solid #D9D9D9;
+}
+
 #logo {
 	margin: 0 0 0 24px;
 }
@@ -79,6 +84,7 @@ a img {
 .weekChunk ul {
 	font-size: 14px;
 }
+
 #presence {
 	float: right;
 	text-shadow: 0 -1px 0 #000;
@@ -124,6 +130,11 @@ ul {
 em {
 	font-weight: bold;
 	font-style: normal;
+}
+
+h1, h2, h3, h4 {
+    padding: 0;
+    margin: 0;
 }
 
 /* Homepage */
