@@ -47,6 +47,35 @@ WHAT'RE YOU GOING TO DO THIS WEEK?
 </pre>
 '''
 
+first_time_plaintext = '''
+
+Hi %(username)s,
+
+Welcome to SNPTZ!
+Tell us a few things you are going to be working on this week in the space below.
+Don't get too detailed or wordy. Each week, we'll follow up so you can reflect on your progress.
+
+-----------------------------------------
+WHAT'RE YOU GOING TO DO THIS WEEK?
+-----------------------------------------
+
+
+'''
+
+first_time_html = '''
+
+<img src="http://www.snptz.com/static/logoEmail.png" width="174" height="50" alt="SNPTZ">
+<p>Good morning %(username)s!</p>
+Welcome to SNPTZ!
+Tell us a few things you are going to be working on this week in the space below.
+Don't get too detailed or wordy. Each week, we'll follow up so you can reflect on your progress.
+<pre>
+-----------------------------------------
+WHAT'RE YOU GOING TO DO THIS WEEK?
+-----------------------------------------
+</pre>
+'''
+
 que = db.Query(models.Profile)
 que = que.filter('weekly_email= ', 'True')
 user_list = que.fetch(limit=100)
@@ -59,11 +88,14 @@ for user in user_list:
         first_name = user.first_name
     if last_past is not None:
         last_tasks = user.last_past_taskweek.optimistic
-    # join all the tasks with linebreaks
-    tasks_as_lines = "\n".join(last_tasks)
-    # personalize the message_template
-    personalized_plaintext_message = plaintext_template % {"username": first_name, "tasks": tasks_as_lines}
-    personalized_html_message = html_template % {"username": first_name, "tasks": tasks_as_lines}
+        # join all the tasks with linebreaks
+        tasks_as_lines = "\n".join(last_tasks)
+        # personalize the message_template
+        personalized_plaintext_message = plaintext_template % {"username": first_name, "tasks": tasks_as_lines}
+        personalized_html_message = html_template % {"username": first_name, "tasks": tasks_as_lines}
+    else:
+        personalized_html_message = first_time_html % {"username": first_name}
+        personalized_plaintext_message = first_time_plaintext % {"username": first_name}
 
     message = mail.EmailMessage(
       sender='SNPTZ <weekly@snptz.com>',
