@@ -28,6 +28,7 @@ class Settings(webapp.RequestHandler):
         profile.first_name = self.request.get('firstname')
         profile.last_name = self.request.get('lastname')
         profile.weekly_email = self.request.get('weeklyEmailsToggle', '').lower() in ['true', 'yes', 't', '1', 'on', 'checked']
+        profile.timezone = self.request.get('timezone')
         profile.put()
         self.redirect('/settings')
 
