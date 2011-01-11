@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # vim: ai ts=4 sts=4 et sw=4 coding=utf-8
 
+import logging
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -30,6 +31,7 @@ class Settings(webapp.RequestHandler):
         profile.last_name = self.request.get('lastname')
         
         profile.weekly_email = self.request.get('weeklyEmailsToggle', '').lower() in ['true', 'yes', 't', '1', 'on', 'checked']
+        profile.timezone = self.request.get('timezone')
         
         profile.put()
         self.redirect('/settings')

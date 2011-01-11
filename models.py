@@ -6,32 +6,17 @@ from google.appengine.api import users
 from google.appengine.ext import db
 import logging
 import datetime
-
-# TODO move to separate file?
-# subclasses of datetime.tzinfo to define timezones we want to use
-# and how they relate to UTC
-class UtcTzinfo(datetime.tzinfo):
-    def utcoffset(self, dt): return datetime.timedelta(0)
-    def dst(self, dt): return datetime.timedelta(0)
-    def tzname(self, dt): return 'UTC'
-    def olsen_name(self): return 'UTC'
-
-class EstTzinfo(datetime.tzinfo):
-    def utcoffset(self, dt): return datetime.timedelta(hours=-5)
-    def dst(self, dt): return datetime.timedelta(0)
-    def tzname(self, dt): return 'EST+05EDT'
-    def olsen_name(self): return 'US/Eastern'
-
-class PstTzinfo(datetime.tzinfo):
-    def utcoffset(self, dt): return datetime.timedelta(hours=-8)
-    def dst(self, dt): return datetime.timedelta(0)
-    def tzname(self, dt): return 'PST+08PDT'
-    def olsen_name(self): return 'US/Pacific'
+from timezones import *
 
 # dictionary of instances of our tzinfo subclasses
+# as defined in timezones.py
+# these are the values that should be used
+# in the dropdown on /templates/settings.html
 TZINFOS = {
   'utc': UtcTzinfo(),
   'est': EstTzinfo(),
+  'cst': CstTzinfo(),
+  'mst': MstTzinfo(),
   'pst': PstTzinfo(),
 }
 
@@ -40,7 +25,6 @@ def year_and_week_num_of(dt):
     year, week_num, day_num = dt.date().isocalendar()
     # return a tuple of year and week number
     return (year, week_num)
-
 
 class Team(db.Model):
     name = db.StringProperty()
@@ -66,12 +50,13 @@ class Team(db.Model):
 class Profile(db.Model):
     user = db.UserProperty(auto_current_user_add=True)
     # XXX note that user.email() could return a different email
-    # address if the user changes their google account's email handle
+    # address than self.email if the user changes their google
+    # account's email handle
     email = db.EmailProperty()
     first_name = db.StringProperty()
     last_name = db.StringProperty()
     weekly_email = db.BooleanProperty()
-    timezone_offset = db.IntegerProperty()
+    timezone = db.StringProperty()
 
     @classmethod
     def find_by_email(klass, str):
