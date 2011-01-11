@@ -13,9 +13,9 @@ a img {
 #header {
 	height: 51px;
 	color: #fff;
-	box-shadow: 0 3px 5px rgba(0, 0, 0, .4);
-	-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, .4);
-	-moz-box-shadow: 0 3px 5px rgba(0, 0, 0, .4);
+	box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+	-webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+	-moz-box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -44,13 +44,17 @@ a img {
 	z-index: 0;
 }
 
-#content {
+#main, #info, #settings {
 	background-color: white;
 	z-index: 2;
 	position: relative;
 	width: 760px;
 	margin: 51px auto;
 	text-align: left;
+}
+
+#info, #settings {
+    padding: 50px 0;
 }
 
 #secondaryPage {
@@ -64,8 +68,13 @@ a img {
 
 #thisWeek {
 	padding: 20px 24px 24px 24px;
+	-webkit-transition: background-color 100ms ease-in;
 }
 
+#thisWeek:hover, .weekChunk .plans:hover, .weekChunk .review:hover {
+	cursor: pointer;
+	background-color: #D7E3F7;
+}
 #thisWeek, .weekChunk {
 	border-bottom: 1px solid #D9D9D9;
 	display: block;
@@ -79,6 +88,8 @@ a img {
 	padding: 16px 0 20px 24px;
 	width: 344px;
 	float: left;
+	-webkit-transition: background-color 100ms ease-in;
+
 }
 
 .weekChunk ul {
