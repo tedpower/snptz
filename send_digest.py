@@ -46,7 +46,7 @@ user_list.append(models.Profile.find_by_email('tedpower@gmail.com'))
 
 for user in user_list:
 
-    esteemed_colleages = user.esteemed_colleagues
+    esteemed_colleagues = user.esteemed_colleagues
     if esteemed_colleagues is not None:
         digest_message_body = construct_digest(esteemed_colleagues) % {"username": first_name}
 
