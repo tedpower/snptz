@@ -94,8 +94,8 @@ def cleanLines(weekList):
     tempList = []
     for i in weekList:
         # remove quote mark
-        i.strip('>')
-        # remove any leading/trailing spaces
+        i.replace('>', '')
+        # remove any leading/trailing whitespace
         i.strip()
         if (len(i) != 0) and (i.isspace() == False):
             tempList.append(i)
