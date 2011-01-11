@@ -26,16 +26,26 @@
             <h1>Esteemed colleagues</h1>
             <form action="/teams" method="post">
 
-                <div>Team name</div>
-                <div><input type="text" name="teamname"
-                    {% ifnotequal team.name None %}
-                        value="{{ team.name }}"
-                    {% endifnotequal %}/></div>
+                <div>My teams</div>
+                {% for team in memberships_teams %}
+                    <div>
+                        <label for="team-{{team.key}}">{{team.name}}</label>
+                        <input type="checkbox" name="team-{{team.key}}" checked="yes"/>
+                    </div>
+                {% endfor %}
+
+                <div>Other teams</div>
+                {% for team in other_teams %}
+                    <div>
+                        <label for="team-{{team.key}}">{{team.name}}</label>
+                        <input type="checkbox" name="team-{{team.key}}"/>
+                    </div>
+                {% endfor %}
                 <div>
-                    <input type="text" name="teammembers" value="{{ team.emails_of_members }}"/>
-                    <label for="teammembers">email addresses, comma separated</label>
+                    <label for="newteamname">Create new team</label>
+                    <input type="text" name="newteamname" value=""/>
                 </div>
-                <div><input type="submit" value="Save Team"></div>
+                <div><input type="submit" value="Update memberships"></div>
             </form>
         </div>
     </div>

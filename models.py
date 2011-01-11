@@ -44,15 +44,24 @@ def year_and_week_num_of(dt):
 
 class Team(db.Model):
     name = db.StringProperty()
-    owner = db.UserProperty(auto_current_user_add=True)
     created = db.DateTimeProperty(auto_now_add=True)
 
     @property
     def emails_of_members(self):
         str_list = ""
-        for p in self.profile_set:
-            str_list = str_list + (p.email) + ', '
+        for p in self.membership_set:
+            str_list = str_list + (p.profile.email) + ', '
         return str_list
+
+    @classmethod
+    def find_by_name(klass, str):
+        team_q = klass.all()
+        team_q.filter("name = ", str)
+        matches = team_q.fetch(1)
+        if len(matches) != 0:
+            return matches[0]
+        else:
+            return None
 
 class Profile(db.Model):
     user = db.UserProperty(auto_current_user_add=True)
@@ -63,7 +72,6 @@ class Profile(db.Model):
     last_name = db.StringProperty()
     weekly_email = db.BooleanProperty()
     timezone_offset = db.IntegerProperty()
-    team = db.ReferenceProperty(Team)
 
     @classmethod
     def find_by_email(klass, str):
@@ -183,3 +191,20 @@ class Message(db.Model):
         # use the astimezone method to convert the timezone aware datetime
         # to EST timezone (as defined by our EstTzinfo class)
         return created_utc_aware.astimezone(TZINFOS['est'])
+
+class Membership(db.Model):
+    profile = db.ReferenceProperty(Profile)
+    team = db.ReferenceProperty(Team)
+
+    @classmethod
+    def find_by_profile_and_team(klass, prof, t):
+        # start with all users
+        mem_q = klass.all()
+        mem_q.filter("profile = ", prof)
+        mem_q.filter("team = ", t)
+        # fetch and return one match (or None)
+        matches = mem_q.fetch(1)
+        if len(matches) != 0:
+            return matches[0]
+        else:
+            return None
