@@ -3,3 +3,8 @@ cron:
   url: /scheduledtask
   schedule: every monday 9:00
   timezone: America/New_York
+
+- description: test digest
+  url: /testdigest
+  schedule: every tuesday 18:30
+  timezone: America/New_York

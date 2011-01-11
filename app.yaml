@@ -14,6 +14,10 @@ handlers:
   script: send_mail.py
   login: admin
 
+- url: /testdigest
+  script: send_digest.py
+  login: admin
+
 - url: /settings
   script: logged_in.py
   login: required
