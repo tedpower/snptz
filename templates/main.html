@@ -8,8 +8,8 @@
                 {% ifnotequal logoutURL None %}
                     <a href="{{ logoutURL }}">Logout</a>
                 {% endifnotequal %}
-                <a href="/settings">Settings</a>
-                <a href="#">Info</a>
+                <a href="/settings" id="settingsLink">Settings</a>
+                <a href="/info" id="infoLink">Info</a>
                 <splan id="user">{{ userNickname }}</splan>
             </div>
             <a href="/main" id="logo">
@@ -21,19 +21,18 @@
     <!-- Empty div for the background -->
     <div id="bg"></div>
 
-    <div id="content">
+    <div id="main" {% ifnotequal current_page "main" %} style="display:none;" {% endifnotequal %}>
         
         <div id="thisWeek">
-                <div class="timeStamp">
-                    <em>This week</em> {{ this_week.created|date:"M j" }} -
-                </div>
-                <div class="plans">
-                    <ul>
-                        {% for t in this_week.optimistic %}
-                            <li>{{ t }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
+            <div class="timeStamp">
+                <em>This week</em> {{ this_week.created|date:"M j" }} -
+            </div>
+            <div class="plans">
+                <ul>
+                    {% for t in this_week.optimistic %}
+                        <li>{{ t }}</li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
         
@@ -89,5 +88,46 @@
             
         </div>
     </div>
+    
+    <div id="info" {% ifnotequal current_page "info" %} style="display:none;" {% endifnotequal %}>
+        Built by Ted and Evan
+    </div>
+    
+    <div id="settings" {% ifnotequal current_page "settings" %} style="display:none;" {% endifnotequal %}>
+            <h1>Settings</h1>
+            <form action="/settings" method="post">
+
+                <div>Email</div>
+                <div>{{ email }}</div>
+                <div>First name</div>
+                <div><input type="text" name="firstname" 
+                    {% ifnotequal firstName None %}
+                        value="{{ firstName }}"
+                    {% endifnotequal %}/></div>
+                <div>Last name</div>
+                <div><input type="text" name="lastname" 
+                    {% ifnotequal lastName None %}
+                        value="{{ lastName }}"
+                    {% endifnotequal %}/></div>
+                <div>
+                    <input type="checkbox" name="weeklyEmailsToggle" id="weeklyEmailsToggle"
+                    {% if weeklyEmail %}
+                        checked="yes"
+                    {% endif %} />
+                    <label for="weeklyEmailsToggle">Subscribe to weekly reminder emails</label>
+                </div>
+                <div>
+                    <select>
+                      <option value="pst">(GMT-5:00) Eastern Time</option>
+                      <option value="cst">(GMT-6:00) Central Time</option>
+                      <option value="mst">(GMT-7:00) Mountain Time</option>
+                      <option value="pst">(GMT-8:00) Pacific Time</option>
+                    </select>
+                </div>
+                <div><input type="submit" value="Save Settings"></div>
+            </form>
+            <a href="#">Delete account (this cannot be undone)</a>
+    </div>
+    
 </div>
 {% endblock %}

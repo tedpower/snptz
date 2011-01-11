@@ -15,7 +15,11 @@ handlers:
   login: admin
 
 - url: /settings
-  script: settings.py
+  script: logged_in.py
+  login: required
+
+- url: /info
+  script: logged_in.py
   login: required
 
 - url: /teams
