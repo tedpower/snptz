@@ -144,6 +144,19 @@ class Profile(db.Model):
         # return list of taskweeks that are not excluded
         return [tw for tw in all_past if year_and_week_num_of(tw.created) not in exclude]
 
+    @property
+    def esteemed_colleagues(self):
+        teams = [m.team for m in self.membership_set]
+        if len(teams) == 0:
+            return None
+        esteemed_colleagues = []
+        for team in teams:
+            for mem in team.membership_set:
+                if mem.profile is not self:
+                    if mem.profile not in esteemed_colleagues:
+                        esteemed_colleagues.append(mem.profile)
+        return esteemed_colleagues
+
 
 class TaskWeek(db.Model):
     profile = db.ReferenceProperty(Profile)
