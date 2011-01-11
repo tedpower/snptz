@@ -41,8 +41,8 @@ def construct_digest(profile_list):
     return personalized_digest_plaintext
 
 user_list = []
-user_list.append(models.Profile.find_by_email('evanmwheeler@gmail.com')
-user_list.append(models.Profile.find_by_email('tedpower@gmail.com')
+user_list.append(models.Profile.find_by_email('evanmwheeler@gmail.com'))
+user_list.append(models.Profile.find_by_email('tedpower@gmail.com'))
 
 for user in user_list:
 
