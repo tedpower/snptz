@@ -90,10 +90,14 @@
     </div>
     
     <div id="info" {% ifnotequal current_page "info" %} style="display:none;" {% endifnotequal %}>
-        Built by Ted and Evan
+        <div class="subPage">
+            <h1>Info</h1>
+            Built by Ted and Evan
+        </div>
     </div>
     
     <div id="settings" {% ifnotequal current_page "settings" %} style="display:none;" {% endifnotequal %}>
+        <div class="subPage">
             <h1>Settings</h1>
             <form action="/settings" method="post">
 
@@ -127,6 +131,7 @@
                 <div><input type="submit" value="Save Settings"></div>
             </form>
             <a href="#">Delete account (this cannot be undone)</a>
+        </div>
     </div>
     
 </div>

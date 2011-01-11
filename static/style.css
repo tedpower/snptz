@@ -54,12 +54,11 @@ a img {
 }
 
 #info, #settings {
-    padding: 50px 0;
+    border-bottom: 1px solid #D9D9D9;
 }
 
-#secondaryPage {
+.subPage {
     padding: 20px 24px 24px 24px;
-    border-bottom: 1px solid #D9D9D9;
 }
 
 #logo {
@@ -89,7 +88,6 @@ a img {
 	width: 344px;
 	float: left;
 	-webkit-transition: background-color 100ms ease-in;
-
 }
 
 .weekChunk ul {
