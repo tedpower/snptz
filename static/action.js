@@ -4,7 +4,7 @@ $(document).ready(function(){
         $("#main").show();
         $("#info").hide();
         $("#settings").hide();
-        history.pushState("", "main", "/main");
+        history.pushState("", "main", "/");
         event.preventDefault();
     });
     $("#infoLink").click(function(event){
@@ -25,7 +25,7 @@ $(document).ready(function(){
 
 // Makes the back button work
 window.onpopstate = function(event) {
-    if (document.location.pathname == '/main') {
+    if (document.location.pathname == '/') {
         $("#main").show();
         $("#info").hide();
         $("#settings").hide();

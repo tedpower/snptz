@@ -9,7 +9,7 @@ from google.appengine.ext.webapp import template
 
 class SplashPage(webapp.RequestHandler):
     def get(self):
-        loginURL = users.create_login_url("/main")
+        loginURL = users.create_login_url("/")
         doRender(self, 'index.html', {'loginURL' : loginURL})
 
 # A render helper

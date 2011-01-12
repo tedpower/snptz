@@ -4,14 +4,30 @@
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-import os
-import models
 from google.appengine.ext.webapp import template
 from google.appengine.ext import db
+import os
+import models
+import logging
 
 class MainPage(webapp.RequestHandler):
     def get(self):
-        renderMainPage(self, "main")
+        user = users.get_current_user()
+        logging.info("the user is %s" % (user))
+        
+        if user is None:
+            loginURL = users.create_login_url("/")
+            doRender(self, 'index.html', {'loginURL' : loginURL})
+            return
+            
+        profile = models.Profile.get_by_key_name(user.user_id())
+        if profile is None:
+            loginURL = users.create_login_url("/")
+            doRender(self, 'index.html', {'loginURL' : loginURL})
+            return
+            
+        else:
+            renderMainPage(self, "main")
 
 class Info(webapp.RequestHandler):
     def get(self):
@@ -75,7 +91,7 @@ def doRender(handler, tname, values = { }):
     return True
 
 application = webapp.WSGIApplication([
-   ('/main', MainPage),
+   ('/', MainPage),
    ('/info', Info),
    ('/settings', Settings)],
    debug=True)

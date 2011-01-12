@@ -18,20 +18,19 @@ handlers:
   script: send_digest.py
   login: admin
 
+- url: /
+  script: main.py
+
 - url: /settings
-  script: logged_in.py
+  script: main.py
   login: required
 
 - url: /info
-  script: logged_in.py
+  script: main.py
   login: required
 
 - url: /teams
   script: teams.py
-  login: required
-
-- url: /main
-  script: logged_in.py
   login: required
 
 - url: /robots.txt
@@ -43,7 +42,7 @@ handlers:
   login: required
 
 - url: /.*
-  script: index.py
+  script: error.py
 
 inbound_services:
 - mail

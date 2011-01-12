@@ -41,7 +41,7 @@ class LoadData(webapp.RequestHandler):
                 realistic=['lazy', 'sick', 'shopping'])
         four.put()
 
-        self.redirect('/main')
+        self.redirect('/')
 
 application = webapp.WSGIApplication([
    ('/fixtures', LoadData)],
