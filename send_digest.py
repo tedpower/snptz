@@ -12,13 +12,13 @@ logging.info('Scheduled task ran.')
 
 def construct_digest(nickname, profile_list):
     digest_template = '''
-        Hi %(username)s,
+        Hi jackass,
 
         Here's what your esteemed colleagues are up to this week:
 
 
     '''
-    personalized_digest_plaintext = digest_template % {"username": nickname}
+    personalized_digest_plaintext = digest_template# % {"username": nickname}
 
     for profile in profile_list:
         template = '''
@@ -60,6 +60,6 @@ for user in user_list:
         reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
         # TODO make the subject of the email include the date
         subject='SNPTZ Esteemed Colleagues digest for %s' % datetime.datetime.now().strftime("%b %d"),
-        body=personalized_digest_plaintext)
+        body=digest_message_body)
 
         digest.send()
