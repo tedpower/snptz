@@ -10,7 +10,7 @@ import models
 
 logging.info('Scheduled task ran.')
 
-def construct_digest(profile_list):
+def construct_digest(nickname, profile_list):
     personalized_digest_plaintext = '''
         Hi %(username)s,
 
@@ -29,6 +29,7 @@ def construct_digest(profile_list):
         prof_name = profile.nickname
         prof_team_names = ", ".join([m.team.name for m in profile.membership_set])
         prof_taskweek = profile.this_weeks_taskweek
+        # TODO refactor control flow. this is whack
         if prof_taskweek is not None:
             prof_taskweek = prof_taskweek.optimistic
         if prof_taskweek is None:
@@ -37,7 +38,8 @@ def construct_digest(profile_list):
             prof_tasks = "\n".join(prof_taskweek)
 
         personalized_digest_plaintext = personalized_digest_plaintext +\
-            template % {"colleague_nick": prof_name,
+            template % {"username": nickname,
+                        "colleague_nick": prof_name,
                         "colleague_teams": prof_team_names,
                         "colleague_tasks": prof_tasks}
     return personalized_digest_plaintext
@@ -50,7 +52,7 @@ for user in user_list:
 
     esteemed_colleagues = user.esteemed_colleagues
     if esteemed_colleagues is not None:
-        digest_message_body = construct_digest(esteemed_colleagues) % {"username": first_name}
+        digest_message_body = construct_digest(first_name, esteemed_colleagues)
 
         digest = mail.EmailMessage(
         sender='SNPTZ Esteemed Colleagues <digest@snptz.com>',
