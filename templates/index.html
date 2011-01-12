@@ -1,10 +1,12 @@
 {% extends "_base.html" %}
 {% block bodycontent %}
 <div id="loggedOut">
-    <img src="../static/logoBig.png" width="349" height="100" alt="LogoBig" id="logoBig">
+    
+    <img src="../static/logoBig.png" width="349" height="100" alt="SNPTZ" id="logoBig">
     
     {% ifnotequal loginURL None %}
 		<p><a href="{{ loginURL }}">Sign in</a></p>
 	{% endifnotequal %}
+	
 </div>
 {% endblock %}

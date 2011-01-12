@@ -7,10 +7,9 @@ from google.appengine.ext.webapp.util import run_wsgi_app
 import os
 from google.appengine.ext.webapp import template
 
-class SplashPage(webapp.RequestHandler):
+class ErrorPage(webapp.RequestHandler):
     def get(self):
-        loginURL = users.create_login_url("/")
-        doRender(self, 'index.html', {'loginURL' : loginURL})
+        doRender(self, 'error.html', { })
 
 # A render helper
 def doRender(handler, tname, values = { }):
@@ -25,7 +24,7 @@ def doRender(handler, tname, values = { }):
     return True
 
 application = webapp.WSGIApplication([
-   ('/', SplashPage)],
+   ('/.*', ErrorPage)],
    debug=True)
 
 def main():

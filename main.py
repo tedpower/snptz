@@ -52,6 +52,8 @@ def renderMainPage(handler, selectedPage):
     current_page = selectedPage;
     user = users.get_current_user()
     profile = models.Profile.get_by_key_name(user.user_id())
+    
+    # TODO This should be taken out and replaced with a signup step
     if profile is None:
         profile = models.Profile(key_name=user.user_id(), email=user.email(), weekly_email=True)
         profile.put()
