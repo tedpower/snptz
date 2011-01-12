@@ -1,26 +1,45 @@
+// Attaches the hide and show actions for the main page
 $(document).ready(function(){    
-    $("#infoLink").click(function(event){
-        $("#main").hide();
-        $("#info").show();
-        $("#settings").hide();
-        history.pushState("test", "test", "/info");
-        event.preventDefault();
-    });
-
     $("#logo").click(function(event){
         $("#main").show();
         $("#info").hide();
         $("#settings").hide();
-        history.pushState("test", "test", "/main");
+        history.pushState("", "main", "/main");
         event.preventDefault();
     });
-    
+    $("#infoLink").click(function(event){
+        $("#main").hide();
+        $("#info").show();
+        $("#settings").hide();
+        history.pushState("", "info", "/info");
+        event.preventDefault();
+    });
     $("#settingsLink").click(function(event){
         $("#main").hide();
         $("#info").hide();
         $("#settings").show();
-        history.pushState("test", "test", "/settings");
+        history.pushState("", "settings", "/settings");
         event.preventDefault();
     });
 });
 
+// Makes the back button work
+window.onpopstate = function(event) {
+    if (document.location.pathname == '/main') {
+        $("#main").show();
+        $("#info").hide();
+        $("#settings").hide();
+    }
+    if (document.location.pathname == '/info') {
+        alert('info');
+        $("#main").hide();
+        $("#info").show();
+        $("#settings").hide();
+    }
+    if (document.location.pathname == '/settings') {
+        alert('settings');
+        $("#main").hide();
+        $("#info").hide();
+        $("#settings").show();
+    }
+};
