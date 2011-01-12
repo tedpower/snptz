@@ -55,7 +55,7 @@ for user in user_list:
         digest_message_body = construct_digest(user.first_name, esteemed_colleagues)
 
         digest = mail.EmailMessage(
-        sender='SNPTZ Esteemed Colleagues <digest@snptz.com>',
+        sender='SNPTZ <weekly@snptz.com>',
         to=user.email,
         reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
         # TODO make the subject of the email include the date
