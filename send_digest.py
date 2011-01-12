@@ -12,9 +12,9 @@ logging.info('Scheduled task ran.')
 
 def construct_digest(nickname, profile_list):
     digest_greeting = '''
-        Hi %(username)s,
+Hi %(username)s,
 
-        Here's what your esteemed colleagues are up to this week:
+Here's what your esteemed colleagues are up to this week:
 
 
     '''
@@ -22,9 +22,9 @@ def construct_digest(nickname, profile_list):
 
     for profile in profile_list:
         colleague_summary = '''
-        %(colleague_nick)s (%(colleague_teams)s)
-        ---------------------
-        %(colleague_tasks)s
+%(colleague_nick)s (%(colleague_teams)s)
+---------------------
+%(colleague_tasks)s
 
         '''
         prof_name = profile.nickname

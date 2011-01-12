@@ -152,7 +152,7 @@ class Profile(db.Model):
         esteemed_colleagues = []
         for team in teams:
             for mem in team.membership_set:
-                if mem.profile is not self:
+                if mem.profile.email != self.email:
                     if mem.profile not in esteemed_colleagues:
                         esteemed_colleagues.append(mem.profile)
         return esteemed_colleagues
