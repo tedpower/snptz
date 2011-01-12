@@ -37,6 +37,10 @@ handlers:
   static_files: static/robots.txt
   upload: static/robot.txt
 
+- url: /favicon.ico
+  static_files: static/favicon.ico
+  upload: static/favicon.ico
+
 - url: /fixtures
   script: load_data.py
   login: required
