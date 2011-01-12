@@ -146,14 +146,19 @@ class Profile(db.Model):
 
     @property
     def esteemed_colleagues(self):
+        # get all of the teams this profile is a member of
         teams = [m.team for m in self.membership_set]
         if len(teams) == 0:
             return None
         esteemed_colleagues = []
         for team in teams:
+            # loop through all the members of all the teams
             for mem in team.membership_set:
                 if mem.profile.email != self.email:
+                    # avoid adding self (by checking if emails are equal)
                     if mem.profile not in esteemed_colleagues:
+                        # add to esteemed_colleagues if the profile
+                        # is not already there (avoid duplicates)
                         esteemed_colleagues.append(mem.profile)
         return esteemed_colleagues
 
