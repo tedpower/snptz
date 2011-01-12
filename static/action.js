@@ -31,13 +31,11 @@ window.onpopstate = function(event) {
         $("#settings").hide();
     }
     if (document.location.pathname == '/info') {
-        alert('info');
         $("#main").hide();
         $("#info").show();
         $("#settings").hide();
     }
     if (document.location.pathname == '/settings') {
-        alert('settings');
         $("#main").hide();
         $("#info").hide();
         $("#settings").show();
