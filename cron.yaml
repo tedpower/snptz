@@ -6,5 +6,5 @@ cron:
 
 - description: test digest
   url: /testdigest
-  schedule: every tuesday 18:30
+  schedule: every tuesday 19:33
   timezone: America/New_York
