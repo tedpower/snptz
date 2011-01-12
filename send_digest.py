@@ -29,7 +29,9 @@ def construct_digest(profile_list):
         prof_name = profile.nickname
         prof_team_names = ", ".join([m.team.name for m in profile.membership_set])
         prof_taskweek = profile.this_weeks_taskweek
-        if len(prof_taskweek) == 0:
+        if prof_taskweek is not None:
+            prof_taskweek = prof_taskweek.optimistic
+        if prof_taskweek is None:
             prof_tasks = "just chillin... (no reported tasks!)"
         else:
             prof_tasks = "\n".join(prof_taskweek)
