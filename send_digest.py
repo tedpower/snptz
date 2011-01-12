@@ -11,18 +11,18 @@ import models
 logging.info('Scheduled task ran.')
 
 def construct_digest(nickname, profile_list):
-    digest_template = '''
-        Hi jackass,
+    digest_greeting = '''
+        Hi %(username)s,
 
         Here's what your esteemed colleagues are up to this week:
 
 
     '''
-    personalized_digest_plaintext = digest_template# % {"username": nickname}
+    personalized_digest_plaintext = digest_greeting % {"username": nickname}
 
     for profile in profile_list:
-        template = '''
-        %(colleague_nick)s (%s(colleague_teams)s)
+        colleague_summary = '''
+        %(colleague_nick)s (%(colleague_teams)s)
         ---------------------
         %(colleague_tasks)s
 
@@ -39,7 +39,7 @@ def construct_digest(nickname, profile_list):
             prof_tasks = "\n".join(prof_taskweek)
 
         personalized_digest_plaintext = personalized_digest_plaintext +\
-            template % {"colleague_nick": prof_name,
+             colleague_summary % {"colleague_nick": prof_name,
                         "colleague_teams": prof_team_names,
                         "colleague_tasks": prof_tasks}
     return personalized_digest_plaintext
