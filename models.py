@@ -76,6 +76,13 @@ class Profile(db.Model):
         return self.user.nickname()
 
     @property
+    def name(self):
+        if (self.first_name and self.last_name) is not None:
+            return "%s %s" % (self.first_name, self.last_name)
+        else:
+            return self.nickname
+
+    @property
     def this_weeks_taskweek(self):
         # TODO rename to get_or_create_...?
         # when are we?
