@@ -22,6 +22,11 @@ class MainPage(webapp.RequestHandler):
             
         profile = models.Profile.get_by_key_name(user.user_id())
         if profile is None:
+            # TODO This should be taken out and replaced with a signup step
+            # need this here for now to prevent endless redirects to login page
+            # if user's profile doesn't exist yet
+            profile = models.Profile(key_name=user.user_id(), email=user.email(), weekly_email=True)
+            profile.put()
             loginURL = users.create_login_url("/")
             doRender(self, 'index.html', {'loginURL' : loginURL})
             return
@@ -60,19 +65,11 @@ def renderMainPage(handler, selectedPage):
 
     logoutURL = users.create_logout_url("/")
 
-    last_past = profile.last_past_taskweek
-    all_other_past = profile.all_other_past_taskweeks
-    this_week = profile.this_weeks_taskweek
+    teams = [m.team for m in profile.membership_set]
 
-    doRender(handler, 'main.html', {'userNickname' : profile.email,
-                                    'logoutURL' : logoutURL, 
-                                    'this_week' : this_week,
-                                    'last_past' : last_past, 
-                                    'all_other_past' : all_other_past,                                    
-                                    'email' : profile.email,
-                                    'firstName' : profile.first_name,
-                                    'lastName' : profile.last_name,
-                                    'weeklyEmail' : profile.weekly_email,        
+    doRender(handler, 'main.html', {'logoutURL' : logoutURL,
+                                    "profile": profile,
+                                    "teams": teams,
                                     'current_page' : current_page})
                                  
 # A helper to do the rendering and to add the necessary
