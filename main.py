@@ -41,7 +41,9 @@ class Info(webapp.RequestHandler):
 class Team(webapp.RequestHandler):
     def get(self, team_slug):
         team = models.Team.find_by_slug(team_slug)
-        # TODO if team is None, redirect to 404
+        # if team is None, give 'em a 404
+        if team is None:
+            self.redirect("/404")
         renderMainPage(self, "team", team=team)
 
 class Settings(webapp.RequestHandler):
