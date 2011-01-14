@@ -1,0 +1,62 @@
+<div id="thisWeek">
+    <div class="timeStamp">
+        <em>This week</em> {{ colleague.this_weeks_taskweek.created|date:"M j" }} -
+    </div>
+    <div class="plans">
+        <ul>
+            {% for t in colleague.this_weeks_taskweek.optimistic %}
+                <li>{{ t }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div id="history">
+    
+    <div class="weekChunk clearfix">
+        <div class="plans">
+            <div class="timeStamp">
+                Week of <em>{{ colleague.last_past_taskweek.created|date:"M j" }}</em>
+            </div>
+            <ul>
+                {% for t in colleague.last_past_taskweek.optimistic %}
+                    <li>{{ t }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="review">
+            <div class="timeStamp">
+                How'd it go?
+            </div>
+            <ul>
+                {% for t in colleague.last_past_taskweek.realistic %}
+                    <li>{{ t }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    {% for tw in colleague.all_other_past_taskweeks %}
+        <div class="weekChunk clearfix">
+            <div class="plans">
+                <div class="timeStamp">
+                    Week of <em>{{ tw.created|date:"M j" }}</em>
+                </div>
+                <ul>
+                    {% for t in tw.optimistic %}
+                        <li>{{ t }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="review">
+                <div class="timeStamp">
+                    How'd it go?
+                </div>
+                <ul>
+                    {% for t in tw.realistic %}
+                        <li>{{ t }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
