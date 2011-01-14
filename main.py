@@ -38,9 +38,25 @@ class Info(webapp.RequestHandler):
     def get(self):
         renderMainPage(self, "info")
         
+class Team(webapp.RequestHandler):
+    def get(self, team_slug):
+        team = models.Team.find_by_slug(team_slug)
+        # TODO if team is None, redirect to 404
+        renderMainPage(self, "team", team=team)
+
 class Settings(webapp.RequestHandler):
     def get(self):
-        renderMainPage(self, "settings")
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
+
+        memberships = profile.membership_set
+        # get a list of teams user has membership in
+        memberships_teams = [m.team for m in memberships]
+        # get a list of teams user does not have membership in
+        other_teams = [t for t in models.Team.all() if t.key() not in [m.key() for m in memberships_teams]]
+
+        renderMainPage(self, "settings", memberships_teams=memberships_teams,
+            other_teams=other_teams)
 
     def post(self):
         user = users.get_current_user()
@@ -51,9 +67,55 @@ class Settings(webapp.RequestHandler):
         profile.weekly_email = self.request.get('weeklyEmailsToggle', '').lower() in ['true', 'yes', 't', '1', 'on', 'checked']
         profile.timezone = self.request.get('timezone')
         profile.put()
+
+        # now check the team membership settings
+
+        # get the user's team memberships
+        memberships = profile.membership_set
+        # get a list of keys of the teams user has membership in
+        memberships_teams_keys = [m.team.key() for m in memberships]
+
+        for team in models.Team.all():
+            logging.info(team)
+            try:
+                team_status = self.request.get('team-%s' % team.key())
+                if team_status is not None:
+                    if team_status.lower() in ['true', 'yes', 't', '1', 'on', 'checked']:
+                        if team.key() not in memberships_teams_keys:
+                            new_member = models.Membership(team=team, profile=profile)
+                            new_member.put()
+                    else:
+                        if team.key() in memberships_teams_keys:
+                            old_membership = models.Membership.find_by_profile_and_team(profile, team)
+                            if old_membership is not None:
+                                old_membership.delete()
+                continue
+            except Exception, e:
+                logging.info(e)
+
+        old_teams = self.request.get('old-team', allow_multiple=True)
+        new_teams = self.request.get('new-team', allow_multiple=True)
+
+        # if user is creating a new team...
+        team_name = self.request.get('newteamname')
+        if team_name not in [None, '', ' ']:
+            # make sure it doesnt exist yet
+            team = models.Team.find_by_name(team_name)
+            if team is None:
+                # create new team
+                team = models.Team(name=team_name)
+                # make a slug from the supplied team name
+                team.slug = models.slugify(team_name)
+                team.put()
+                # create a new membership for the user
+                membership = models.Membership(team=team, profile=profile)
+                membership.put()
+            else:
+                #TODO handle case where team with this name already exists!
+                pass
         self.redirect('/settings')
 
-def renderMainPage(handler, selectedPage):
+def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;
     user = users.get_current_user()
     profile = models.Profile.get_by_key_name(user.user_id())
@@ -67,9 +129,18 @@ def renderMainPage(handler, selectedPage):
 
     teams = [m.team for m in profile.membership_set]
 
+    # get the keyword argument named 'team' and set as value of variable called team
+    # if there is not kwarg 'team', assign None to variable team
+    team = kwargs.get('team', None)
+    memberships_teams = kwargs.get('memberships_teams', None)
+    other_teams = kwargs.get('other_teams', None)
+
     doRender(handler, 'main.html', {'logoutURL' : logoutURL,
                                     "profile": profile,
                                     "teams": teams,
+                                    "team": team,
+                                    "memberships_teams": memberships_teams,
+                                    "other_teams": other_teams,
                                     'current_page' : current_page})
                                  
 # A helper to do the rendering and to add the necessary
@@ -92,7 +163,8 @@ def doRender(handler, tname, values = { }):
 application = webapp.WSGIApplication([
    ('/', MainPage),
    ('/info', Info),
-   ('/settings', Settings)],
+   ('/settings', Settings),
+   ('/team/([^/]+)', Team)],
    debug=True)
 
 def main():

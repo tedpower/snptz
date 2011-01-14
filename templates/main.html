@@ -91,7 +91,7 @@
             <div id="sidebar">
             {% for team in teams %}
                     <div class="team" id="team-{{ team.name }}">
-                    <h3>esteemed colleages from {{ team.name }}</h3>
+                    <h3>esteemed colleages from <a href="/team/{{team.slug}}">{{ team.name }}</a></h3>
                     <ul>
                     {% for member in team.membership_set %}
                         {% ifnotequal member.profile.name profile.name %}
@@ -109,6 +109,26 @@
         <div class="subPage">
             <h1>Info</h1>
             Built by Ted and Evan
+        </div>
+    </div>
+    
+    <div id="team" {% ifnotequal current_page "team" %} style="display:none;" {% endifnotequal %}>
+        <div class="subPage">
+            {% if team %}
+                <h1>{{ team.name }}</h1>
+                <ul>
+                {% for member in team.membership_set %}
+                    {% ifnotequal member.profile.name profile.name %}
+                        <li>
+                            <div>
+                            {{ member.profile.name }}
+                            {{ member.profile.this_weeks_taskweek.optimistic_as_str }}
+                            </div>
+                        </li>
+                    {% endifnotequal %}
+                {% endfor %}
+                </ul>
+            {% endif %}
         </div>
     </div>
     
@@ -138,17 +158,42 @@
                 </div>
                 <div>
                     <select name='timezone'>
-                      <option value="est">(GMT-5:00) Eastern Time</option>
-                      <option value="cst">(GMT-6:00) Central Time</option>
-                      <option value="mst">(GMT-7:00) Mountain Time</option>
-                      <option value="pst">(GMT-8:00) Pacific Time</option>
+                      <option {% ifequal profile.timezone "est"%} selected {% endifequal %} value="est">(GMT-5:00) Eastern Time</option>
+                      <option {% ifequal profile.timezone "cst"%} selected {% endifequal %} value="cst">(GMT-6:00) Central Time</option>
+                      <option {% ifequal profile.timezone "mst"%} selected {% endifequal %} value="mst">(GMT-7:00) Mountain Time</option>
+                      <option {% ifequal profile.timezone "pst"%} selected {% endifequal %} value="pst">(GMT-8:00) Pacific Time</option>
                     </select>
                 </div>
-                <div><input type="submit" value="Save Settings"></div>
+
+            <h1>Esteemed colleagues</h1>
+            <form action="/settings" method="post">
+
+                <div>My teams</div>
+                {% for team in memberships_teams %}
+                    <div>
+                        <label for="team-{{team.key}}">{{team.name}}</label>
+                        <input type="checkbox" name="team-{{team.key}}" checked="yes"/>
+                    </div>
+                {% endfor %}
+
+                <div>Other teams</div>
+                {% for team in other_teams %}
+                    <div>
+                        <label for="team-{{team.key}}">{{team.name}}</label>
+                        <input type="checkbox" name="team-{{team.key}}"/>
+                    </div>
+                {% endfor %}
+                <div>
+                    <label for="newteamname">Create new team</label>
+                    <input type="text" name="newteamname" value=""/>
+                </div>
+                <div><input type="submit" value="Update settings"></div>
             </form>
+
             <a href="#">Delete account (this cannot be undone)</a>
+            <br/>
+
         </div>
     </div>
-    
 </div>
 {% endblock %}
