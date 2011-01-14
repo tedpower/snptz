@@ -29,10 +29,6 @@ handlers:
   script: main.py
   login: required
 
-- url: /teams
-  script: teams.py
-  login: required
-
 - url: /robots.txt
   static_files: static/robots.txt
   upload: static/robot.txt
