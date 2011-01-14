@@ -120,9 +120,8 @@ class Profile(db.Model):
             # for dev users and gmail for their domain users
             ats = nick.count("@")
             if ats > 0:
-                parts = nick.split("@")
-                # save only the part before @domain.tld
-                self.nickname = parts[0]
+                no_at = nick.replace("@", "-")
+                self.nickname = no_at
             else:
                 self.nickname = nick
             # TODO enforce uniqueness of nickname!
