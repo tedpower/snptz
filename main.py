@@ -46,6 +46,13 @@ class Team(webapp.RequestHandler):
             self.redirect("/404")
         renderMainPage(self, "team", team=team)
 
+class Colleague(webapp.RequestHandler):
+    def get(self, nickname):
+        colleague = models.Profile.find_by_nickname(nickname)
+        if colleague is None:
+            self.redirect("/404")
+        renderMainPage(self, "colleague", colleague=colleague)
+
 class Settings(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
@@ -136,6 +143,7 @@ def renderMainPage(handler, selectedPage, **kwargs):
     team = kwargs.get('team', None)
     memberships_teams = kwargs.get('memberships_teams', None)
     other_teams = kwargs.get('other_teams', None)
+    colleague = kwargs.get('colleague', None)
 
     doRender(handler, 'main.html', {'logoutURL' : logoutURL,
                                     "profile": profile,
@@ -143,6 +151,7 @@ def renderMainPage(handler, selectedPage, **kwargs):
                                     "team": team,
                                     "memberships_teams": memberships_teams,
                                     "other_teams": other_teams,
+                                    "colleague": colleague,
                                     'current_page' : current_page})
                                  
 # A helper to do the rendering and to add the necessary
@@ -166,7 +175,8 @@ application = webapp.WSGIApplication([
    ('/', MainPage),
    ('/info', Info),
    ('/settings', Settings),
-   ('/team/([^/]+)', Team)],
+   ('/team/([^/]+)', Team),
+   ('/colleague/([^/]+)', Colleague)],
    debug=True)
 
 def main():

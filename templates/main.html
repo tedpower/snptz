@@ -91,11 +91,11 @@
             <div id="sidebar">
             {% for team in teams %}
                     <div class="team" id="team-{{ team.name }}">
-                    <h3>esteemed colleages from <a href="/team/{{team.slug}}">{{ team.name }}</a></h3>
+                    <h3>esteemed colleages from <a href="/team/{{ team.slug }}">{{ team.name }}</a></h3>
                     <ul>
                     {% for member in team.membership_set %}
                         {% ifnotequal member.profile.name profile.name %}
-                            <li>{{ member.profile.name }}</li>
+                            <li><a href="/colleague/{{ member.profile.get_nickname }}">{{ member.profile.name }}</a></li>
                         {% endifnotequal %}
                     {% endfor %}
                     </ul>
@@ -119,7 +119,7 @@
                 {% ifnotequal member.profile.name profile.name %}
                     <li>
                         <div>
-                        {{ member.profile.name }}
+                        <a href="/colleague/{{ member.profile.get_nickname}}">{{ member.profile.name }}</a>
                         {{ member.profile.this_weeks_taskweek.optimistic_as_str }}
                         </div>
                     </li>
@@ -129,6 +129,11 @@
         {% endif %}
     </div>
     
+    <div id="colleague" class="subPage" {% ifnotequal current_page "colleague" %} style="display:none;" {% endifnotequal %}>
+        <h1>Colleague</h1>
+        {{ colleague.name }}
+    </div>
+
     <div id="settings" class="subPage" {% ifnotequal current_page "settings" %} style="display:none;" {% endifnotequal %}>
         <h1>Settings</h1>
         <form action="/settings" method="post">

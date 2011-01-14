@@ -45,6 +45,10 @@ handlers:
   script: main.py
   login: required
 
+- url: /colleague/.*
+  script: main.py
+  login: required
+
 - url: /.*
   script: error.py
 
