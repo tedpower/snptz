@@ -61,68 +61,7 @@
     </div>
 
     <div id="settings" class="subPage" {% ifnotequal current_page "settings" %} style="display:none;" {% endifnotequal %}>
-        <h1>Settings</h1>
-        <form action="/settings" method="post">
-
-            <div>Email</div>
-            <div>{{ profile.email }}</div>
-            <div>First name</div>
-            <div><input type="text" name="firstname" id="firstname"
-                {% ifnotequal profile.first_name None %}
-                    value="{{ profile.first_name }}"
-                {% endifnotequal %}/></div>
-            <div>Last name</div>
-            <div><input type="text" name="lastname"  id="lastname"
-                {% ifnotequal profile.last_name None %}
-                    value="{{ profile.last_name }}"
-                {% endifnotequal %}/></div>
-            <div>
-                <input type="checkbox" name="weeklyEmailsToggle" id="weeklyEmailsToggle"
-                {% if profile.weekly_email %}
-                    checked="yes"
-                {% endif %} />
-                <label for="weeklyEmailsToggle">Subscribe to weekly reminder emails</label>
-            </div>
-            <div>
-                <select name='timezone'>
-                  <option {% ifequal profile.timezone "est"%} selected {% endifequal %} value="est">(GMT-5:00) Eastern Time</option>
-                  <option {% ifequal profile.timezone "cst"%} selected {% endifequal %} value="cst">(GMT-6:00) Central Time</option>
-                  <option {% ifequal profile.timezone "mst"%} selected {% endifequal %} value="mst">(GMT-7:00) Mountain Time</option>
-                  <option {% ifequal profile.timezone "pst"%} selected {% endifequal %} value="pst">(GMT-8:00) Pacific Time</option>
-                </select>
-            </div>
-            <div><input type="submit" id="settingsSubmit" value="Save settings"></div>
-        </form>
-        
-        <form action="/settings" method="post">
-        <h1>Esteemed colleagues</h1>
-
-            <div>My teams</div>
-            {% for team in memberships_teams %}
-                <div>
-                    <label for="team-{{team.key}}">{{team.name}}</label>
-                    <input type="checkbox" name="team-{{team.key}}" checked="yes"/>
-                </div>
-            {% endfor %}
-
-            <div>Other teams</div>
-            {% for team in other_teams %}
-                <div>
-                    <label for="team-{{team.key}}">{{team.name}}</label>
-                    <input type="checkbox" name="team-{{team.key}}"/>
-                </div>
-            {% endfor %}
-            <div>
-                <label for="newteamname">Create new team</label>
-                <input type="text" name="newteamname" value=""/>
-            </div>
-            <div><input type="submit" value="Edit teams"></div>
-            
-        </form>
-
-        <a href="#">Delete account (this cannot be undone)</a>
-        <br/>
-
+        {% include "partials/settings.html" %}
     </div>
 </div>
 {% endblock %}
