@@ -1,3 +1,18 @@
+#notifications {
+    line-height: 50px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: yellow;
+    z-index: 3;
+    color: black;
+    -webkit-transition: top 300ms linear;
+}
+
+.notificationShow {
+    top: 50px !important;
+}
 body {
 	font-family: "Droid Sans", Helvetica, Arial, sans-serif;
 	margin: 0;

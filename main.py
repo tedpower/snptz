@@ -69,14 +69,15 @@ class Settings(webapp.RequestHandler):
         profile.weekly_email = self.request.get('weeklyEmailsToggle', '').lower() in ['true', 'yes', 't', '1', 'on', 'checked']
         profile.timezone = self.request.get('timezone')
         profile.put()
+        self.response.out.write("Your settings have been saved")        
 
         # now check the team membership settings
-
+        
         # get the user's team memberships
         memberships = profile.membership_set
         # get a list of keys of the teams user has membership in
         memberships_teams_keys = [m.team.key() for m in memberships]
-
+        
         for team in models.Team.all():
             logging.info(team)
             try:
@@ -94,10 +95,10 @@ class Settings(webapp.RequestHandler):
                 continue
             except Exception, e:
                 logging.info(e)
-
+        
         old_teams = self.request.get('old-team', allow_multiple=True)
         new_teams = self.request.get('new-team', allow_multiple=True)
-
+        
         # if user is creating a new team...
         team_name = self.request.get('newteamname')
         if team_name not in [None, '', ' ']:
@@ -115,7 +116,6 @@ class Settings(webapp.RequestHandler):
             else:
                 #TODO handle case where team with this name already exists!
                 pass
-        self.redirect('/settings')
 
 def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;
