@@ -10,7 +10,7 @@
                 {% endifnotequal %}
                 <a href="/settings" id="settingsLink">Settings</a>
                 <a href="/info" id="infoLink">Info</a>
-                <splan id="user">{{ profile.email }}</splan>
+                <span id="user">{{ profile.email }}</span>
             </div>
             <a href="/" id="logo">
                 <img src="/static/logoMain.png" width="88" height="50" alt="SNPTZ">
@@ -69,8 +69,7 @@
     </div>
     
     <div id="colleague" class="subPage" {% ifnotequal current_page "colleague" %} style="display:none;" {% endifnotequal %}>
-        <h1>Colleague</h1>
-        {{ colleague.name }}
+        <h1>{{ colleague.name }}'s snptzs</h1>
         {% include "partials/colleague.html" %}
     </div>
 
