@@ -1,23 +1,8 @@
 {% extends "_base.html" %}
 {% block bodycontent %}
 <div id="loggedIn">
-    
-    <div id="header">
-        <div id="nav">
-            <div id="presence">
-                {% ifnotequal logoutURL None %}
-                    <a href="{{ logoutURL }}">Logout</a>
-                {% endifnotequal %}
-                <a href="/settings" id="settingsLink">Settings</a>
-                <a href="/info" id="infoLink">Info</a>
-                <span id="user">{{ profile.email }}</span>
-            </div>
-            <a href="/" id="logo">
-                <img src="/static/logoMain.png" width="88" height="50" alt="SNPTZ">
-            </a>
-        </div>
-    </div>
-    
+    {% include "partials/header.html" %}
+
     <!-- Empty div for the background -->
     <div id="bg"></div>
 
