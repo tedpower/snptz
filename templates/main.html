@@ -113,6 +113,7 @@
     <div id="team" class="subPage" {% ifnotequal current_page "team" %} style="display:none;" {% endifnotequal %}>
         {% if team %}
             <h1>{{ team.name }}</h1>
+                <em>Keeping esteemed colleagues in the loop since {{ team.created|date:"M j" }}</em>
             <ul>
             {% for member in team.membership_set %}
                 {% ifnotequal member.profile.name profile.name %}
