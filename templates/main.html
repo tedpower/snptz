@@ -10,7 +10,6 @@
     <div id="notifications">Test</div>
     
     <div id="main" {% ifnotequal current_page "main" %} style="display:none;" {% endifnotequal %}>
-
         {% include "partials/profile.html" %}
             
         {% if teams %}
@@ -56,7 +55,6 @@
     </div>
     
     <div id="colleague" class="subPage" {% ifnotequal current_page "colleague" %} style="display:none;" {% endifnotequal %}>
-        <h1>{{ colleague.name }}'s snptzs</h1>
         {% include "partials/colleague.html" %}
     </div>
 
