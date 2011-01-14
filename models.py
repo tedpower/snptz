@@ -122,11 +122,9 @@ class Profile(db.Model):
             created_tw.put()
             return created_tw
 
-        logging.info(taskweeks)
         # otherwise limit these taskweeks to those from this year & week
         taskweek = [tw for tw in taskweeks
                 if year_and_week_num_of(tw.created) == year_and_week_num_of(now_now)]
-        logging.info(taskweek)
         if len(taskweek) == 1:
             # if there is exactly one, return it
             return taskweek[0]
