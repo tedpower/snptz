@@ -78,6 +78,7 @@ class Profile(db.Model):
     # address than self.email if the user changes their google
     # account's email handle
     email = db.EmailProperty()
+    nickname = db.StringProperty()
     first_name = db.StringProperty()
     last_name = db.StringProperty()
     weekly_email = db.BooleanProperty()
@@ -96,9 +97,40 @@ class Profile(db.Model):
         else:
             return None
 
+    @classmethod
+    def find_by_nickname(klass, str):
+        # start with all users
+        user_query = klass.all()
+        # filter users by email equalling str
+        user_query.filter("nickname = ", str)
+        # fetch and return one match (or None)
+        matches = user_query.fetch(1)
+        if len(matches) != 0:
+            return matches[0]
+        else:
+            return None
+
     @property
-    def nickname(self):
-        return self.user.nickname()
+    def get_nickname(self):
+        if self.nickname is not None:
+            return self.nickname
+        else:
+            nick = self.user.nickname()
+            # self.user.nickname() will return the whole email address
+            # for dev users and gmail for their domain users
+            ats = nick.count("@")
+            if ats > 0:
+                no_at = nick.replace("@", "-")
+                self.nickname = no_at
+            else:
+                self.nickname = nick
+            # TODO enforce uniqueness of nickname!
+            self.put()
+            return self.nickname
+
+    @property
+    def get_key(self):
+        return self.key()
 
     @property
     def name(self):
