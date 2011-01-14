@@ -44,7 +44,7 @@ a img {
 	z-index: 0;
 }
 
-#main, #info, #settings {
+#main {
 	background-color: white;
 	z-index: 2;
 	position: relative;
@@ -53,12 +53,15 @@ a img {
 	text-align: left;
 }
 
-#info, #settings {
-    border-bottom: 1px solid #D9D9D9;
-}
-
 .subPage {
-    padding: 20px 24px 24px 24px;
+    background-color: white;
+	z-index: 2;
+	position: relative;
+	width: 712px;
+	margin: 51px auto;
+	text-align: left;
+	border-bottom: 1px solid #D9D9D9;
+	padding: 20px 24px 24px 24px;   
 }
 
 #logo {
