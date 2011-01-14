@@ -5,8 +5,22 @@ from google.appengine.api import memcache
 from google.appengine.api import users
 from google.appengine.ext import db
 import logging
+import re
 import datetime
 from timezones import *
+
+
+# slightly modified method cribbed from django
+# (django/template/defaultfilters.py)
+def slugify(value):
+    """
+    Normalizes string, converts to lowercase, removes non-alpha characters,
+    and converts spaces to hyphens.
+    """
+    import unicodedata
+    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
+    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
+    return (re.sub('[-\s]+', '-', value))
 
 # dictionary of instances of our tzinfo subclasses
 # as defined in timezones.py
@@ -28,6 +42,7 @@ def year_and_week_num_of(dt):
 
 class Team(db.Model):
     name = db.StringProperty()
+    slug = db.StringProperty()
     created = db.DateTimeProperty(auto_now_add=True)
 
     @property
@@ -41,6 +56,16 @@ class Team(db.Model):
     def find_by_name(klass, str):
         team_q = klass.all()
         team_q.filter("name = ", str)
+        matches = team_q.fetch(1)
+        if len(matches) != 0:
+            return matches[0]
+        else:
+            return None
+
+    @classmethod
+    def find_by_slug(klass, str):
+        team_q = klass.all()
+        team_q.filter("slug = ", str)
         matches = team_q.fetch(1)
         if len(matches) != 0:
             return matches[0]
@@ -178,6 +203,14 @@ class TaskWeek(db.Model):
     optimistic = db.StringListProperty()
     # what they actually accomplished
     realistic = db.StringListProperty()
+
+    @property
+    def optimistic_as_str(self):
+        return "\n".join(self.optimistic)
+
+    @property
+    def realistic_as_str(self):
+        return "\n".join(self.realistic)
 
 # A Model for a received email message
 class Message(db.Model):
