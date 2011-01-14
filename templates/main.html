@@ -21,6 +21,9 @@
     <!-- Empty div for the background -->
     <div id="bg"></div>
 
+    <!-- Empty div for notifications -->
+    <div id="notifications">Test</div>
+    
     <div id="main" {% ifnotequal current_page "main" %} style="display:none;" {% endifnotequal %}>
 
         {% include "partials/profile.html" %}
@@ -80,12 +83,12 @@
             <div>Email</div>
             <div>{{ profile.email }}</div>
             <div>First name</div>
-            <div><input type="text" name="firstname" 
+            <div><input type="text" name="firstname" id="firstname"
                 {% ifnotequal profile.first_name None %}
                     value="{{ profile.first_name }}"
                 {% endifnotequal %}/></div>
             <div>Last name</div>
-            <div><input type="text" name="lastname" 
+            <div><input type="text" name="lastname"  id="lastname"
                 {% ifnotequal profile.last_name None %}
                     value="{{ profile.last_name }}"
                 {% endifnotequal %}/></div>
@@ -104,9 +107,11 @@
                   <option {% ifequal profile.timezone "pst"%} selected {% endifequal %} value="pst">(GMT-8:00) Pacific Time</option>
                 </select>
             </div>
-
-        <h1>Esteemed colleagues</h1>
+            <div><input type="submit" id="settingsSubmit" value="Save settings"></div>
+        </form>
+        
         <form action="/settings" method="post">
+        <h1>Esteemed colleagues</h1>
 
             <div>My teams</div>
             {% for team in memberships_teams %}
@@ -127,7 +132,8 @@
                 <label for="newteamname">Create new team</label>
                 <input type="text" name="newteamname" value=""/>
             </div>
-            <div><input type="submit" value="Update settings"></div>
+            <div><input type="submit" value="Edit teams"></div>
+            
         </form>
 
         <a href="#">Delete account (this cannot be undone)</a>
