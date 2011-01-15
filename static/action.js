@@ -42,12 +42,6 @@ $(document).ready(function(){
         }
     };
     
-    // Function to replace plain text with links
-    function replaceURLWithHTMLLinks(text) {
-      var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-      return text.replace(exp,"<a href='$1'>$1</a>"); 
-    }
-    
     // On the settings page, do the post with ajax
     $("#settingsSubmit").click(function(event){
         $.post("/settings", 
