@@ -62,5 +62,37 @@ $(document).ready(function(){
                });
         event.preventDefault();
     });
+    $("#newteamSubmit").click(function(event){
+        $.post("/team/new/wtf",
+               {newteamname:$('#newteamname').val()},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                       $("#main").show();
+                       $("#info").hide();
+                       $("#settings").hide();
+                       history.pushState("", "main", "/");
+                    }, 1500);
+               });
+        event.preventDefault();
+    });
+    $("#teams :checkbox").click(function(event){
+        $.post("/team/toggle/wtf",
+               {teamslug:$(this).attr('name')},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                       $("#main").show();
+                       $("#info").hide();
+                       $("#settings").hide();
+                       history.pushState("", "main", "/");
+                    }, 1500);
+               });
+        event.preventDefault();
+    });
 });
 

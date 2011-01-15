@@ -38,14 +38,6 @@ class Info(webapp.RequestHandler):
     def get(self):
         renderMainPage(self, "info")
         
-class Team(webapp.RequestHandler):
-    def get(self, team_slug):
-        team = models.Team.find_by_slug(team_slug)
-        # if team is None, give 'em a 404
-        if team is None:
-            self.redirect("/404")
-        renderMainPage(self, "team", team=team)
-
 class Colleague(webapp.RequestHandler):
     def get(self, nickname):
         colleague = models.Profile.find_by_nickname(nickname)
@@ -78,51 +70,59 @@ class Settings(webapp.RequestHandler):
         profile.put()
         self.response.out.write("Your settings have been saved")        
 
-        # now check the team membership settings
         
-        # get the user's team memberships
-        memberships = profile.membership_set
-        # get a list of keys of the teams user has membership in
-        memberships_teams_keys = [m.team.key() for m in memberships]
+class Team(webapp.RequestHandler):
+    def get(self, verb, team_slug):
+        # TODO handle failed assertion
+        assert(verb == "show")
+        team = models.Team.find_by_slug(team_slug)
+        # if team is None, give 'em a 404
+        if team is None:
+            self.redirect("/404")
+        renderMainPage(self, "team", team=team)
+
+    def post(self, verb, team_slug):
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
         
-        for team in models.Team.all():
-            logging.info(team)
-            try:
-                team_status = self.request.get('team-%s' % team.key())
-                if team_status is not None:
-                    if team_status.lower() in ['true', 'yes', 't', '1', 'on', 'checked']:
-                        if team.key() not in memberships_teams_keys:
-                            new_member = models.Membership(team=team, profile=profile)
-                            new_member.put()
-                    else:
-                        if team.key() in memberships_teams_keys:
-                            old_membership = models.Membership.find_by_profile_and_team(profile, team)
-                            if old_membership is not None:
-                                old_membership.delete()
-                continue
-            except Exception, e:
-                logging.info(e)
-        
-        old_teams = self.request.get('old-team', allow_multiple=True)
-        new_teams = self.request.get('new-team', allow_multiple=True)
-        
-        # if user is creating a new team...
-        team_name = self.request.get('newteamname')
-        if team_name not in [None, '', ' ']:
-            # make sure it doesnt exist yet
-            team = models.Team.find_by_name(team_name)
-            if team is None:
-                # create new team
-                team = models.Team(name=team_name)
-                # make a slug from the supplied team name
-                team.slug = models.slugify(team_name)
-                team.put()
-                # create a new membership for the user
-                membership = models.Membership(team=team, profile=profile)
-                membership.put()
+        if verb == "new":
+            # if user is creating a new team...
+            team_name = self.request.get('newteamname')
+            if team_name not in [None, '', ' ']:
+                # make sure it doesnt exist yet
+                team = models.Team.find_by_name(team_name)
+                if team is None:
+                    # create new team
+                    team = models.Team(name=team_name)
+                    # make a slug from the supplied team name
+                    team.slug = models.slugify(team_name)
+                    team.put()
+                    # create a new membership for the user
+                    membership = models.Membership(team=team, profile=profile)
+                    membership.put()
+                    self.response.out.write("You have created and joined %s" % team.name)
+                else:
+                    #TODO handle case where team with this name already exists!
+                    self.response.out.write("Oops. That team name is already taken.")
+
+        if verb == "toggle":
+            # get the user's team memberships
+            memberships = profile.membership_set
+            # get a list of keys of the teams user has membership in
+            memberships_teams_keys = [m.team.key() for m in memberships]
+
+            team_slug = self.request.get('teamslug')
+            team = models.Team.find_by_slug(team_slug)
+            if team.key() not in memberships_teams_keys:
+                new_member = models.Membership(team=team, profile=profile)
+                new_member.put()
+                self.response.out.write("You are now a member of %s" % team.name)
             else:
-                #TODO handle case where team with this name already exists!
-                pass
+                if team.key() in memberships_teams_keys:
+                    old_membership = models.Membership.find_by_profile_and_team(profile, team)
+                    if old_membership is not None:
+                        old_membership.delete()
+                        self.response.out.write("You are no longer a member of %s" % team.name)
 
 def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;
@@ -175,7 +175,7 @@ application = webapp.WSGIApplication([
    ('/', MainPage),
    ('/info', Info),
    ('/settings', Settings),
-   ('/team/([^/]+)', Team),
+   ('/team/([^/]+)/([^/]+)', Team),
    ('/colleague/([^/]+)', Colleague)],
    debug=True)
 

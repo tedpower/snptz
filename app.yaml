@@ -41,7 +41,7 @@ handlers:
   script: load_data.py
   login: required
 
-- url: /team/.*
+- url: /team/(new|toggle|show)/([^/]*)
   script: main.py
   login: required
 

@@ -30,28 +30,27 @@
     <div><input type="submit" id="settingsSubmit" value="Update settings"></div>
     </form>
 <h1>Esteemed colleagues</h1>
-<form action="/settings" method="post">
-
+<form id="teams" action="/team/" method="post">
     <div>My teams</div>
     {% for team in memberships_teams %}
         <div>
-            <label for="team-{{team.key}}">{{team.name}}</label>
-            <input type="checkbox" name="team-{{team.key}}" checked="yes"/>
+            <label for="{{team.slug}}">{{team.name}}</label>
+            <input type="checkbox" name="{{team.slug}}" checked="yes"/>
         </div>
     {% endfor %}
 
     <div>Other teams</div>
     {% for team in other_teams %}
         <div>
-            <label for="team-{{team.key}}">{{team.name}}</label>
-            <input type="checkbox" name="team-{{team.key}}"/>
+            <label for="{{team.slug}}">{{team.name}}</label>
+            <input type="checkbox" name="{{team.slug}}"/>
         </div>
     {% endfor %}
     <div>
         <label for="newteamname">Create new team</label>
-        <input type="text" name="newteamname" value=""/>
+        <input type="text" id="newteamname" name="newteamname" value=""/>
     </div>
-    <div><input type="submit" value="Update settings"></div>
+    <div><input type="submit" id="newteamSubmit" value="Create new team"></div>
 </form>
 
 <a href="#">Delete account (this cannot be undone)</a>
