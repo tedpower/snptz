@@ -31,7 +31,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
         plaintext_bodies = message.bodies('text/plain')
         for content_type, body in plaintext_bodies:
             decoded_message = body.decode()
-            
+
         logging.info('Received email message from %s: %s' % (message.sender,
                                                                  decoded_message))
         
@@ -51,8 +51,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
         lastWeek = cleanLines(lastWeek)
         logging.info("last week: %s" % lastWeek)
         start = decoded_message.find(breaking_string, end + 1)
-        end = decoded_message.find(breaking_string, start + 1)
-        thisWeek = decoded_message[start + len(breaking_string):end]
+        thisWeek = decoded_message[start + len(breaking_string):]
         thisWeek = thisWeek.splitlines()
         thisWeek = cleanLines(thisWeek)
         logging.info("this week: %s" % thisWeek)
