@@ -4,6 +4,7 @@
 from google.appengine.api import memcache
 from google.appengine.api import users
 from google.appengine.ext import db
+from datetime import datetime, timedelta
 import logging
 import re
 import datetime
@@ -241,6 +242,16 @@ class TaskWeek(db.Model):
     @property
     def realistic_as_str(self):
         return "\n".join(self.realistic)
+    
+    # Takes the created date and finds the monday of the containing week
+    @property
+    def get_monday(self):
+        return self.created + timedelta(days = -self.created.weekday())
+
+    # Takes the created date and finds the sunday of the containing week
+    @property
+    def get_sunday(self):
+        return self.created + timedelta(days = (6 -self.created.weekday()))
 
 # A Model for a received email message
 class Message(db.Model):
