@@ -1,18 +1,22 @@
 #notifications {
+    z-index: 3;
+    color: black;
+    width: 760px;
     line-height: 50px;
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
-    background-color: yellow;
-    z-index: 3;
-    color: black;
-    -webkit-transition: top 300ms linear;
+    left: 50%;
+    margin-left: -380px;
+    font-weight:bold;
+    background-color: rgba(119,239,177,.9);
+    border-bottom: 1px solid #5BC886;
+    -webkit-transition: top 300ms ease-in;
 }
 
 .notificationShow {
     top: 50px !important;
 }
+
 body {
 	font-family: "Droid Sans", Helvetica, Arial, sans-serif;
 	margin: 0;
@@ -39,7 +43,7 @@ a img {
 	z-index: 4;
 }
 
-#loggedIn a {
+body a {
 	text-decoration: none;
 }
 
@@ -90,8 +94,8 @@ a img {
 
 #thisWeek:hover, .weekChunk .plans:hover, .weekChunk .review:hover {
 	cursor: pointer;
-	background-color: #D7E3F7;
 }
+
 #thisWeek, .weekChunk {
 	border-bottom: 1px solid #D9D9D9;
 	display: block;

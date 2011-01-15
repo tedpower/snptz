@@ -1,65 +1,63 @@
 {% extends "_base.html" %}
 {% block bodycontent %}
-<div id="loggedIn">
-    {% include "partials/header.html" %}
+{% include "partials/header.html" %}
 
-    <!-- Empty div for the background -->
-    <div id="bg"></div>
+<!-- Empty div for the background -->
+<div id="bg"></div>
 
-    <!-- Empty div for notifications -->
-    <div id="notifications"></div>
-    
-    <div id="main" {% ifnotequal current_page "main" %} style="display:none;" {% endifnotequal %}>
-        {% include "partials/profile.html" %}
-            
-        {% if teams %}
-            <div id="sidebar">
-            {% for team in teams %}
-                    <div class="team" id="team-{{ team.name }}">
-                    <h3>esteemed colleages from <a href="/team/show/{{ team.slug }}">{{ team.name }}</a></h3>
-                    <ul>
-                    {% for member in team.membership_set %}
-                        {% ifnotequal member.profile.name profile.name %}
-                            <li><a href="/colleague/{{ member.profile.get_nickname }}">{{ member.profile.name }}</a></li>
-                        {% endifnotequal %}
-                    {% endfor %}
-                    </ul>
+<!-- Empty div for notifications -->
+<div id="notifications"></div>
+
+<div id="main" {% ifnotequal current_page "main" %} style="display:none;" {% endifnotequal %}>
+    {% include "partials/profile.html" %}
+        
+    {% if teams %}
+        <div id="sidebar">
+        {% for team in teams %}
+                <div class="team" id="team-{{ team.name }}">
+                <h3>esteemed colleages from <a href="/team/show/{{ team.slug }}">{{ team.name }}</a></h3>
+                <ul>
+                {% for member in team.membership_set %}
+                    {% ifnotequal member.profile.name profile.name %}
+                        <li><a href="/colleague/{{ member.profile.get_nickname }}">{{ member.profile.name }}</a></li>
+                    {% endifnotequal %}
+                {% endfor %}
+                </ul>
+                </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+<div id="info" class="subPage" {% ifnotequal current_page "info" %} style="display:none;" {% endifnotequal %}>
+    <h1>Info</h1>
+    Built by Ted and Evan
+</div>
+
+<div id="team" class="subPage" {% ifnotequal current_page "team" %} style="display:none;" {% endifnotequal %}>
+    {% if team %}
+        <h1>{{ team.name }}</h1>
+            <em>Keeping esteemed colleagues in the loop since {{ team.created|date:"M j" }}</em>
+        <ul>
+        {% for member in team.membership_set %}
+            {% ifnotequal member.profile.name profile.name %}
+                <li>
+                    <div>
+                    <a href="/colleague/{{ member.profile.get_nickname}}">{{ member.profile.name }}</a>
+                    {{ member.profile.this_weeks_taskweek.optimistic_as_str }}
                     </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-    
-    <div id="info" class="subPage" {% ifnotequal current_page "info" %} style="display:none;" {% endifnotequal %}>
-        <h1>Info</h1>
-        Built by Ted and Evan
-    </div>
-    
-    <div id="team" class="subPage" {% ifnotequal current_page "team" %} style="display:none;" {% endifnotequal %}>
-        {% if team %}
-            <h1>{{ team.name }}</h1>
-                <em>Keeping esteemed colleagues in the loop since {{ team.created|date:"M j" }}</em>
-            <ul>
-            {% for member in team.membership_set %}
-                {% ifnotequal member.profile.name profile.name %}
-                    <li>
-                        <div>
-                        <a href="/colleague/{{ member.profile.get_nickname}}">{{ member.profile.name }}</a>
-                        {{ member.profile.this_weeks_taskweek.optimistic_as_str }}
-                        </div>
-                    </li>
-                {% endifnotequal %}
-            {% endfor %}
-            </ul>
-        {% endif %}
-    </div>
-    
-    <div id="colleague" class="subPage" {% ifnotequal current_page "colleague" %} style="display:none;" {% endifnotequal %}>
-        {% include "partials/colleague.html" %}
-    </div>
+                </li>
+            {% endifnotequal %}
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>
 
-    <div id="settings" class="subPage" {% ifnotequal current_page "settings" %} style="display:none;" {% endifnotequal %}>
-        {% include "partials/settings.html" %}
-    </div>
+<div id="colleague" class="subPage" {% ifnotequal current_page "colleague" %} style="display:none;" {% endifnotequal %}>
+    {% include "partials/colleague.html" %}
+</div>
+
+<div id="settings" class="subPage" {% ifnotequal current_page "settings" %} style="display:none;" {% endifnotequal %}>
+    {% include "partials/settings.html" %}
 </div>
 {% endblock %}
