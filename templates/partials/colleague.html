@@ -13,14 +13,13 @@
 </div>
 
 <div id="history">
-    
     <div class="weekChunk clearfix">
         <div class="plans">
             <div class="timeStamp">
-                Week of <em>{{ colleague.last_past_taskweek.created|date:"M j" }}</em>
+                Week of <em>{{ colleague.freshest_taskweek.created|date:"M j" }}</em>
             </div>
             <ul>
-                {% for t in colleague.last_past_taskweek.optimistic %}
+                {% for t in colleague.freshest_taskweek.optimistic %}
                     <li>{{ t }}</li>
                 {% endfor %}
             </ul>
@@ -30,7 +29,7 @@
                 How'd it go?
             </div>
             <ul>
-                {% for t in colleague.last_past_taskweek.realistic %}
+                {% for t in colleague.freshest_taskweek.realistic %}
                     <li>{{ t }}</li>
                 {% endfor %}
             </ul>

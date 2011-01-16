@@ -167,7 +167,7 @@ class Profile(db.Model):
             return "WTF"
 
     @property
-    def last_past_taskweek(self):
+    def freshest_taskweek(self):
         last_past_q = TaskWeek.all()
         # order by most recent first
         last_past_q.order("-created")
@@ -199,10 +199,10 @@ class Profile(db.Model):
         # add (year, week_num) tuple of this week to exclude list
         exclude.append(year_and_week_num_of(datetime.datetime.now()))
 
-        last_past_taskweek = self.last_past_taskweek
-        if last_past_taskweek is not None:
-            # add (year, week_num) tuple of last_past_taskweek to exclude list
-            exclude.append(year_and_week_num_of(self.last_past_taskweek.created))
+        # freshest_taskweek = self.freshest_taskweek
+        # if freshest_taskweek is not None:
+        #     # add (year, week_num) tuple of freshest_taskweek to exclude list
+        #     exclude.append(year_and_week_num_of(self.freshest_taskweek.created))
 
         # return list of taskweeks that are not excluded
         return [tw for tw in all_past if year_and_week_num_of(tw.created) not in exclude]

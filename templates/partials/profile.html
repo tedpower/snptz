@@ -3,8 +3,7 @@
         <em>This week</em>
         <!-- Shows the range of the current week, monday to sunday -->
         {% ifequal profile.this_weeks_taskweek.get_monday|date:"M" profile.this_weeks_taskweek.get_sunday|date:"M" %}
-            {{ profile.this_weeks_taskweek.get_monday|date:"M j" }} - 
-            {{ profile.this_weeks_taskweek.get_sunday|date:"j" }}
+            {{ profile.this_weeks_taskweek.get_monday|date:"M j" }}-{{ profile.this_weeks_taskweek.get_sunday|date:"j" }}
         {% else %}
             {{ profile.this_weeks_taskweek.get_monday|date:"M j" }} - 
             {{ profile.this_weeks_taskweek.get_sunday|date:"M j" }}
@@ -20,30 +19,6 @@
 </div>
 
 <div id="history">
-    
-    <div class="weekChunk clearfix">
-        <div class="plans">
-            <div class="timeStamp">
-                Week of <em>{{ profile.last_past_taskweek.created|date:"M j" }}</em>
-            </div>
-            <ul>
-                {% for t in profile.last_past_taskweek.optimistic %}
-                    <li>{{ t|urlize }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="review">
-            <div class="timeStamp">
-                How'd it go?
-            </div>
-            <ul>
-                {% for t in profile.last_past_taskweek.realistic %}
-                    <li>{{ t|urlize }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-
     {% for tw in profile.all_other_past_taskweeks %}
         <div class="weekChunk clearfix">
             <div class="plans">

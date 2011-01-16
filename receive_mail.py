@@ -67,10 +67,10 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
         if user is not None:
             newmessage.userRef = user
 
-            # deal with last_past_taskweek before creating a new one!
-            # (otherwise user.last_past_taskweek will return the newly
+            # deal with freshest_taskweek before creating a new one!
+            # (otherwise user.freshest_taskweek will return the newly
             # created taskweek created by user.this_weeks_taskweek)
-            last_taskweek = user.last_past_taskweek
+            last_taskweek = user.freshest_taskweek
             if last_taskweek is not None:
                 last_taskweek.realistic = lastWeek
                 last_taskweek.put()

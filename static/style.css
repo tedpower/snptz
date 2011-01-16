@@ -8,7 +8,7 @@
     left: 50%;
     margin-left: -380px;
     font-weight:bold;
-    background-color: rgba(119,239,177,.9);
+    background-color: #90F2C0;
     border-bottom: 1px solid #5BC886;
     -webkit-transition: top 300ms ease-in;
 }
