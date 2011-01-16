@@ -60,7 +60,7 @@ $(document).ready(function(){
                        $('#notifications').removeClass('notificationShow');
                        showMain();
                        history.pushState("", "main", "/");
-                    }, 1800);
+                    }, 2000);
                });
         event.preventDefault();
     });

@@ -11,8 +11,6 @@ import models
 import re
 from datetime import datetime, timedelta
 
-from stripper import stripHTML
-
 class MyMailHandler(mail_handlers.InboundMailHandler):
     def receive(self, message):
         

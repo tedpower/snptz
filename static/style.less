@@ -1,0 +1,224 @@
+/* Constants
+--------------------------------------------- */
+
+@contentWidth: 920px;
+
+/* reset styles
+--------------------------------------------- */
+
+html { 
+  margin:0; 
+  padding:0; 
+  border:0; 
+}
+
+body, div, span, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, code,
+del, dfn, em, img, q, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, dialog, figure, footer, header,
+hgroup, nav, section {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-weight: inherit;
+  font-style: inherit;
+  font-size: 100%;
+  font-family: inherit;
+  vertical-align: baseline;
+}
+
+a img { border: none; }
+
+:focus { outline: 0; }
+
+/* master styles
+--------------------------------------------- */
+
+body {
+	font-family: "Droid Sans", Helvetica, Arial, sans-serif;
+	text-align: center;
+	font-size: 12px;
+}
+
+body a {
+	text-decoration: none;
+}
+
+em {
+	font-weight: bold;
+	font-style: normal;
+}
+
+/* Logged out homepage
+--------------------------------------------- */
+
+#loggedOut #logoBig {
+	padding: 80px 0;
+}
+
+#loggedOut a {
+	font-size: 24px;
+}
+
+/* Header (logged in)
+--------------------------------------------- */
+
+#header {
+	height: 51px;
+	color: #fff;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+	-webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+	-moz-box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	background: #000 url(navbar.png) repeat-x;
+	z-index: 4;
+}
+
+#nav {
+	width: @contentWidth;
+	text-align: left;
+	margin: 0 auto;
+}
+
+#logo {
+	margin: 0 0 0 24px;
+}
+
+#presence {
+	float: right;
+	text-shadow: 0 -1px 0 #000;
+	line-height: 51px;
+}
+
+#user {
+	color: #919191;
+}
+
+#presence a {
+	color: #CCC;
+}
+
+#presence #user, #presence a {
+	padding: 0 12px;
+	border-right: 1px solid rgba(0, 0, 0, .7);
+	box-shadow: 1px 0 rgba(255, 255, 255, .1);
+	-webkit-box-shadow: 1px 0 rgba(255, 255, 255, .1);
+	-moz-box-shadow: 1px 0 rgba(255, 255, 255, .1);
+	float: right;
+}
+
+#presence a:hover {
+	color: #FFF;
+}
+
+#presence a:active {
+	background-color: black;
+	background-image: none;
+}
+
+#notifications {
+    z-index: 3;
+    color: black;
+    width: @contentWidth;
+    line-height: 50px;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    margin-left: @contentWidth * -1 / 2;
+    font-weight:bold;
+    background-color: #FFF1A8;
+    border-bottom: 1px solid #DDD192;
+    -webkit-transition: top .3s ease-in;
+}
+
+.notificationShow {
+    top: 50px !important;
+}
+
+/* main content styles
+--------------------------------------------- */
+
+#main {
+	background-color: white;
+	z-index: 2;
+	position: relative;
+	width: @contentWidth;
+	margin: 51px auto;
+	text-align: left;
+}
+
+#bg {
+	position: fixed;
+	top: 51px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #F2F2F2 url(dots.png) repeat;
+	z-index: 0;
+}
+
+.subPage {
+    background-color: white;
+	z-index: 2;
+	position: relative;
+	width: @contentWidth - 48px;
+	margin: 51px auto;
+	text-align: left;
+	border-bottom: 1px solid #D9D9D9;
+	padding: 20px 24px 24px 24px;   
+}
+
+#thisWeek {
+	padding: 20px 24px 24px 24px;
+	-webkit-transition: background-color .1s ease-in;
+}
+
+#thisWeek:hover, .weekChunk .plans:hover, .weekChunk .review:hover {
+	cursor: pointer;
+}
+
+#thisWeek, .weekChunk {
+	border-bottom: 1px solid #D9D9D9;
+	display: block;
+}
+
+#thisWeek .plans{
+	font-size: 24px;
+}
+
+.weekChunk .plans, .weekChunk .review {
+	padding: 16px 0 20px 24px;
+	width: 344px;
+	float: left;
+	-webkit-transition: background-color .1s ease-in;
+}
+
+.weekChunk ul {
+	font-size: 14px;
+}
+
+.timeStamp {
+	text-transform: uppercase;
+	padding: 0 0 15px 0;
+}
+
+/* Settings styles
+--------------------------------------------- */
+
+/* Misc
+--------------------------------------------- */
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
