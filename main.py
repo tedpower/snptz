@@ -13,7 +13,6 @@ import logging
 class MainPage(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        logging.info("the user is %s" % (user))
         
         if user is None:
             loginURL = users.create_login_url("/")

@@ -67,7 +67,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
 
             # deal with freshest_taskweek before creating a new one!
             # (otherwise user.freshest_taskweek will return the newly
-            # created taskweek created by user.this_weeks_taskweek)
+            # created taskweek created by user.this_weeks_tw)
             last_taskweek = user.freshest_taskweek
             if last_taskweek is not None:
                 last_taskweek.realistic = lastWeek
@@ -77,7 +77,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
             # get or create a new taskweek for this week
             # ... meaning we will overwrite the tasks if this is the
             # second email from this user this week
-            new_taskweek = user.this_weeks_taskweek
+            new_taskweek = user.this_weeks_tw
             new_taskweek.optimistic = thisWeek
             new_taskweek.put()
         else:

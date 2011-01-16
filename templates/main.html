@@ -10,23 +10,6 @@
 
 <div id="main" {% ifnotequal current_page "main" %} style="display:none;" {% endifnotequal %}>
     {% include "partials/profile.html" %}
-        
-    {% if teams %}
-        <div id="sidebar">
-        {% for team in teams %}
-                <div class="team" id="team-{{ team.name }}">
-                <h3>esteemed colleages from <a href="/team/show/{{ team.slug }}">{{ team.name }}</a></h3>
-                <ul>
-                {% for member in team.membership_set %}
-                    {% ifnotequal member.profile.name profile.name %}
-                        <li><a href="/colleague/{{ member.profile.get_nickname }}">{{ member.profile.name }}</a></li>
-                    {% endifnotequal %}
-                {% endfor %}
-                </ul>
-                </div>
-        {% endfor %}
-        </div>
-    {% endif %}
 </div>
 
 <div id="info" class="subPage" {% ifnotequal current_page "info" %} style="display:none;" {% endifnotequal %}>
@@ -34,6 +17,7 @@
     Built by Ted and Evan
 </div>
 
+<!-- This maybe should be pulled from an ajax get? -->
 <div id="team" class="subPage" {% ifnotequal current_page "team" %} style="display:none;" {% endifnotequal %}>
     {% if team %}
         <h1>{{ team.name }}</h1>
@@ -44,7 +28,7 @@
                 <li>
                     <div>
                     <a href="/colleague/{{ member.profile.get_nickname}}">{{ member.profile.name }}</a>
-                    {{ member.profile.this_weeks_taskweek.optimistic_as_str }}
+                    {{ member.profile.this_weeks_tw.optimistic_as_str }}
                     </div>
                 </li>
             {% endifnotequal %}

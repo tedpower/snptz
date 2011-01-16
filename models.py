@@ -141,7 +141,7 @@ class Profile(db.Model):
             return self.nickname
 
     @property
-    def this_weeks_taskweek(self):
+    def this_weeks_tw(self):
         # TODO rename to get_or_create_...?
         # when are we?
         now_now = datetime.datetime.now()
@@ -245,12 +245,12 @@ class TaskWeek(db.Model):
     
     # Takes the created date and finds the monday of the containing week
     @property
-    def get_monday(self):
+    def get_mon(self):
         return self.created + timedelta(days = -self.created.weekday())
 
     # Takes the created date and finds the sunday of the containing week
     @property
-    def get_sunday(self):
+    def get_sun(self):
         return self.created + timedelta(days = (6 -self.created.weekday()))
 
 # A Model for a received email message

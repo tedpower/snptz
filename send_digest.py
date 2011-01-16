@@ -35,7 +35,7 @@ Here's what your esteemed colleagues are up to this week:
 
         # list all team names this colleague belongs to
         prof_team_names = ", ".join([m.team.name for m in profile.membership_set])
-        prof_taskweek = profile.this_weeks_taskweek
+        prof_taskweek = profile.this_weeks_tw
         # TODO refactor control flow. this is whack
         if prof_taskweek is not None:
             prof_taskweek = prof_taskweek.optimistic

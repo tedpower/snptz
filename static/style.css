@@ -89,14 +89,6 @@ em {
   -webkit-transition: top 0.3s ease-in;
 }
 .notificationShow { top: 50px !important; }
-#main {
-  background-color: white;
-  z-index: 2;
-  position: relative;
-  width: 920px;
-  margin: 51px auto;
-  text-align: left;
-}
 #bg {
   position: fixed;
   top: 51px;
@@ -105,6 +97,53 @@ em {
   bottom: 0;
   background: #f2f2f2 url(dots.png) repeat;
   z-index: 0;
+}
+#main {
+  background-color: white;
+  z-index: 2;
+  position: relative;
+  width: 920px;
+  margin: 51px auto;
+  text-align: left;
+  border-bottom: 1px solid #d9d9d9;
+}
+#sidebar {
+  width: 160px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #f6f6f6;
+  padding: 20px;
+}
+#taskWrapper { width: 560px; }
+#thisWeek {
+  padding: 20px 24px 24px 24px;
+  -webkit-transition: background-color 0.1s ease-in;
+}
+#thisWeek:hover { cursor: pointer; }
+.weekChunk .plans:hover { cursor: pointer; }
+.weekChunk .review:hover { cursor: pointer; }
+#thisWeek, .weekChunk { display: block; }
+#thisWeek .plans { font-size: 24px; }
+.weekChunk .plans {
+  padding: 16px 0 20px 24px;
+  width: 344px;
+  float: left;
+  border-top: 1px solid #d9d9d9;
+  -webkit-transition: background-color 0.1s ease-in;
+}
+.weekChunk .review {
+  padding: 16px 0 20px 24px;
+  width: 344px;
+  float: left;
+  border-top: 1px solid #d9d9d9;
+  -webkit-transition: background-color 0.1s ease-in;
+}
+.weekChunk ul { font-size: 14px; }
+.timeStamp {
+  text-transform: uppercase;
+  padding: 0 0 15px 0;
 }
 .subPage {
   background-color: white;
@@ -115,35 +154,6 @@ em {
   text-align: left;
   border-bottom: 1px solid #d9d9d9;
   padding: 20px 24px 24px 24px;
-}
-#thisWeek {
-  padding: 20px 24px 24px 24px;
-  -webkit-transition: background-color 0.1s ease-in;
-}
-#thisWeek:hover { cursor: pointer; }
-.weekChunk .plans:hover { cursor: pointer; }
-.weekChunk .review:hover { cursor: pointer; }
-#thisWeek, .weekChunk {
-  border-bottom: 1px solid #d9d9d9;
-  display: block;
-}
-#thisWeek .plans { font-size: 24px; }
-.weekChunk .plans {
-  padding: 16px 0 20px 24px;
-  width: 344px;
-  float: left;
-  -webkit-transition: background-color 0.1s ease-in;
-}
-.weekChunk .review {
-  padding: 16px 0 20px 24px;
-  width: 344px;
-  float: left;
-  -webkit-transition: background-color 0.1s ease-in;
-}
-.weekChunk ul { font-size: 14px; }
-.timeStamp {
-  text-transform: uppercase;
-  padding: 0 0 15px 0;
 }
 .clearfix:after {
   content: ".";
