@@ -105,6 +105,13 @@ $(document).ready(function(){
                function(data){
                    $("#notifications").html(data);
                    $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                       $("#main").show();
+                       $("#info").hide();
+                       $("#settings").hide();
+                       history.pushState("", "main", "/");
+                    }, 1500);
                });
     event.preventDefault();
     });
