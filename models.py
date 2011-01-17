@@ -235,8 +235,11 @@ class Profile(db.Model):
 
 class TaskWeek(db.Model):
     profile = db.ReferenceProperty(Profile)
+    # TODO XXX turn auto_now_add back on for production and stop
+    # setting it manually in receive_email.py
     #created = db.DateTimeProperty(auto_now_add=True)
     created = db.DateTimeProperty()
+    modified = db.DateTimeProperty(auto_now=True)
     # what they hoped to accomplish
     optimistic = db.StringListProperty()
     # what they actually accomplished
@@ -259,6 +262,10 @@ class TaskWeek(db.Model):
     @property
     def get_sun(self):
         return self.created + timedelta(days = (6 -self.created.weekday()))
+
+    @property
+    def get_key(self):
+        return self.key()
 
 # A Model for a received email message
 class Message(db.Model):
