@@ -92,6 +92,11 @@ $(document).ready(function(){
         $(this).hide();
         $(".edit").show();
     });
+    $(".cancel").click(function(event){
+        $(".plans").show();
+        $(".edit").hide();
+        event.preventDefault();
+    });
     $(".twedit").click(function(event){
         $(".edit").hide();
         $(".plans").show();
