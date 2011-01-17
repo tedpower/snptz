@@ -21,7 +21,7 @@
         <label for="weeklyEmailsToggle">Subscribe to weekly reminder emails</label>
     </div>
     <div>
-        <select name='timezone'>
+        <select name='timezone' id="timezone">
             <option {% ifequal profile.timezone "est"%} selected {% endifequal %} value="est">(GMT-5:00) Eastern Time</option>
             <option {% ifequal profile.timezone "cst"%} selected {% endifequal %} value="cst">(GMT-6:00) Central Time</option>
             <option {% ifequal profile.timezone "mst"%} selected {% endifequal %} value="mst">(GMT-7:00) Mountain Time</option>

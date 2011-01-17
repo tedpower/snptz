@@ -18,6 +18,10 @@ handlers:
   script: send_digest.py
   login: admin
 
+- url: /signup
+  script: signup.py
+  login: required
+
 - url: /
   script: main.py
 

@@ -29,7 +29,7 @@ WHAT'RE YOU GOING TO DO THIS WEEK?
 
 html_template = '''
 
-<img src="http://www.snptz.com/static/logoEmail.png" width="174" height="50" alt="SNPTZ">
+<img src="http://www.snptz.com/static/logoMed.png" width="174" height="50" alt="SNPTZ">
 <p>Good morning %(username)s!</p>
 
 <pre>
@@ -64,7 +64,7 @@ WHAT'RE YOU GOING TO DO THIS WEEK?
 
 first_time_html = '''
 
-<img src="http://www.snptz.com/static/logoEmail.png" width="174" height="50" alt="SNPTZ">
+<img src="http://www.snptz.com/static/logoMed.png" width="174" height="50" alt="SNPTZ">
 <p>Good morning %(username)s!</p>
 Welcome to SNPTZ!
 Tell us a few things you are going to be working on this week in the space below.
@@ -76,11 +76,18 @@ WHAT'RE YOU GOING TO DO THIS WEEK?
 </pre>
 '''
 
-que = db.Query(models.Profile)
-que = que.filter('weekly_email= ', 'True')
-user_list = que.fetch(limit=100)
+# q = db.GqlQuery("SELECT * FROM models.Profile " +
+#                 "WHERE weekly_email = :1",
+#                 "True")
+# user_list = q.fetch(5)
+
+q = models.Profile.all()
+q.filter('weekly_email = ', True)
+user_list = q.fetch(100)
+logging.info("there are %s users" %(len(user_list)))
 
 for user in user_list:
+    logging.info("user is %s" % (user.first_name))
     # get the list of what the user planned to do last time
     last_past = user.freshest_taskweek
     if user.first_name is not None:

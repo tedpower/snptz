@@ -1,0 +1,29 @@
+{% extends "_base.html" %}
+{% block bodycontent %}
+<div id="signup">
+    
+    <img src="/static/logoMed.png" width="174" height="50" alt="LogoMed">
+
+    <h1>Sign up</h1>
+    
+    <form action="/signup" method="post">
+
+        <div>Email</div>
+        <div>{{ user_email }}</div>
+        <div>First name</div>
+        <div><input type="text" name="firstname" id="firstname" value="{{ profile.first_name }}"/></div>
+        <div>Last name</div>
+        <div><input type="text" name="lastname" id="lastname" value="{{ profile.last_name }}"/></div>
+        <div>
+            <select name='timezone' id="timezone">
+                <option {% ifequal profile.timezone "est"%} selected {% endifequal %} value="est">(GMT-5:00) Eastern Time</option>
+                <option {% ifequal profile.timezone "cst"%} selected {% endifequal %} value="cst">(GMT-6:00) Central Time</option>
+                <option {% ifequal profile.timezone "mst"%} selected {% endifequal %} value="mst">(GMT-7:00) Mountain Time</option>
+                <option {% ifequal profile.timezone "pst"%} selected {% endifequal %} value="pst">(GMT-8:00) Pacific Time</option>
+            </select>
+        </div>
+        <div><input type="submit" value="Continue »"></div>
+    </form>
+	
+</div>
+{% endblock %}

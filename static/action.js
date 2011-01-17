@@ -52,7 +52,7 @@ $(document).ready(function(){
                {firstname:$('#firstname').val(),
                 lastname:$('#lastname').val(), 
                 weeklyEmailsToggle:$('#weeklyEmailsToggle:checked').val(),
-                timezone:$('timezone').val()},
+                timezone:$('#timezone').val()},
                function(data){
                    $("#notifications").html(data);
                    $('#notifications').addClass('notificationShow');

@@ -84,8 +84,7 @@ em {
   left: 50%;
   margin-left: -460px;
   font-weight: bold;
-  background-color: #fff1a8;
-  border-bottom: 1px solid #ddd192;
+  background-color: #fffd64;
   -webkit-transition: top 0.3s ease-in;
 }
 .notificationShow { top: 50px !important; }
@@ -108,7 +107,7 @@ em {
   -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.16);
 }
 #taskWrapper {
-  -webkit-box-shadow: -1px 0 0 rgba(0, 0, 0, 0.06);
+  -webkit-box-shadow: -1px 0 0 rgba(0, 0, 0, 0.08);
   width: 700px;
 }
 #sidebar {
@@ -119,7 +118,7 @@ em {
   bottom: 0;
   background-color: #f6f6f6;
   padding: 20px;
-  -webkit-box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.06), 1px 0 0 rgba(0, 0, 0, 0.06);
+  -webkit-box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.08), 1px 0 0 rgba(0, 0, 0, 0.08);
 }
 #thisWeek {
   padding: 20px;
