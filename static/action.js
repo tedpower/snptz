@@ -90,17 +90,32 @@ $(document).ready(function(){
     });
     $(".plans").click(function(event){
         $(this).hide();
-        $(".edit").show();
+        $(this).siblings(".edit").show();
     });
     $(".cancel").click(function(event){
-        $(".plans").show();
-        $(".edit").hide();
+        $(this).parent().parent().hide();
+        $(this).parent().parent().siblings(".plans").show();
         event.preventDefault();
     });
-    $(".twedit").click(function(event){
-        $(".edit").hide();
-        $(".plans").show();
-        $.post("/taskweek/update",
+    $(".submit_optimistic").click(function(event){
+        $(this).parent().parent().hide();
+        $(this).parent().parent().siblings(".plans").show();
+        $.post("/taskweek/update/optimistic",
+            {twkey:$(this).parent().attr('id'),
+             twedit:$(this).parent().children("textarea").val()},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                    }, 1500);
+               });
+    event.preventDefault();
+    });
+    $(".submit_realistic").click(function(event){
+        $(this).parent().parent().hide();
+        $(this).parent().parent().siblings(".plans").show();
+        $.post("/taskweek/update/realistic",
             {twkey:$(this).parent().attr('id'),
              twedit:$(this).parent().children("textarea").val()},
                function(data){

@@ -45,7 +45,7 @@ handlers:
   script: load_data.py
   login: required
 
-- url: /taskweek/update
+- url: /taskweek/update/(realistic|optimistic)
   script: main.py
   login: required
 

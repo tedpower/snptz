@@ -19,9 +19,9 @@
             </ul>
         </div>
         <div class="edit" style="display:none;">
-            <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update" method="post">
+            <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update/optimistic" method="post">
                 <textarea>{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
-                <input type="submit" class="twedit" value="update"/>
+                <input type="submit" class="submit_optimistic" value="update"/>
                 <input type="submit" class="cancel" value="cancel"/>
             </form>
         </div>
@@ -30,6 +30,7 @@
     <div id="history">
         {% for tw in profile.all_other_past_taskweeks %}
             <div class="weekChunk clearfix">
+              <div class="optimistic">
                 <div class="plans">
                     <div class="timeStamp">
                         Week of <em>{{ tw.get_mon|date:"M j" }}</em>
@@ -40,7 +41,16 @@
                         {% endfor %}
                     </ul>
                 </div>
-                <div class="review">
+                <div class="edit" style="display:none;">
+                    <form id="{{ tw.get_key }}" action="/taskweek/update/optimistic" method="post">
+                        <textarea>{{ tw.optimistic_as_str }}</textarea>
+                        <input type="submit" class="submit_optimistic" value="update"/>
+                        <input type="submit" class="cancel" value="cancel"/>
+                    </form>
+                </div>
+              </div>
+                <div class="realistic">
+                <div class="plans">
                     <div class="timeStamp">
                         How'd it go?
                     </div>
@@ -50,6 +60,14 @@
                         {% endfor %}
                     </ul>
                 </div>
+                <div class="edit" style="display:none;">
+                    <form id="{{ tw.get_key }}" action="/taskweek/update/realistic" method="post">
+                        <textarea>{{ tw.realistic_as_str }}</textarea>
+                        <input type="submit" class="submit_realistic" value="update"/>
+                        <input type="submit" class="cancel" value="cancel"/>
+                    </form>
+                </div>
+             </div>
             </div>
         {% endfor %}
     </div>

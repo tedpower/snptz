@@ -65,12 +65,15 @@ class Settings(webapp.RequestHandler):
         self.response.out.write("Your settings have been saved")        
 
 class Taskweek(webapp.RequestHandler):
-    def post(self):
+    def post(self, tw_type):
+        # TODO handle failed assertion
+        assert(tw_type in ['realistic', 'optimistic'])
         user = users.get_current_user()
         profile = models.Profile.get_by_key_name(user.user_id())
 
         tw_key = self.request.get('twkey')
         edited = self.request.get('twedit')
+        tw_attr = tw_type
 
         logging.info(tw_key)
         logging.info(edited)
@@ -79,9 +82,9 @@ class Taskweek(webapp.RequestHandler):
             logging.info('OOPS. TASKWEEK FOR EDITING NOT FOUND')
             self.response.out.write("Oops. FAIL!")
         else:
-            logging.info(edited)
             edited_as_lines = [l.strip() for l in edited.splitlines()]
-            taskweek.optimistic = edited_as_lines
+            if hasattr(taskweek, tw_attr):
+                setattr(taskweek, tw_attr, edited_as_lines)
             taskweek.put()
             self.response.out.write("Yay. Your tasks have been updated.")
         
@@ -190,7 +193,7 @@ application = webapp.WSGIApplication([
    ('/info', Info),
    ('/settings', Settings),
    ('/team/([^/]+)/([^/]+)', Team),
-   ('/taskweek/update', Taskweek),
+   ('/taskweek/update/([^/]+)', Taskweek),
    ('/colleague/([^/]+)', Colleague)],
    debug=True)
 
