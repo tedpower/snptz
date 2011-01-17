@@ -148,7 +148,7 @@ class Profile(db.Model):
         # get all of this user's taskweeks
         taskweeks = self.taskweek_set
 
-        if taskweeks.count() == 0:
+        if len(taskweeks) == 0:
             # if there are none, create one
             created_tw = TaskWeek(profile=self)
             created_tw.created=now_now
@@ -158,9 +158,16 @@ class Profile(db.Model):
         # otherwise limit these taskweeks to those from this year & week
         taskweek = [tw for tw in taskweeks
                 if year_and_week_num_of(tw.created) == year_and_week_num_of(now_now)]
+
         if len(taskweek) == 1:
             # if there is exactly one, return it
             return taskweek[0]
+        elif len(taskweek) == 0:
+            # if there are none, create one
+            created_tw = TaskWeek(profile=self)
+            created_tw.created=now_now
+            created_tw.put()
+            return created_tw
         else:
             # TODO if there are more than one ...
             logging.info("OOPS. USER HAS MORE THAN ONE TASKWEEK FOR THIS WEEK")
