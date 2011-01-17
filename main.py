@@ -77,7 +77,9 @@ class Taskweek(webapp.RequestHandler):
         tw_key = self.request.get('twkey')
         edited = self.request.get('twedit')
 
-        taskweek = models.Taskweek.get(tw_key)
+        logging.info(tw_key)
+        logging.info(edited)
+        taskweek = models.TaskWeek.get(tw_key)
         if taskweek is None:
             logging.info('OOPS. TASKWEEK FOR EDITING NOT FOUND')
             self.response.out.write("Oops. FAIL!")
