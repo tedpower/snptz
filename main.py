@@ -21,11 +21,6 @@ class MainPage(webapp.RequestHandler):
             
         profile = models.Profile.get_by_key_name(user.user_id())
         if profile is None:
-            # TODO This should be taken out and replaced with a signup step
-            # need this here for now to prevent endless redirects to login page
-            # if user's profile doesn't exist yet
-            profile = models.Profile(key_name=user.user_id(), email=user.email(), weekly_email=True)
-            profile.put()
             loginURL = users.create_login_url("/")
             doRender(self, 'index.html', {'loginURL' : loginURL})
             return
@@ -148,10 +143,10 @@ def renderMainPage(handler, selectedPage, **kwargs):
     user = users.get_current_user()
     profile = models.Profile.get_by_key_name(user.user_id())
     
-    # TODO This should be taken out and replaced with a signup step
+    # Check to make sure the user exists
     if profile is None:
-        profile = models.Profile(key_name=user.user_id(), email=user.email(), weekly_email=True)
-        profile.put()
+        self.redirect("/")
+        return
 
     logoutURL = users.create_logout_url("/")
 
