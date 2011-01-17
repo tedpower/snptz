@@ -13,8 +13,13 @@ import models
 class Signup(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        doRender(self, 'signup.html', {'user_email' : user.email()})
-    
+        
+        profile = models.Profile.get_by_key_name(user.user_id())
+        if profile is None:
+            doRender(self, 'signup.html', {'user_email' : user.email()})
+        else:
+            self.redirect('/');
+
     def post(self):
         user = users.get_current_user()
         profile = models.Profile(key_name=user.user_id(), email=user.email(), weekly_email=True)

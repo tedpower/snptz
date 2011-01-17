@@ -20,9 +20,7 @@
         </div>
         <div class="edit">
             <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update" method="post">
-                <textarea>
-{{ profile.this_weeks_tw.optimistic_as_str }}
-                </textarea>
+                <textarea>{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
                 <input type="submit" class="twedit" value="update"/>
             </form>
         </div>
