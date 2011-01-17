@@ -148,7 +148,7 @@ class Profile(db.Model):
         # get all of this user's taskweeks
         taskweeks = self.taskweek_set
 
-        if len(taskweeks) == 0:
+        if taskweeks.count() == 0:
             # if there are none, create one
             created_tw = TaskWeek(profile=self)
             created_tw.created=now_now
