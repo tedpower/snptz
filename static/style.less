@@ -2,7 +2,8 @@
 --------------------------------------------- */
 
 @contentWidth: 920px;
-@sidebarWidth: 160px;
+@sidebarWidth: 180px;
+@paddingWidth: 20px;
 
 /* reset styles
 --------------------------------------------- */
@@ -88,7 +89,7 @@ em {
 }
 
 #logo {
-    margin: 0 0 0 24px;
+    margin: 0 0 0 @paddingWidth;
 }
 
 #presence {
@@ -162,7 +163,12 @@ em {
     width: @contentWidth;
     margin: 51px auto;
     text-align: left;
-    border-bottom: 1px solid #D9D9D9;
+    -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.16);
+}
+
+#taskWrapper {
+    -webkit-box-shadow: -1px 0 0 rgba(0,0,0,.06);
+    width: @contentWidth - @sidebarWidth - (2 * @paddingWidth);
 }
 
 #sidebar {
@@ -172,36 +178,38 @@ em {
     right: 0;
     bottom: 0;
     background-color: #F6F6F6;
-    padding: 20px;
-}
-
-#taskWrapper {
-    width: @contentWidth - @sidebarWidth - 200px;
+    padding: @paddingWidth;
+    -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.06), 1px 0 0 rgba(0,0,0,.06);
 }
 
 #thisWeek {
-    padding: 20px 24px 24px 24px;
-    -webkit-transition: background-color .1s ease-in;
+    padding: @paddingWidth;
+    border-bottom: 1px solid #D9D9D9;
 }
 
-#thisWeek:hover, .weekChunk .plans:hover, .weekChunk .review:hover {
-    cursor: pointer;
+.weekChunk .plans, .weekChunk .review {
+    padding: 0 @paddingWidth;
+    width: ((@contentWidth - @sidebarWidth - (2 * @paddingWidth)) / 2) - (2 * @paddingWidth) - 2px;
+    float: left;
 }
 
-#thisWeek, .weekChunk {
-    display: block;
+.weekChunk {
+    padding: @paddingWidth 0;
+    border-left: 2px solid transparent;
+    border-right: 2px solid transparent;
+    border-bottom: 1px solid #D9D9D9;
+}
+
+.weekChunk:last-child {
+    border-bottom: 1px solid transparent;
+}
+
+#thisWeek ul, .weekChunk ul {
+    list-style-position: inside;
 }
 
 #thisWeek .plans{
     font-size: 24px;
-}
-
-.weekChunk .plans, .weekChunk .review {
-    padding: 16px 0 20px 24px;
-    width: 344px;
-    float: left;
-    border-top: 1px solid #D9D9D9;
-    -webkit-transition: background-color .1s ease-in;
 }
 
 .weekChunk ul {
@@ -210,7 +218,24 @@ em {
 
 .timeStamp {
     text-transform: uppercase;
-    padding: 0 0 15px 0;
+    padding: 0 0 12px 0;
+}
+
+.plans a:hover, .review a:hover {
+    text-decoration: underline;
+}
+
+#thisWeek:hover {
+    cursor: pointer;
+    border: 2px solid #73A6FF;
+    padding: (@paddingWidth - 2px) (@paddingWidth - 2px) (@paddingWidth - 1px) (@paddingWidth - 2px);
+}
+
+.weekChunk:hover {
+    margin-top: -2px;
+    cursor: pointer;
+    border: 2px solid #73A6FF;
+    padding-bottom: @paddingWidth - 1px;
 }
 
 /* Settings & Info styles
@@ -220,11 +245,11 @@ em {
     background-color: white;
     z-index: 2;
     position: relative;
-    width: @contentWidth - 48px;
+    width: @contentWidth - (2 * @paddingWidth);
     margin: 51px auto;
     text-align: left;
-    border-bottom: 1px solid #D9D9D9;
-    padding: 20px 24px 24px 24px;
+    -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.16);
+    padding: @paddingWidth;
 }
 
 /* Misc
