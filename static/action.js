@@ -58,8 +58,6 @@ $(document).ready(function(){
                    $('#notifications').addClass('notificationShow');
                    setTimeout(function(){
                        $('#notifications').removeClass('notificationShow');
-                       showMain();
-                       history.pushState("", "main", "/");
                     }, 2000);
                });
         event.preventDefault();
@@ -74,10 +72,6 @@ $(document).ready(function(){
                    $('#notifications').addClass('notificationShow');
                    setTimeout(function(){
                        $('#notifications').removeClass('notificationShow');
-                       $("#main").show();
-                       $("#info").hide();
-                       $("#settings").hide();
-                       history.pushState("", "main", "/");
                     }, 1500);
                });
         event.preventDefault();
@@ -90,15 +84,22 @@ $(document).ready(function(){
                    $('#notifications').addClass('notificationShow');
                    setTimeout(function(){
                        $('#notifications').removeClass('notificationShow');
-                       $("#main").show();
-                       $("#info").hide();
-                       $("#settings").hide();
-                       history.pushState("", "main", "/");
                     }, 1500);
                });
         event.preventDefault();
     });
+    $(".plans").click(function(event){
+        $(this).hide();
+        $(".edit").show();
+    });
+    $(".cancel").click(function(event){
+        $(".plans").show();
+        $(".edit").hide();
+        event.preventDefault();
+    });
     $(".twedit").click(function(event){
+        $(".edit").hide();
+        $(".plans").show();
         $.post("/taskweek/update",
             {twkey:$(this).parent().attr('id'),
              twedit:$(this).parent().children("textarea").val()},
@@ -107,10 +108,6 @@ $(document).ready(function(){
                    $('#notifications').addClass('notificationShow');
                    setTimeout(function(){
                        $('#notifications').removeClass('notificationShow');
-                       $("#main").show();
-                       $("#info").hide();
-                       $("#settings").hide();
-                       history.pushState("", "main", "/");
                     }, 1500);
                });
     event.preventDefault();

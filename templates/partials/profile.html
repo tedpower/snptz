@@ -18,10 +18,11 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="edit">
+        <div class="edit" style="display:none;">
             <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update" method="post">
                 <textarea>{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
                 <input type="submit" class="twedit" value="update"/>
+                <input type="submit" class="cancel" value="cancel"/>
             </form>
         </div>
     </div>
@@ -69,7 +70,7 @@
                     {% endifnotequal %}
                 {% endfor %}
                 </ul>
+                </div>
         {% endfor %}
-        </div>
     {% endif %}
 </div>
