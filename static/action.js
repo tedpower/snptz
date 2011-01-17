@@ -99,9 +99,6 @@ $(document).ready(function(){
         event.preventDefault();
     });
     $(".twedit").click(function(event){
-        alert('clicked');
-        alert(twkey:$(this).parent().attr('id'));
-        alert(twkey:$(this).parent().children("textarea").val());
         $.post("/taskweek/update",
             {twkey:$(this).parent().attr('id'),
              twedit:$(this).parent().children("textarea").val()},
