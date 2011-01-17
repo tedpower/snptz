@@ -25,6 +25,7 @@
             </form>
         </div>
     </div>
+    {% ifnotequal profile.all_other_past_taskweeks None %}
     <div id="history">
         {% for tw in profile.all_other_past_taskweeks %}
             <div class="weekChunk clearfix">
@@ -51,6 +52,7 @@
             </div>
         {% endfor %}
     </div>
+    {% endifnotequal %}
 </div>
 <div id="sidebar">
 

@@ -166,7 +166,7 @@ em {
 }
 
 #taskWrapper {
-    -webkit-box-shadow: -1px 0 0 rgba(0,0,0,.08);
+    -webkit-box-shadow: -1px 0 0 rgba(0,0,0,.1);
     width: @contentWidth - @sidebarWidth - (2 * @paddingWidth);
 }
 
@@ -176,9 +176,9 @@ em {
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: #F6F6F6;
+    background-color: #F5F5F5;
     padding: @paddingWidth;
-    -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.08), 1px 0 0 rgba(0,0,0,.08);
+    -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), 1px 0 0 rgba(0,0,0,.1);
 }
 
 #thisWeek {
@@ -199,7 +199,7 @@ em {
     border-bottom: 1px solid #D9D9D9;
 }
 
-.weekChunk:last-child {
+#taskWrapper > div:last-child {
     border-bottom: 1px solid transparent;
 }
 
@@ -226,14 +226,14 @@ em {
 
 #thisWeek:hover {
     cursor: pointer;
-    border: 2px solid #73A6FF;
+    border: 2px solid #73A6FF !important;
     padding: (@paddingWidth - 2px) (@paddingWidth - 2px) (@paddingWidth - 1px) (@paddingWidth - 2px);
 }
 
 .weekChunk:hover {
     margin-top: -2px;
     cursor: pointer;
-    border: 2px solid #73A6FF;
+    border: 2px solid #73A6FF !important;
     padding-bottom: @paddingWidth - 1px;
 }
 

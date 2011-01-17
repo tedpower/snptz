@@ -107,7 +107,7 @@ em {
   -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.16);
 }
 #taskWrapper {
-  -webkit-box-shadow: -1px 0 0 rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: -1px 0 0 rgba(0, 0, 0, 0.1);
   width: 700px;
 }
 #sidebar {
@@ -116,9 +116,9 @@ em {
   top: 0;
   right: 0;
   bottom: 0;
-  background-color: #f6f6f6;
+  background-color: #f5f5f5;
   padding: 20px;
-  -webkit-box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.08), 1px 0 0 rgba(0, 0, 0, 0.08);
+  -webkit-box-shadow: inset 1px 0 0 rgba(0, 0, 0, 0.1), 1px 0 0 rgba(0, 0, 0, 0.1);
 }
 #thisWeek {
   padding: 20px;
@@ -140,7 +140,7 @@ em {
   border-right: 2px solid transparent;
   border-bottom: 1px solid #d9d9d9;
 }
-.weekChunk:last-child { border-bottom: 1px solid transparent; }
+#taskWrapper > div:last-child { border-bottom: 1px solid transparent; }
 #thisWeek ul { list-style-position: inside; }
 .weekChunk ul { list-style-position: inside; }
 #thisWeek .plans { font-size: 24px; }
@@ -153,13 +153,13 @@ em {
 .review a:hover { text-decoration: underline; }
 #thisWeek:hover {
   cursor: pointer;
-  border: 2px solid #73a6ff;
+  border: 2px solid #73a6ff !important;
   padding: 18px 18px 19px 18px;
 }
 .weekChunk:hover {
   margin-top: -2px;
   cursor: pointer;
-  border: 2px solid #73a6ff;
+  border: 2px solid #73a6ff !important;
   padding-bottom: 19px;
 }
 .subPage {

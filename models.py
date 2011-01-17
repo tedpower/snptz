@@ -212,7 +212,12 @@ class Profile(db.Model):
         #     exclude.append(year_and_week_num_of(self.freshest_taskweek.created))
 
         # return list of taskweeks that are not excluded
-        return [tw for tw in all_past if year_and_week_num_of(tw.created) not in exclude]
+        results = [tw for tw in all_past if year_and_week_num_of(tw.created) not in exclude]
+        
+        if len(results) == 0:
+            return None
+        else:
+            return results
 
     @property
     def esteemed_colleagues(self):
