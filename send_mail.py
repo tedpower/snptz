@@ -8,11 +8,20 @@ from google.appengine.api import users
 from google.appengine.ext import db
 import models
 
-logging.info('Scheduled task ran.')
+logging.info('Scheduled task starting...')
 
 plaintext_template = '''
 
 Hi %(username)s,
+
+Please reply to this email and describe
+(inline, below) what you worked on last
+week and what you are going to work on
+this week.
+
+Be sure to send your reply before lunch...
+otherwise we'll tell your colleagues that
+you are planning to slack off all week :)
 
 -----------------------------------------
 HOW DID LAST WEEK GO?
@@ -32,6 +41,16 @@ html_template = '''
 <img src="http://www.snptz.com/static/logoMed.png" width="174" height="50" alt="SNPTZ">
 <p>Good morning %(username)s!</p>
 
+<p>
+Please reply to this email and describe
+(inline, below) what you worked on last
+week and what you are going to work on
+this week.
+
+Be sure to send your reply before lunch...
+otherwise we'll tell your colleagues that
+you are planning to slack off all week :)
+</p>
 <pre>
 -----------------------------------------
 HOW DID LAST WEEK GO?
@@ -52,8 +71,13 @@ first_time_plaintext = '''
 Hi %(username)s,
 
 Welcome to SNPTZ!
-Tell us a few things you are going to be working on this week in the space below.
-Don't get too detailed or wordy. Each week, we'll follow up so you can reflect on your progress.
+
+Please hit reply and tell us a few things you are going
+to work on this week in the space below (reply inline).
+Don't get too detailed or wordy -- SNPTZ isn't a to-do list or an issue tracker.
+Also, don't get creative with formatting your reply (our email parsing code is really basic).
+Each week, we'll follow up so you can reflect on your progress --
+and share your plans with your esteemed colleagues (if they use SNPTZ too).
 
 -----------------------------------------
 WHAT'RE YOU GOING TO DO THIS WEEK?
@@ -67,8 +91,14 @@ first_time_html = '''
 <img src="http://www.snptz.com/static/logoMed.png" width="174" height="50" alt="SNPTZ">
 <p>Good morning %(username)s!</p>
 Welcome to SNPTZ!
-Tell us a few things you are going to be working on this week in the space below.
-Don't get too detailed or wordy. Each week, we'll follow up so you can reflect on your progress.
+<p>
+Please hit reply and tell us a few things you are going
+to work on this week in the space below (reply inline).
+Don't get too detailed or wordy -- SNPTZ isn't a to-do list or an issue tracker.
+Also, don't get creative with formatting your reply (our email parsing code is really basic).
+Each week, we'll follow up so you can reflect on your progress --
+and share your plans with your esteemed colleagues (if they use SNPTZ too).
+</p>
 <pre>
 -----------------------------------------
 WHAT'RE YOU GOING TO DO THIS WEEK?
