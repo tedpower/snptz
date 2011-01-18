@@ -45,6 +45,10 @@ handlers:
   script: load_data.py
   login: required
 
+- url: /taskweek/show/(realistic|optimistic)/([^/]*)
+  script: main.py
+  login: required
+
 - url: /taskweek/update/(realistic|optimistic)
   script: main.py
   login: required

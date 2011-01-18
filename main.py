@@ -65,6 +65,22 @@ class Settings(webapp.RequestHandler):
         self.response.out.write("Your settings have been saved")        
 
 class Taskweek(webapp.RequestHandler):
+
+    def get(self, tw_type, tw_key):
+        # TODO handle failed assertion
+        assert(tw_type in ['realistic', 'optimistic'])
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
+
+        # get the path for the appropriate template, based on type of taskweek
+        template_path = 'templates/partials/taskweek_%s.html' % tw_type
+
+        # find taskweek based on key provided in url
+        taskweek = models.TaskWeek.get(tw_key)
+
+        # respond with rendered template
+        return self.response.out.write(template.render(template_path, {'taskweek':taskweek}))
+
     def post(self, tw_type):
         # TODO handle failed assertion
         assert(tw_type in ['realistic', 'optimistic'])
@@ -193,6 +209,7 @@ application = webapp.WSGIApplication([
    ('/info', Info),
    ('/settings', Settings),
    ('/team/([^/]+)/([^/]+)', Team),
+   ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),
    ('/colleague/([^/]+)', Colleague)],
    debug=True)
