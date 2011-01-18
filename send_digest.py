@@ -3,12 +3,13 @@
 
 import logging
 import datetime
+import random
 from google.appengine.api import mail
 from google.appengine.api import users
 from google.appengine.ext import db
 import models
 
-logging.info('Scheduled task ran.')
+logging.info('Scheduled task starting...')
 
 def construct_digest(nickname, profile_list):
     digest_greeting = '''
@@ -40,7 +41,17 @@ Here's what your esteemed colleagues are up to this week:
         if prof_taskweek is not None:
             prof_taskweek = prof_taskweek.optimistic
         if prof_taskweek is None:
-            prof_tasks = "just chillin... (no reported tasks!)"
+            fake_tasks = [
+                "putting feet up all week",
+                "sleeping on the job each day",
+                "taking really really long lunch breaks",
+                "productivity consumed by facebook bender",
+                "researching 1000 best cute animal videos",
+                "catching up on reality TV",
+                "just chillin",
+                "secretly daytrading all day",
+                "'working from home' at the beach"]
+            prof_tasks = random.choice(fake_tasks) + "\n(no reported tasks this week!)"
         else:
             prof_tasks = "\n".join(prof_taskweek)
 
