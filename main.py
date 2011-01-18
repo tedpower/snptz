@@ -67,14 +67,12 @@ class Settings(webapp.RequestHandler):
 class Taskweek(webapp.RequestHandler):
 
     def get(self, tw_type, tw_key):
+        assert (tw_type in ['realistic', 'optimistic']), "tw_type is not known: %s" % `tw_type`
         # this method expects a url formatted like:
         #   http://localhost:8080/taskweek/show/optimistic/aghzbnB0emFwcHIOCxIIVGFza1dlZWsYFww
         #   e.g.,
         #   http://mydomain/taskweek/show/(optimistic or realistic)/(taskweek.get_key)
         # and returns a little rendered template (html) ideal for loading into a page via ajax
-
-        # TODO handle failed assertion
-        assert(tw_type in ['realistic', 'optimistic'])
         user = users.get_current_user()
         profile = models.Profile.get_by_key_name(user.user_id())
 
@@ -89,8 +87,8 @@ class Taskweek(webapp.RequestHandler):
             return self.response.out.write(template.render(template_path, {'taskweek':taskweek}))
 
     def post(self, tw_type):
-        # TODO handle failed assertion
-        assert(tw_type in ['realistic', 'optimistic'])
+        assert (tw_type in ['realistic', 'optimistic']), "tw_type is not known: %s" % `tw_type`
+
         user = users.get_current_user()
         profile = models.Profile.get_by_key_name(user.user_id())
 
@@ -98,8 +96,6 @@ class Taskweek(webapp.RequestHandler):
         edited = self.request.get('twedit')
         tw_attr = tw_type
 
-        logging.info(tw_key)
-        logging.info(edited)
         taskweek = models.TaskWeek.get(tw_key)
         if taskweek is None:
             logging.info('OOPS. TASKWEEK FOR EDITING NOT FOUND')
@@ -113,8 +109,7 @@ class Taskweek(webapp.RequestHandler):
         
 class Team(webapp.RequestHandler):
     def get(self, verb, team_slug):
-        # TODO handle failed assertion
-        assert(verb == "show")
+        assert (verb == "show"), "GET verb is not show: %s" % `verb`
         team = models.Team.find_by_slug(team_slug)
         # if team is None, give 'em a 404
         if team is None:
@@ -122,6 +117,7 @@ class Team(webapp.RequestHandler):
         renderMainPage(self, "team", team=team)
 
     def post(self, verb, team_slug):
+        assert (verb in ["new", "toggle"]), "POST verb is not supported: %s" % `verb`
         user = users.get_current_user()
         profile = models.Profile.get_by_key_name(user.user_id())
         
@@ -142,7 +138,6 @@ class Team(webapp.RequestHandler):
                     membership.put()
                     self.response.out.write("You have created and joined %s" % team.name)
                 else:
-                    #TODO handle case where team with this name already exists!
                     self.response.out.write("Oops. That team name is already taken.")
 
         if verb == "toggle":
