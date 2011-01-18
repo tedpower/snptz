@@ -67,6 +67,12 @@ class Settings(webapp.RequestHandler):
 class Taskweek(webapp.RequestHandler):
 
     def get(self, tw_type, tw_key):
+        # this method expects a url formatted like:
+        #   http://localhost:8080/taskweek/show/optimistic/aghzbnB0emFwcHIOCxIIVGFza1dlZWsYFww
+        #   e.g.,
+        #   http://mydomain/taskweek/show/(optimistic or realistic)/(taskweek.get_key)
+        # and returns a little rendered template (html) ideal for loading into a page via ajax
+
         # TODO handle failed assertion
         assert(tw_type in ['realistic', 'optimistic'])
         user = users.get_current_user()
@@ -78,8 +84,9 @@ class Taskweek(webapp.RequestHandler):
         # find taskweek based on key provided in url
         taskweek = models.TaskWeek.get(tw_key)
 
-        # respond with rendered template
-        return self.response.out.write(template.render(template_path, {'taskweek':taskweek}))
+        if taskweek is not None:
+            # respond with rendered template
+            return self.response.out.write(template.render(template_path, {'taskweek':taskweek}))
 
     def post(self, tw_type):
         # TODO handle failed assertion
