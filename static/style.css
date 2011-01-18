@@ -125,22 +125,12 @@ em {
   border-bottom: 1px solid #d9d9d9;
 }
 .weekChunk .plans {
-  padding: 0 20px;
-  width: 308px;
+  padding: 20px;
+  width: 310px;
   float: left;
 }
-.weekChunk .review {
-  padding: 0 20px;
-  width: 308px;
-  float: left;
-}
-.weekChunk {
-  padding: 20px 0;
-  border-left: 2px solid transparent;
-  border-right: 2px solid transparent;
-  border-bottom: 1px solid #d9d9d9;
-}
-#taskWrapper > div:last-child { border-bottom: 1px solid transparent; }
+.weekChunk { border-bottom: 1px solid #d9d9d9; }
+#taskWrapper > div:last-child { border-bottom: none; }
 #thisWeek ul { list-style-position: inside; }
 .weekChunk ul { list-style-position: inside; }
 #thisWeek .plans { font-size: 24px; }
@@ -150,18 +140,6 @@ em {
   padding: 0 0 12px 0;
 }
 .plans a:hover { text-decoration: underline; }
-.review a:hover { text-decoration: underline; }
-#thisWeek:hover {
-  cursor: pointer;
-  border: 2px solid #73a6ff !important;
-  padding: 18px 18px 19px 18px;
-}
-.weekChunk:hover {
-  margin-top: -2px;
-  cursor: pointer;
-  border: 2px solid #73a6ff !important;
-  padding-bottom: 19px;
-}
 .subPage {
   background-color: white;
   z-index: 2;

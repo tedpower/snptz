@@ -12,52 +12,27 @@
     </div>
 </div>
 
-<div id="history">
+{% for tw in colleague.all_other_past_taskweeks %}
     <div class="weekChunk clearfix">
         <div class="plans">
             <div class="timeStamp">
-                Week of <em>{{ colleague.freshest_taskweek.created|date:"M j" }}</em>
+                Week of <em>{{ tw.created|date:"M j" }}</em>
             </div>
             <ul>
-                {% for t in colleague.freshest_taskweek.optimistic %}
+                {% for t in tw.optimistic %}
                     <li>{{ t }}</li>
                 {% endfor %}
             </ul>
         </div>
-        <div class="review">
+        <div class="plans">
             <div class="timeStamp">
                 How'd it go?
             </div>
             <ul>
-                {% for t in colleague.freshest_taskweek.realistic %}
+                {% for t in tw.realistic %}
                     <li>{{ t }}</li>
                 {% endfor %}
             </ul>
         </div>
     </div>
-
-    {% for tw in colleague.all_other_past_taskweeks %}
-        <div class="weekChunk clearfix">
-            <div class="plans">
-                <div class="timeStamp">
-                    Week of <em>{{ tw.created|date:"M j" }}</em>
-                </div>
-                <ul>
-                    {% for t in tw.optimistic %}
-                        <li>{{ t }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="review">
-                <div class="timeStamp">
-                    How'd it go?
-                </div>
-                <ul>
-                    {% for t in tw.realistic %}
-                        <li>{{ t }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    {% endfor %}
-</div>
+{% endfor %}
