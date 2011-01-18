@@ -41,18 +41,52 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
         logging.info('the user is %s' % (cleanedEmail[0]))
 
         # find the good bits of the email
-        breaking_string = "-----------------------------------------"
-        start = decoded_message.find(breaking_string)
-        start = decoded_message.find(breaking_string, start + 1)
-        end = decoded_message.find(breaking_string, start + 1)
-        lastWeek = decoded_message[start + len(breaking_string):end]
-        lastWeek = lastWeek.splitlines()
-        lastWeek = cleanLines(lastWeek)
-        logging.info("last week: %s" % lastWeek)
-        start = decoded_message.find(breaking_string, end + 1)
-        thisWeek = decoded_message[start + len(breaking_string):]
-        thisWeek = thisWeek.splitlines()
-        thisWeek = cleanLines(thisWeek)
+
+        # this regex matches one or more repetitions of '--~'
+        breaking_pattern = re.compile(r'(\-\-\~)+', re.MULTILINE)
+        # this regex matches two hyphens
+        end_pattern = re.compile(r'(\-\-)', re.MULTILINE)
+
+        # split email on breaking_pattern
+        split_email = re.split(breaking_pattern, decoded_message)
+
+        # see if this is a reply to the first-time welcome message
+        # TODO is there a more reliable way of doing this?
+        welcome_message = decoded_message.find("Welcome to SNPTZ!")
+
+        # handy variable to keep track of whether or not we are
+        # dealing with a reply to the first-time welcome message or not
+        first_time = False if welcome_message == -1 else True
+
+        if not first_time:
+            # split_email[0] is everything up to Good Morning user!
+            # split_email[1] is --~
+            # split_email[2] is the HOW DID LAST WEEK GO... text
+            # split_email[3] is --~
+            last_week_raw = split_email[4]
+            last_week_split = last_week_raw.splitlines()
+            lastWeek = cleanLines(last_week_split)
+
+            logging.info("last week: %s" % lastWeek)
+
+            # split_email[5] is --~
+            # split_email[6] is WHAT'RE YOU GOING ... text
+            # split_email[7] is --~
+
+            # split_email[8] is this weeks tasks, along with everything else (signature, etc)
+            # so split it on the end_pattern and the first item should be this weeks tasks
+            this_week_raw = re.split(end_pattern, split_email[8])[0]
+            this_week_split = this_week_raw.splitlines()
+            thisWeek = cleanLines(this_week_split)
+        else:
+            # split_email[0] is intro paragraph
+            # split_email[1] is --~
+            # split_email[2] is WHAT'RE YOU GOING ... text
+            # split_email[3] is --~
+            this_week_raw = re.split(end_pattern, split_email[4])[0]
+            this_week_split = this_week_raw.splitlines()
+            thisWeek = cleanLines(this_week_split)
+
         logging.info("this week: %s" % thisWeek)
 
         # create a Message object to store the email, etc
@@ -65,14 +99,15 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
         if user is not None:
             newmessage.userRef = user
 
-            # deal with freshest_taskweek before creating a new one!
-            # (otherwise user.freshest_taskweek will return the newly
-            # created taskweek created by user.this_weeks_tw)
-            last_taskweek = user.freshest_taskweek
-            if last_taskweek is not None:
-                last_taskweek.realistic = lastWeek
-                last_taskweek.put()
-            # TODO do something if there are no past taskweeks?
+            if not first_time:
+                # deal with freshest_taskweek before creating a new one!
+                # (otherwise user.freshest_taskweek will return the newly
+                # created taskweek created by user.this_weeks_tw)
+                last_taskweek = user.freshest_taskweek
+                if last_taskweek is not None:
+                    last_taskweek.realistic = lastWeek
+                    last_taskweek.put()
+                # TODO do something if there are no past taskweeks?
 
             # get or create a new taskweek for this week
             # ... meaning we will overwrite the tasks if this is the

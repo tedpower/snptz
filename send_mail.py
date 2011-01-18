@@ -17,23 +17,27 @@ Hi %(username)s,
 Please reply to this email and describe
 (inline, below) what you worked on last
 week and what you are going to work on
-this week.
+this week (one task per line, please).
 
 Be sure to send your reply before lunch...
 otherwise we'll tell your colleagues that
 you are planning to slack off all week :)
 
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 HOW DID LAST WEEK GO?
 Edit your goals from last week:
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 
 %(tasks)s
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 WHAT'RE YOU GOING TO DO THIS WEEK?
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 
 
+
+
+--
+(list any number of tasks above these two hyphens)
 '''
 
 html_template = '''
@@ -45,24 +49,32 @@ html_template = '''
 Please reply to this email and describe
 (inline, below) what you worked on last
 week and what you are going to work on
-this week.
+this week (one task per line, please).
 
 Be sure to send your reply before lunch...
 otherwise we'll tell your colleagues that
 you are planning to slack off all week :)
 </p>
 <pre>
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 HOW DID LAST WEEK GO?
 Edit your goals from last week:
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 </pre>
 
 %(tasks)s
 <pre>
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 WHAT'RE YOU GOING TO DO THIS WEEK?
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
+</pre>
+
+
+
+
+<pre>
+--
+(list any number of tasks above these two hyphens)
 </pre>
 '''
 
@@ -79,11 +91,15 @@ Also, don't get creative with formatting your reply (our email parsing code is r
 Each week, we'll follow up so you can reflect on your progress --
 and share your plans with your esteemed colleagues (if they use SNPTZ too).
 
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 WHAT'RE YOU GOING TO DO THIS WEEK?
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 
 
+
+
+--
+(list any number of tasks above these two hyphens)
 '''
 
 first_time_html = '''
@@ -100,9 +116,17 @@ Each week, we'll follow up so you can reflect on your progress --
 and share your plans with your esteemed colleagues (if they use SNPTZ too).
 </p>
 <pre>
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 WHAT'RE YOU GOING TO DO THIS WEEK?
------------------------------------------
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
+</pre>
+
+
+
+
+<pre>
+--
+(list any number of tasks above these two hyphens)
 </pre>
 '''
 
