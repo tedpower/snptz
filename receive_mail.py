@@ -9,6 +9,7 @@ from google.appengine.api import users
 from google.appengine.ext import db
 import models
 import re
+import itertools
 from datetime import datetime, timedelta
 
 class MyMailHandler(mail_handlers.InboundMailHandler):
@@ -99,22 +100,91 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
         if user is not None:
             newmessage.userRef = user
 
+            def extract_tags(text):
+                ''' Given a string, this method extracts tags from within
+                    brackets, returning a tag-and-bracket-free string and
+                    a list of tags-sans-brackets.
+                    e.g., "[ux, android app ] work on prototype of settings interface "
+                        returns "work on prototype of settings interface"
+                                and ['ux','android-app'] '''
+                t = text
+                tag_list = None
+                tag_pattern = re.compile(r'\[(.*)\]')
+                # search item from email for tags (stuff between [])
+                matches = re.search(tag_pattern, t)
+                if matches is not None:
+                    # if there are tags, cast the matches.groups() tuple
+                    # as a list, and split each list item by commas and
+                    # finally flatten the resulting list of lists
+                    raw_tags = itertools.chain.from_iterable([m.split(',')
+                        for m in list(matches.groups())])
+                    # slugify all the tags, so 'my tag ' becomes 'my-tag'
+                    tags = [models.slugify(rt) for rt in raw_tags]
+
+                    # add list of slugified tags to Task's tags property
+                    tag_list = tags
+                    tag_w_brackets_pattern = re.compile(r'\[.*\]')
+                    # replace tags (and enclosing brackets) with an
+                    # empty string, and strip any leading or trailing
+                    # whitespace from the task text
+                    text_wo_tags = tag_w_brackets_pattern.sub("", t).strip()
+                    # and add to Task's text property
+                    t = text_wo_tags
+                    return t, tag_list
+                return t, tag_list
+
             if not first_time:
                 # deal with freshest_taskweek before creating a new one!
                 # (otherwise user.freshest_taskweek will return the newly
                 # created taskweek created by user.this_weeks_tw)
                 last_taskweek = user.freshest_taskweek
                 if last_taskweek is not None:
-                    last_taskweek.realistic = lastWeek
-                    last_taskweek.put()
-                # TODO do something if there are no past taskweeks?
+                    # get or create a 'realistic' tasklist
+                    tasklist = last_taskweek.get_or_create_tasklist("realistic")
+                    if tasklist is not None:
+                        # gather any tasks that belong to this list
+                        tasks_to_replace = tasklist.task_set
+                        if tasks_to_replace.count() > 0:
+                            # if any tasks exist, delete them
+                            for old_task in tasks_to_replace:
+                                old_task.delete()
+                        for t in lastWeek:
+                            # create a Task for each of the items pulled from
+                            # the email and add a reference to the tasklist
+                            task = models.Task(tasklist=tasklist)
+                            task_text, tag_list = extract_tags(t)
+                            task.text = task_text
+                            if tag_list is not None:
+                                task.tags = tag_list
+                            task.put()
+                        tasklist.put()
+                        last_taskweek.put()
 
             # get or create a new taskweek for this week
             # ... meaning we will overwrite the tasks if this is the
             # second email from this user this week
             new_taskweek = user.this_weeks_tw
-            new_taskweek.optimistic = thisWeek
-            new_taskweek.put()
+            if new_taskweek is not None:
+                # get or create an 'optimistic' tasklist
+                tasklist = new_taskweek.get_or_create_tasklist("optimistic")
+                if tasklist is not None:
+                    # gather any tasks that belong to this list
+                    tasks_to_replace = tasklist.task_set
+                    if tasks_to_replace.count() > 0:
+                        # if any tasks exist, delete them
+                        for old_task in tasks_to_replace:
+                            old_task.delete()
+                    for t in thisWeek:
+                        # create a Task for each of the items pulled from
+                        # the email and add a reference to the tasklist
+                        task = models.Task(tasklist=tasklist)
+                        task_text, tag_list = extract_tags(t)
+                        task.text = task_text
+                        if tag_list is not None:
+                            task.tags = tag_list
+                        task.put()
+                    tasklist.put()
+                    new_taskweek.put()
         else:
             # TODO user is not known -- tell them to sign up
             logging.info("OOPS. UNKNOWN USER: %s" % from_email)
