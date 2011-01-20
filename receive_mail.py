@@ -114,7 +114,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
             # second email from this user this week
             new_taskweek = user.this_weeks_tw
             if new_taskweek is not None:
-                new_taskweek.update_list_tasks("optimistic", thisWeek)
+                new_taskweek.update_tasklist_tasks("optimistic", thisWeek)
                 logging.info(new_taskweek.optimistic)
         else:
             # TODO user is not known -- tell them to sign up
