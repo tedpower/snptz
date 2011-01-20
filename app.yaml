@@ -41,10 +41,6 @@ handlers:
   static_files: static/favicon.ico
   upload: static/favicon.ico
 
-- url: /fixtures
-  script: load_data.py
-  login: required
-
 - url: /taskweek/show/(realistic|optimistic)/([^/]*)
   script: main.py
   login: required
