@@ -252,21 +252,14 @@ class TaskWeek(db.Model):
 
     def get_or_create_tasklist(self, tl_type):
         assert tl_type in ["realistic", "optimistic"]
-        logging.info("GETTING OR CREATING TL")
-        logging.info(tl_type)
         looking_for = True if tl_type == "optimistic" else False
         logging.info(looking_for)
         matches = [tl for tl in self.tasklist_set if tl.optimistic == looking_for]
-        logging.info(matches)
         if len(matches) == 1:
-            logging.info("RETURNING ONE TL")
-            logging.info(matches[0])
             return matches[0]
         elif len(matches) == 0:
-            logging.info("MAKING NEW TL")
             tl = TaskList(taskweek=self, optimistic=looking_for)
             tl.put()
-            logging.info(tl)
             return tl
         else:
             # TODO do something...
@@ -276,49 +269,22 @@ class TaskWeek(db.Model):
 
     @property
     def optimistic(self):
-        logging.info("OPTIMISTIC")
         optimistic_tl = [tl for tl in self.tasklist_set if tl.optimistic == True]
-        logging.info(optimistic_tl)
         if len(optimistic_tl) > 0:
-            logging.info("HAVE TL")
             tasks = optimistic_tl[0].task_set
-            logging.info(tasks)
             if tasks.count() > 0:
-                logging.info("HAVE TASKS")
                 return [t.text for t in tasks]
-            else:
-                logging.info("OOPS. NO OPTIMISTIC TASKS")
-                logging.info(tasks)
         else:
-            logging.info("OOPS. NO OPTIMISTIC TLs")
-            '''
-            logging.info("MAKING NEW TL")
-            tl = TaskList(taskweek=self, optimistic=True)
-            tl.put()
-            logging.info(tl)
-            '''
             return []
 
     @property
     def realistic(self):
-        logging.info("REALISTIC")
         realistic_tl = [tl for tl in self.tasklist_set if tl.optimistic == False]
-        logging.info(realistic_tl)
         if len(realistic_tl) > 0:
             tasks = realistic_tl[0].task_set
             if tasks.count() > 0:
                 return [t.text for t in tasks]
-            else:
-                logging.info("OOPS. NO REALISTIC TASKS")
-                logging.info(tasks)
         else:
-            logging.info("OOPS. NO REALISTIC TLs")
-            '''
-            logging.info("MAKING NEW TL")
-            tl = TaskList(taskweek=self, optimistic=False)
-            tl.put()
-            logging.info(tl)
-            '''
             return []
 
     @property
