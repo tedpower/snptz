@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 # vim: ai ts=4 sts=4 et sw=4 coding=utf-8
-
+import os
+import logging
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
 from google.appengine.ext import db
-import os
+
 import models
-import logging
+import helpers
 
 class MainPage(webapp.RequestHandler):
     def get(self):
@@ -131,7 +132,7 @@ class Team(webapp.RequestHandler):
                     # create new team
                     team = models.Team(name=team_name)
                     # make a slug from the supplied team name
-                    team.slug = models.slugify(team_name)
+                    team.slug = helpers.slugify(team_name)
                     team.put()
                     # create a new membership for the user
                     membership = models.Membership(team=team, profile=profile)

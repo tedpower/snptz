@@ -9,19 +9,8 @@ import logging
 import re
 import datetime
 from timezones import *
+import helpers
 
-
-# slightly modified method cribbed from django
-# (django/template/defaultfilters.py)
-def slugify(value):
-    """
-    Normalizes string, converts to lowercase, removes non-alpha characters,
-    and converts spaces to hyphens.
-    """
-    import unicodedata
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
-    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
-    return (re.sub('[-\s]+', '-', value))
 
 # dictionary of instances of our tzinfo subclasses
 # as defined in timezones.py
@@ -245,15 +234,10 @@ class TaskWeek(db.Model):
     #created = db.DateTimeProperty(auto_now_add=True)
     created = db.DateTimeProperty()
     modified = db.DateTimeProperty(auto_now=True)
-    # what they hoped to accomplish
-    #optimistic = db.StringListProperty()
-    # what they actually accomplished
-    #realistic = db.StringListProperty()
 
     def get_or_create_tasklist(self, tl_type):
         assert tl_type in ["realistic", "optimistic"]
         looking_for = True if tl_type == "optimistic" else False
-        logging.info(looking_for)
         matches = [tl for tl in self.tasklist_set if tl.optimistic == looking_for]
         if len(matches) == 1:
             return matches[0]
@@ -326,11 +310,6 @@ class Message(db.Model):
     body = db.TextProperty()
     created = db.DateTimeProperty(auto_now_add=True)
 
-    # the property decorator allows a method to be called as if it were
-    # a read-only attribute of Message
-    # (e.g., that_message.my_property rather than that_message.my_property() )
-    # this allows us to use created_est within a django template just like
-    # any of the Message attributes
     @property
     def created_est(self):
         # datetime stored in created is timezone naive
