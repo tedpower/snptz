@@ -251,6 +251,39 @@ class TaskWeek(db.Model):
             logging.info(len(matches))
             pass
 
+    def update_tasklist_tasks(self, tl_type, list_of_tasks):
+        ''' Updates Tasks (and TaskLists) associated with a
+            TaskWeek. Given a type (realistic or optimistic) and
+            a list of tasks (with optional tags), this method
+            gets/edits or creates appropriate TaskList and Task
+            records referenced to this TaskWeek. If there is already
+            a TaskList and Tasks of tl_type, the existing Tasks will
+            be deleted before the new ones are created.
+
+            Other than perhaps getting/displaying, TaskList and Task records
+            should not be modified by other callers.'''
+        assert tl_type in ["realistic", "optimistic"]
+        tasklist = self.get_or_create_tasklist(tl_type)
+        # gather any tasks that belong to this list
+        tasks_to_replace = tasklist.task_set
+        if tasks_to_replace.count() > 0:
+            # if any tasks exist, delete them
+            for old_task in tasks_to_replace:
+                old_task.delete()
+        for t in list_of_tasks:
+            # create a Task for each of the items pulled from
+            # the email and add a reference to the tasklist
+            task = Task(tasklist=tasklist)
+            task_text, tag_list = helpers.extract_tags(t)
+            task.text = task_text
+            if tag_list is not None:
+                task.tags = tag_list
+            task.put()
+        tasklist.put()
+        self.put()
+        # TODO return something more useful?
+        return True
+
     @property
     def optimistic(self):
         optimistic_tl = [tl for tl in self.tasklist_set if tl.optimistic == True]
@@ -294,6 +327,8 @@ class TaskWeek(db.Model):
         return self.key()
 
 class TaskList(db.Model):
+    # TaskList is either of type 'optimistic' or 'realistic',
+    # so if optimistic is false, assume it is of type realistic
     optimistic = db.BooleanProperty()
     taskweek = db.ReferenceProperty(TaskWeek)
 

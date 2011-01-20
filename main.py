@@ -103,8 +103,7 @@ class Taskweek(webapp.RequestHandler):
             self.response.out.write("Oops. FAIL!")
         else:
             edited_as_lines = [l.strip() for l in edited.splitlines()]
-            if hasattr(taskweek, tw_attr):
-                setattr(taskweek, tw_attr, edited_as_lines)
+            taskweek.update_tasklist_tasks(tw_attr, edited_as_lines)
             taskweek.put()
             self.response.out.write("Yay. Your tasks have been updated.")
         

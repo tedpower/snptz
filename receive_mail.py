@@ -106,52 +106,16 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
                 # created taskweek created by user.this_weeks_tw)
                 last_taskweek = user.freshest_taskweek
                 if last_taskweek is not None:
-                    # get or create a 'realistic' tasklist
-                    tasklist = last_taskweek.get_or_create_tasklist("realistic")
-                    if tasklist is not None:
-                        # gather any tasks that belong to this list
-                        tasks_to_replace = tasklist.task_set
-                        if tasks_to_replace.count() > 0:
-                            # if any tasks exist, delete them
-                            for old_task in tasks_to_replace:
-                                old_task.delete()
-                        for t in lastWeek:
-                            # create a Task for each of the items pulled from
-                            # the email and add a reference to the tasklist
-                            task = models.Task(tasklist=tasklist)
-                            task_text, tag_list = helpers.extract_tags(t)
-                            task.text = task_text
-                            if tag_list is not None:
-                                task.tags = tag_list
-                            task.put()
-                        tasklist.put()
-                        last_taskweek.put()
+                    last_taskweek.update_tasklist_tasks("realistic", lastWeek)
+                    logging.info(last_taskweek.realistic)
 
             # get or create a new taskweek for this week
             # ... meaning we will overwrite the tasks if this is the
             # second email from this user this week
             new_taskweek = user.this_weeks_tw
             if new_taskweek is not None:
-                # get or create an 'optimistic' tasklist
-                tasklist = new_taskweek.get_or_create_tasklist("optimistic")
-                if tasklist is not None:
-                    # gather any tasks that belong to this list
-                    tasks_to_replace = tasklist.task_set
-                    if tasks_to_replace.count() > 0:
-                        # if any tasks exist, delete them
-                        for old_task in tasks_to_replace:
-                            old_task.delete()
-                    for t in thisWeek:
-                        # create a Task for each of the items pulled from
-                        # the email and add a reference to the tasklist
-                        task = models.Task(tasklist=tasklist)
-                        task_text, tag_list = helpers.extract_tags(t)
-                        task.text = task_text
-                        if tag_list is not None:
-                            task.tags = tag_list
-                        task.put()
-                    tasklist.put()
-                    new_taskweek.put()
+                new_taskweek.update_list_tasks("optimistic", thisWeek)
+                logging.info(new_taskweek.optimistic)
         else:
             # TODO user is not known -- tell them to sign up
             logging.info("OOPS. UNKNOWN USER: %s" % from_email)
