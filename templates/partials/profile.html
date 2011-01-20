@@ -13,8 +13,18 @@
         </div>
         <div class="plans">
             <ul>
-                {% for t in profile.this_weeks_tw.optimistic %}
-                    <li>{{ t|urlize }}</li>
+                {% for tuple in profile.this_weeks_tw.optimistic_as_tuples %}
+                    <li>{{ tuple.0 }}
+                        {% if tuple.1 %}
+                        <span class="tags" style="color: red; font-size: 50%;">
+                            {% for tag in tuple.1 %}
+                                <span class="tag">
+                                {{ tag }}
+                                </span>
+                            {% endfor %}
+                        {% endif %}
+                        </span>
+                    </li>
                 {% endfor %}
             </ul>
         </div>
@@ -35,8 +45,18 @@
                             Week of <em>{{ tw.get_mon|date:"M j" }}</em>
                         </div>
                         <ul>
-                            {% for t in tw.optimistic %}
-                                <li>{{ t|urlize }}</li>
+                            {% for tuple in tw.optimistic_as_tuples %}
+                                <li>{{ tuple.0 }}
+                                    {% if tuple.1 %}
+                                    <span class="tags" style="color: red; font-size: 50%;">
+                                        {% for tag in tuple.1 %}
+                                            <span class="tag">
+                                            {{ tag }}
+                                            </span>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </span>
+                                </li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -54,8 +74,18 @@
                             How'd it go?
                         </div>
                         <ul>
-                            {% for t in tw.realistic %}
-                                <li>{{ t|urlize }}</li>
+                            {% for tuple in tw.realistic_as_tuples %}
+                                <li>{{ tuple.0 }}
+                                    {% if tuple.1 %}
+                                    <span class="tags" style="color: red; font-size: 50%;">
+                                        {% for tag in tuple.1 %}
+                                            <span class="tag">
+                                            {{ tag }}
+                                            </span>
+                                        {% endfor %}
+                                    {% endif %}
+                                    </span>
+                                </li>
                             {% endfor %}
                         </ul>
                     </div>

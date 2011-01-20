@@ -284,25 +284,24 @@ class TaskWeek(db.Model):
         # TODO return something more useful?
         return True
 
-    @property
-    def optimistic(self):
-        optimistic_tl = [tl for tl in self.tasklist_set if tl.optimistic == True]
-        if len(optimistic_tl) > 0:
-            tasks = optimistic_tl[0].task_set
+    def _tasklist_tasks(self, tl_type):
+        assert tl_type in ["realistic", "optimistic"]
+        looking_for = True if tl_type == "optimistic" else False
+        matches = [tl for tl in self.tasklist_set if tl.optimistic == looking_for]
+        if len(matches) > 0:
+            tasks = matches[0].task_set
             if tasks.count() > 0:
                 return [t.text for t in tasks]
         else:
             return []
 
     @property
+    def optimistic(self):
+        return self._tasklist_tasks("optimistic")
+
+    @property
     def realistic(self):
-        realistic_tl = [tl for tl in self.tasklist_set if tl.optimistic == False]
-        if len(realistic_tl) > 0:
-            tasks = realistic_tl[0].task_set
-            if tasks.count() > 0:
-                return [t.text for t in tasks]
-        else:
-            return []
+        return self._tasklist_tasks("realistic")
 
     @property
     def optimistic_as_str(self):
@@ -312,6 +311,32 @@ class TaskWeek(db.Model):
     def realistic_as_str(self):
         return "\n".join(self.realistic)
     
+    def _tasklist_as_tuples(self, tl_type):
+        assert tl_type in ["realistic", "optimistic"]
+        looking_for = True if tl_type == "optimistic" else False
+        matches = [tl for tl in self.tasklist_set if tl.optimistic == looking_for]
+        if len(matches) > 0:
+            tasks = matches[0].task_set
+            if tasks.count() > 0:
+                tasks_as_tuples = []
+                for t in tasks:
+                    tags = t.tags
+                    if len(tags) > 0:
+                        tasks_as_tuples.append((t.text, tuple(tags)))
+                    else:
+                        tasks_as_tuples.append((t.text, tuple()))
+                return tasks_as_tuples
+        else:
+            return []
+
+    @property
+    def optimistic_as_tuples(self):
+        return self._tasklist_as_tuples("optimistic")
+
+    @property
+    def realistic_as_tuples(self):
+        return self._tasklist_as_tuples("realistic")
+
     # Takes the created date and finds the monday of the containing week
     @property
     def get_mon(self):
