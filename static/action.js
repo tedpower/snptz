@@ -63,7 +63,48 @@ $(document).ready(function(){
         event.preventDefault();
     });
     
+    // Add the event listeners for the main edit stuff
+    hookupAjaxEdit();
     
+    // Putting this in a function so we can add the listeners to new dom elements
+    function hookupAjaxEdit() {
+        $(".plans").click(function(event){
+            $(this).hide();
+            $(this).siblings(".edit").show();
+        });
+
+        $(".cancel").click(function(event){
+            $(this).parent().parent().hide();
+            $(this).parent().parent().siblings(".plans").show();
+            event.preventDefault();
+        });
+
+        $(".submit_optimistic").click(function(event){
+            var $planWrap = $(this).parent().parent().parent();
+            $.post("/taskweek/update/optimistic",
+                {twkey:$(this).parent().attr('id'),
+                 twedit:$(this).parent().children("textarea").val()},
+                   function(data){
+                       $planWrap.replaceWith(data);
+                       hookupAjaxEdit();
+                   });
+        event.preventDefault();
+        });
+        
+        $(".submit_realistic").click(function(event){
+            var $planWrap = $(this).parent().parent().parent();
+            $.post("/taskweek/update/realistic",
+                {twkey:$(this).parent().attr('id'),
+                 twedit:$(this).parent().children("textarea").val()},
+                   function(data){
+                       $planWrap.replaceWith(data);
+                       hookupAjaxEdit();
+                   });
+        event.preventDefault();
+        });
+    }
+    
+    // TODO refactor this
     $("#newteamSubmit").click(function(event){
         $.post("/team/new/wtf",
                {newteamname:$('#newteamname').val()},
@@ -87,45 +128,6 @@ $(document).ready(function(){
                     }, 1500);
                });
         event.preventDefault();
-    });
-    $(".plans").click(function(event){
-        $(this).hide();
-        $(this).siblings(".edit").show();
-    });
-    $(".cancel").click(function(event){
-        $(this).parent().parent().hide();
-        $(this).parent().parent().siblings(".plans").show();
-        event.preventDefault();
-    });
-    $(".submit_optimistic").click(function(event){
-        $(this).parent().parent().hide();
-        $(this).parent().parent().siblings(".plans").show();
-        $.post("/taskweek/update/optimistic",
-            {twkey:$(this).parent().attr('id'),
-             twedit:$(this).parent().children("textarea").val()},
-               function(data){
-                   $("#notifications").html(data);
-                   $('#notifications').addClass('notificationShow');
-                   setTimeout(function(){
-                       $('#notifications').removeClass('notificationShow');
-                    }, 1500);
-               });
-    event.preventDefault();
-    });
-    $(".submit_realistic").click(function(event){
-        $(this).parent().parent().hide();
-        $(this).parent().parent().siblings(".plans").show();
-        $.post("/taskweek/update/realistic",
-            {twkey:$(this).parent().attr('id'),
-             twedit:$(this).parent().children("textarea").val()},
-               function(data){
-                   $("#notifications").html(data);
-                   $('#notifications').addClass('notificationShow');
-                   setTimeout(function(){
-                       $('#notifications').removeClass('notificationShow');
-                    }, 1500);
-               });
-    event.preventDefault();
     });
 });
 

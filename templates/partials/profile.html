@@ -11,19 +11,21 @@
                 {{ profile.this_weeks_tw.get_sun|date:"M j" }}
             {% endifequal %}
         </div>
-        <div class="plans">
-            <ul>
-                {% for t in profile.this_weeks_tw.optimistic %}
-                    <li>{{ t|urlize }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="edit" style="display:none;">
-            <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update/optimistic" method="post">
-                <textarea>{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
-                <input type="submit" class="submit_optimistic" value="update"/>
-                <input type="submit" class="cancel" value="cancel"/>
-            </form>
+        <div class="optimistic">
+            <div class="plans">
+                <ul>
+                    {% for t in profile.this_weeks_tw.optimistic %}
+                        <li>{{ t|urlize }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="edit" style="display:none;">
+                <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update/optimistic" method="post">
+                    <textarea>{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
+                    <input type="submit" class="submit_optimistic" value="update"/>
+                    <input type="submit" class="cancel" value="cancel"/>
+                </form>
+            </div>
         </div>
     </div>
     {% ifnotequal profile.all_other_past_taskweeks None %}
