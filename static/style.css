@@ -145,6 +145,22 @@ em {
   padding: 0 0 12px 0;
 }
 .plans a:hover { text-decoration: underline; }
+.weekChunk textarea {
+  margin: 0;
+  padding: 6px 8px;
+  font-size: 14px;
+  resize: none;
+  font-family: "Droid Sans", Helvetica, Arial, sans-serif;
+}
+#thisWeek textarea {
+  margin: 0;
+  padding: 6px 8px;
+  font-size: 14px;
+  resize: none;
+  font-family: "Droid Sans", Helvetica, Arial, sans-serif;
+}
+#thisWeek textarea { width: 642px; }
+.weekChunk textarea { width: 292px; }
 .subPage {
   background-color: white;
   z-index: 2;

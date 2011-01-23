@@ -21,9 +21,9 @@
             </div>
             <div class="edit" style="display:none;">
                 <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update/optimistic" method="post">
-                    <textarea>{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
-                    <input type="submit" class="submit_optimistic" value="update"/>
-                    <input type="submit" class="cancel" value="cancel"/>
+                    <textarea rows="{{ profile.this_weeks_tw.optimistic|length }}">{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
+                    <input type="submit" class="submit_optimistic" value="Update"/>
+                    <input type="submit" class="cancel" value="Cancel"/>
                 </form>
             </div>
         </div>
@@ -45,9 +45,9 @@
                         </div>
                         <div class="edit" style="display:none;">
                             <form id="{{ tw.get_key }}" action="/taskweek/update/optimistic" method="post">
-                                <textarea>{{ tw.optimistic_as_str }}</textarea>
-                                <input type="submit" class="submit_optimistic" value="update"/>
-                                <input type="submit" class="cancel" value="cancel"/>
+                                <textarea rows="{{ tw.optimistic|length }}">{{ tw.optimistic_as_str }}</textarea>
+                                <input type="submit" class="submit_optimistic" value="Update"/>
+                                <input type="submit" class="cancel" value="Cancel"/>
                             </form>
                         </div>
                     </div>
@@ -67,9 +67,9 @@
                         </div>
                         <div class="edit" style="display:none;">
                             <form id="{{ tw.get_key }}" action="/taskweek/update/realistic" method="post">
-                                <textarea>{{ tw.realistic_as_str }}</textarea>
-                                <input type="submit" class="submit_realistic" value="update"/>
-                                <input type="submit" class="cancel" value="cancel"/>
+                                <textarea rows="{{ tw.realistic|length }}">{{ tw.realistic_as_str }}</textarea>
+                                <input type="submit" class="submit_realistic" value="Update"/>
+                                <input type="submit" class="cancel" value="Cancel"/>
                             </form>
                         </div>
                     </div>

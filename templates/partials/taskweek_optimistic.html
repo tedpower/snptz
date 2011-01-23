@@ -8,9 +8,9 @@
     </div>
     <div class="edit" style="display:none;">
         <form id="{{ taskweek.get_key }}" action="/taskweek/update/optimistic" method="post">
-            <textarea>{{ taskweek.optimistic_as_str }}</textarea>
-            <input type="submit" class="submit_optimistic" value="update"/>
-            <input type="submit" class="cancel" value="cancel"/>
+            <textarea rows="{{ taskweek.optimistic|length }}">{{ taskweek.optimistic_as_str }}</textarea>
+            <input type="submit" class="submit_optimistic" value="Update"/>
+            <input type="submit" class="cancel" value="Cancel"/>
         </form>
     </div>
 </div>

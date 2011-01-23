@@ -62,7 +62,7 @@ $(document).ready(function(){
                });
         event.preventDefault();
     });
-    
+        
     // Add the event listeners for the main edit stuff
     hookupAjaxEdit();
     
@@ -103,6 +103,12 @@ $(document).ready(function(){
         event.preventDefault();
         });
     }
+    
+    // This will allow you to close the edit area by clicking the background
+    $("#bg").click(function(event){
+        $(".edit").hide();
+        $(".plans").show();
+    });
     
     // TODO refactor this
     $("#newteamSubmit").click(function(event){
