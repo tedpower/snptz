@@ -124,7 +124,12 @@ em {
   padding: 20px;
   border-bottom: 1px solid #d9d9d9;
 }
-.weekChunk .plans {
+.weekChunk .optimistic {
+  padding: 20px;
+  width: 310px;
+  float: left;
+}
+.weekChunk .realistic {
   padding: 20px;
   width: 310px;
   float: left;
