@@ -11,90 +11,105 @@
                 {{ profile.this_weeks_tw.get_sun|date:"M j" }}
             {% endifequal %}
         </div>
-        <div class="plans">
-            <ul>
-                {% for tuple in profile.this_weeks_tw.optimistic_as_tuples %}
-                    <li>{{ tuple.0 }}
-                        {% if tuple.1 %}
-                        <span class="tags" style="color: red; font-size: 50%;">
-                            {% for tag in tuple.1 %}
-                                <span class="tag">
-                                {{ tag }}
-                                </span>
-                            {% endfor %}
-                        {% endif %}
-                        </span>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="edit" style="display:none;">
-            <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update/optimistic" method="post">
-                <textarea>{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
-                <input type="submit" class="submit_optimistic" value="update"/>
-                <input type="submit" class="cancel" value="cancel"/>
-            </form>
+        <div class="planWrap">
+            <div class="plans">
+                {% if profile.this_weeks_tw.optimistic_as_tuples|length_is:"0" %}
+                    <div class="emptyWeek">This week I'm gonna...</div>
+                {% else %}
+                <ul>
+                    {% for tuple in profile.this_weeks_tw.optimistic_as_tuples %}
+                        <li>{{ tuple.0 }}
+                            {% if tuple.1 %}
+                            <span class="tags" style="color: red; font-size: 50%;">
+                                {% for tag in tuple.1 %}
+                                    <span class="tag">
+                                    {{ tag }}
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+            <div class="edit" style="display:none;">
+                <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update/optimistic" method="post">
+                    <textarea rows="{{ profile.this_weeks_tw.optimistic|length }}">{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
+                    <input type="submit" class="submit_optimistic" value="Update"/>
+                    <input type="submit" class="cancel" value="Cancel"/>
+                </form>
+            </div>
         </div>
     </div>
     {% ifnotequal profile.all_other_past_taskweeks None %}
         {% for tw in profile.all_other_past_taskweeks %}
             <div class="weekChunk clearfix">
                 <div class="optimistic">
-                    <div class="plans">
-                        <div class="timeStamp">
-                            Week of <em>{{ tw.get_mon|date:"M j" }}</em>
+                    <div class="timeStamp">
+                        Week of <em>{{ tw.get_mon|date:"M j" }}</em>
+                    </div>
+                    <div class="planWrap">
+                        <div class="plans">
+                            <ul>
+                                {% for tuple in tw.optimistic_as_tuples %}
+                                    <li>{{ tuple.0 }}
+                                        {% if tuple.1 %}
+                                        <span class="tags" style="color: red; font-size: 50%;">
+                                            {% for tag in tuple.1 %}
+                                                <span class="tag">
+                                                {{ tag }}
+                                                </span>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
-                        <ul>
-                            {% for tuple in tw.optimistic_as_tuples %}
-                                <li>{{ tuple.0 }}
-                                    {% if tuple.1 %}
-                                    <span class="tags" style="color: red; font-size: 50%;">
-                                        {% for tag in tuple.1 %}
-                                            <span class="tag">
-                                            {{ tag }}
-                                            </span>
-                                        {% endfor %}
-                                    {% endif %}
-                                    </span>
-                                </li>
-                            {% endfor %}
-                        </ul>
+                        <div class="edit" style="display:none;">
+                            <form id="{{ tw.get_key }}" action="/taskweek/update/optimistic" method="post">
+                                <textarea rows="{{ tw.optimistic|length }}">{{ tw.optimistic_as_str }}</textarea>
+                                <input type="submit" class="submit_optimistic" value="Update"/>
+                                <input type="submit" class="cancel" value="Cancel"/>
+                            </form>
+                        </div>
                     </div>
-                    <div class="edit plans" style="display:none;">
-                        <form id="{{ tw.get_key }}" action="/taskweek/update/optimistic" method="post">
-                            <textarea>{{ tw.optimistic_as_str }}</textarea>
-                            <input type="submit" class="submit_optimistic" value="update"/>
-                            <input type="submit" class="cancel" value="cancel"/>
-                        </form>
-                    </div>
+                    
                 </div>
                 <div class="realistic">
-                    <div class="plans">
-                        <div class="timeStamp">
-                            How'd it go?
-                        </div>
-                        <ul>
-                            {% for tuple in tw.realistic_as_tuples %}
-                                <li>{{ tuple.0 }}
-                                    {% if tuple.1 %}
-                                    <span class="tags" style="color: red; font-size: 50%;">
-                                        {% for tag in tuple.1 %}
-                                            <span class="tag">
-                                            {{ tag }}
-                                            </span>
-                                        {% endfor %}
-                                    {% endif %}
-                                    </span>
-                                </li>
-                            {% endfor %}
-                        </ul>
+                    <div class="timeStamp">
+                        How'd it go?
                     </div>
-                    <div class="edit plans" style="display:none;">
-                        <form id="{{ tw.get_key }}" action="/taskweek/update/realistic" method="post">
-                            <textarea>{{ tw.realistic_as_str }}</textarea>
-                            <input type="submit" class="submit_realistic" value="update"/>
-                            <input type="submit" class="cancel" value="cancel"/>
-                        </form>
+                    <div class="planWrap">
+                        <div class="plans">
+                            {% if forloop.first and tw.realistic_as_tuples|length_is:"0" %}
+                                    <div class="emptyWeek">Last week I...</div>
+                            {% else %}
+                            <ul>
+                                {% for tuple in tw.realistic_as_tuples %}
+                                    <li>{{ tuple.0 }}
+                                        {% if tuple.1 %}
+                                        <span class="tags" style="color: red; font-size: 50%;">
+                                            {% for tag in tuple.1 %}
+                                                <span class="tag">
+                                                {{ tag }}
+                                                </span>
+                                            {% endfor %}
+                                        {% endif %}
+                                        </span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                        <div class="edit" style="display:none;">
+                            <form id="{{ tw.get_key }}" action="/taskweek/update/realistic" method="post">
+                                <textarea rows="{{ tw.realistic|length }}">{{ tw.realistic_as_str }}</textarea>
+                                <input type="submit" class="submit_realistic" value="Update"/>
+                                <input type="submit" class="cancel" value="Cancel"/>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

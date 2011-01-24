@@ -29,14 +29,17 @@ Edit your goals from last week:
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~
 
 %(tasks)s
+
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~
 WHAT'RE YOU GOING TO DO THIS WEEK?
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~
 
+REPLACE ME!
+REPLACE ME!
+REPLACE ME!
+REPLACE ME!
 
-
-
---
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 (list any number of tasks above these two hyphens)
 '''
 
@@ -55,27 +58,25 @@ Be sure to send your reply before lunch...
 otherwise we'll tell your colleagues that
 you are planning to slack off all week :)
 </p>
-<pre>
---~--~--~--~--~--~--~--~--~--~--~--~--~--~
-HOW DID LAST WEEK GO?
-Edit your goals from last week:
---~--~--~--~--~--~--~--~--~--~--~--~--~--~
-</pre>
 
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+HOW DID LAST WEEK GO?<br/>
+Edit your goals from last week:<br/>
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+<br/>
 %(tasks)s
-<pre>
---~--~--~--~--~--~--~--~--~--~--~--~--~--~
-WHAT'RE YOU GOING TO DO THIS WEEK?
---~--~--~--~--~--~--~--~--~--~--~--~--~--~
-</pre>
-
-
-
-
-<pre>
---
-(list any number of tasks above these two hyphens)
-</pre>
+<br/>
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+WHAT'RE YOU GOING TO DO THIS WEEK?<br/>
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+<br/>
+REPLACE ME!<br/>
+REPLACE ME!<br/>
+REPLACE ME!<br/>
+REPLACE ME!<br/>
+<br/>
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+(list any number of tasks above this line)<br/>
 '''
 
 first_time_plaintext = '''
@@ -84,56 +85,43 @@ Hi %(username)s,
 
 Welcome to SNPTZ!
 
-Please hit reply and tell us a few things you are going
-to work on this week in the space below (reply inline).
-Don't get too detailed or wordy -- SNPTZ isn't a to-do list or an issue tracker.
-Also, don't get creative with formatting your reply (our email parsing code is really basic).
-Each week, we'll follow up so you can reflect on your progress --
-and share your plans with your esteemed colleagues (if they use SNPTZ too).
+Please HIT REPLY and tell us a few things you're going to do this week, BETWEEN THE LINES below.
+Or visit www.snptz.com 
 
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~
 WHAT'RE YOU GOING TO DO THIS WEEK?
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~
 
+REPLACE ME!
+REPLACE ME!
+REPLACE ME!
+REPLACE ME!
 
-
-
---
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~
 (list any number of tasks above these two hyphens)
 '''
 
 first_time_html = '''
-
 <img src="http://www.snptz.com/static/logoMed.png" width="174" height="50" alt="SNPTZ">
-<p>Good morning %(username)s!</p>
-Welcome to SNPTZ!
+<p>Hi %(username)s!</p>
+<p>Welcome to SNPTZ!</p>
 <p>
-Please hit reply and tell us a few things you are going
-to work on this week in the space below (reply inline).
-Don't get too detailed or wordy -- SNPTZ isn't a to-do list or an issue tracker.
-Also, don't get creative with formatting your reply (our email parsing code is really basic).
-Each week, we'll follow up so you can reflect on your progress --
-and share your plans with your esteemed colleagues (if they use SNPTZ too).
+Please HIT REPLY and tell us a few things you're going to do this week, BETWEEN THE LINES below.
+Or visit <a href="http://www.snptz.com">snptz.com</a>.  
 </p>
-<pre>
---~--~--~--~--~--~--~--~--~--~--~--~--~--~
-WHAT'RE YOU GOING TO DO THIS WEEK?
---~--~--~--~--~--~--~--~--~--~--~--~--~--~
-</pre>
 
-
-
-
-<pre>
---
-(list any number of tasks above these two hyphens)
-</pre>
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+WHAT'RE YOU GOING TO DO THIS WEEK?<br/>
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+<br/>
+REPLACE ME!<br/>
+REPLACE ME!<br/>
+REPLACE ME!<br/>
+REPLACE ME!<br/>
+<br/>
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+(list any number of tasks above this line)<br/>
 '''
-
-# q = db.GqlQuery("SELECT * FROM models.Profile " +
-#                 "WHERE weekly_email = :1",
-#                 "True")
-# user_list = q.fetch(5)
 
 q = models.Profile.all()
 q.filter('weekly_email = ', True)
@@ -160,7 +148,6 @@ for user in user_list:
       sender='SNPTZ <weekly@snptz.com>',
       to=user.email,
       reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
-      # TODO make the subject of the email include the date
       subject='SNPTZ for %s' % datetime.datetime.now().strftime("%b %d"),
       body=personalized_plaintext_message,
       html=personalized_html_message)

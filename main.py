@@ -105,7 +105,8 @@ class Taskweek(webapp.RequestHandler):
             edited_as_lines = [l.strip() for l in edited.splitlines()]
             taskweek.update_tasklist_tasks(tw_attr, edited_as_lines)
             taskweek.put()
-            self.response.out.write("Yay. Your tasks have been updated.")
+            self.get(tw_type, tw_key)
+            # self.response.out.write("Yay. Your tasks have been updated.")
         
 class Team(webapp.RequestHandler):
     def get(self, verb, team_slug):

@@ -186,7 +186,7 @@ em {
     border-bottom: 1px solid #D9D9D9;
 }
 
-.weekChunk .plans {
+.weekChunk .optimistic, .weekChunk .realistic {
     padding: @paddingWidth;
     width: ((@contentWidth - @sidebarWidth - (2 * @paddingWidth)) / 2) - (2 * @paddingWidth);
     float: left;
@@ -201,7 +201,7 @@ em {
 }
 
 #thisWeek ul, .weekChunk ul {
-    list-style-position: inside;
+    padding-left: 1em;
 }
 
 #thisWeek .plans{
@@ -219,6 +219,29 @@ em {
 
 .plans a:hover {
     text-decoration: underline;
+}
+
+.weekChunk textarea, #thisWeek textarea {
+    margin: 0;
+    padding: 6px 8px;
+    font-size: 14px;
+    resize: none;
+    font-family: "Droid Sans", Helvetica, Arial, sans-serif;
+}
+
+#thisWeek textarea {
+    width: 642px;
+}
+
+.weekChunk textarea {
+    width: 292px;
+}
+
+.emptyWeek {
+    padding: 6px 8px;
+    border: 1px solid gray;
+    color: gray;
+    cursor: text;
 }
 
 /* Settings & Info styles

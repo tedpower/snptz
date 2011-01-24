@@ -1,4 +1,4 @@
-<div id="realistic">
+<div class="planWrap">
     <div class="plans">
         <ul>
             {% for t in taskweek.realistic %}
@@ -8,9 +8,9 @@
     </div>
     <div class="edit" style="display:none;">
         <form id="{{ taskweek.get_key }}" action="/taskweek/update/realistic" method="post">
-            <textarea>{{ taskweek.realistic_as_str }}</textarea>
-            <input type="submit" class="submit_realistic" value="update"/>
-            <input type="submit" class="cancel" value="cancel"/>
+            <textarea rows="{{ taskweek.realistic|length }}">{{ taskweek.realistic_as_str }}</textarea>
+            <input type="submit" class="submit_realistic" value="Update"/>
+            <input type="submit" class="cancel" value="Cancel"/>
         </form>
     </div>
 </div>

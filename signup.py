@@ -4,6 +4,7 @@
 import os
 import logging
 from google.appengine.api import users
+from google.appengine.api import mail
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 from google.appengine.ext.webapp import template
@@ -26,8 +27,45 @@ class Signup(webapp.RequestHandler):
         profile.first_name = self.request.get('firstname')
         profile.last_name = self.request.get('lastname')
         profile.timezone = self.request.get('timezone')
+        profile.get_nickname
         profile.put()
+        
+        if profile.first_name is not None:
+            first_name = profile.first_name
+        personalized_html_message = welcome_form % {"username": first_name}
+        
+        welcome_message = mail.EmailMessage(
+            sender = 'SNPTZ <weekly@snptz.com>',
+            to = user.email(),
+            reply_to = 'SNPTZ <mail@snptzapp.appspotmail.com>',
+            subject = 'Welcome to SNPTZ!',
+            body = 'test',
+            html = personalized_html_message)
+        welcome_message.send()
+        
         self.redirect("/")
+
+welcome_form = '''
+<img src="http://www.snptz.com/static/logoMed.png" width="174" height="50" alt="SNPTZ">
+<p>Hi %(username)s!</p>
+<p>Welcome to SNPTZ!</p>
+<p>
+Please hit reply and tell us a few things you're going to work on this week in the space below (reply inline).
+Or visit <a href="http://www.snptz.com">snptz.com</a>.  Each week, we'll follow up so you can reflect on your progress --
+and share your plans with your esteemed colleagues (if they use SNPTZ too).
+</p>
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+WHAT'RE YOU GOING TO DO THIS WEEK?<br/>
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+<br/>
+REPLACE ME!<br/>
+REPLACE ME!<br/>
+REPLACE ME!<br/>
+REPLACE ME!<br/>
+<br/>
+--~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
+(list any number of tasks above this line)<br/>
+'''
 
 def doRender(handler, tname, values = { }):
     temp = os.path.join(
