@@ -44,8 +44,8 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
 
         # this regex matches one or more repetitions of '--~'
         breaking_pattern = re.compile(r'(\-\-\~)+', re.MULTILINE)
-        # this regex matches two hyphens
-        end_pattern = re.compile(r'(\-\-)', re.MULTILINE)
+        # # this regex matches two hyphens
+        # end_pattern = re.compile(r'(\-\-)', re.MULTILINE)
 
         # split email on breaking_pattern
         split_email = re.split(breaking_pattern, decoded_message)
@@ -75,7 +75,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
 
             # split_email[8] is this weeks tasks, along with everything else (signature, etc)
             # so split it on the end_pattern and the first item should be this weeks tasks
-            this_week_raw = re.split(end_pattern, split_email[8])[0]
+            this_week_raw = re.split(breaking_pattern, split_email[8])[0]
             this_week_split = this_week_raw.splitlines()
             thisWeek = cleanLines(this_week_split)
         else:
@@ -83,7 +83,7 @@ class MyMailHandler(mail_handlers.InboundMailHandler):
             # split_email[1] is --~
             # split_email[2] is WHAT'RE YOU GOING ... text
             # split_email[3] is --~
-            this_week_raw = re.split(end_pattern, split_email[4])[0]
+            this_week_raw = re.split(breaking_pattern, split_email[4])[0]
             this_week_split = this_week_raw.splitlines()
             thisWeek = cleanLines(this_week_split)
 

@@ -71,6 +71,7 @@ $(document).ready(function(){
         $(".plans").click(function(event){
             $(this).hide();
             $(this).siblings(".edit").show();
+            $(this).siblings(".edit").find('textarea').focus();
         });
 
         $(".cancel").click(function(event){

@@ -13,11 +13,15 @@
         </div>
         <div class="planWrap">
             <div class="plans">
+                {% if profile.this_weeks_tw.optimistic|length_is:"0" %}
+                    <div class="emptyWeek">This week I'm gonna...</div>
+                {% else %}
                 <ul>
                     {% for t in profile.this_weeks_tw.optimistic %}
                         <li>{{ t|urlize }}</li>
-                    {% endfor %}
+                    {% endfor %}                    
                 </ul>
+                {% endif %}
             </div>
             <div class="edit" style="display:none;">
                 <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update/optimistic" method="post">
@@ -59,11 +63,15 @@
                     </div>
                     <div class="planWrap">
                         <div class="plans">
+                            {% if forloop.first and tw.realistic|length_is:"0" %}
+                                    <div class="emptyWeek">Last week I...</div>
+                            {% else %}
                             <ul>
                                 {% for t in tw.realistic %}
                                     <li>{{ t|urlize }}</li>
                                 {% endfor %}
                             </ul>
+                            {% endif %}
                         </div>
                         <div class="edit" style="display:none;">
                             <form id="{{ tw.get_key }}" action="/taskweek/update/realistic" method="post">
