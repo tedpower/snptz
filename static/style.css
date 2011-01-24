@@ -136,8 +136,8 @@ em {
 }
 .weekChunk { border-bottom: 1px solid #d9d9d9; }
 #taskWrapper > div:last-child { border-bottom: none; }
-#thisWeek ul { list-style-position: inside; }
-.weekChunk ul { list-style-position: inside; }
+#thisWeek ul { padding-left: 1em; }
+.weekChunk ul { padding-left: 1em; }
 #thisWeek .plans { font-size: 24px; }
 .weekChunk ul { font-size: 14px; }
 .timeStamp {

@@ -26,7 +26,9 @@ class Signup(webapp.RequestHandler):
         profile.first_name = self.request.get('firstname')
         profile.last_name = self.request.get('lastname')
         profile.timezone = self.request.get('timezone')
+        profile.get_nickname
         profile.put()
+                
         self.redirect("/")
 
 def doRender(handler, tname, values = { }):
