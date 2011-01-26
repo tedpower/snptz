@@ -82,9 +82,15 @@ $(document).ready(function(){
 
         $(".submit_optimistic").click(function(event){
             var $planWrap = $(this).parent().parent().parent();
+            var params = {}
+            params.twkey = $(this).parent().attr('id');
+
+            var textInputs = $(this).parent().children("input:text");
+            $.each(textInputs, function(index, item) {
+                params[item.id] = item.value;
+            });
             $.post("/taskweek/update/optimistic",
-                {twkey:$(this).parent().attr('id'),
-                 twedit:$(this).parent().children("textarea").val()},
+                   params,
                    function(data){
                        $planWrap.replaceWith(data);
                        hookupAjaxEdit();

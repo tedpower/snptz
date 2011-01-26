@@ -1,14 +1,33 @@
 <div class="planWrap">
     <div class="plans">
         <ul>
-            {% for t in taskweek.optimistic %}
-                <li>{{ t|urlize }}</li>
+            {% for tuple in taskweek.optimistic_as_tuples %}
+                <li>{{ tuple.0 }}
+                    {% if tuple.1 %}
+                    <span class="tags" style="color: red; font-size: 50%;">
+                        {% for tag in tuple.1 %}
+                            <span class="tag">
+                            {{ tag }}
+                            </span>
+                        {% endfor %}
+                    {% endif %}
+                    </span>
+                </li>
             {% endfor %}
         </ul>
+        {% endif %}
     </div>
     <div class="edit" style="display:none;">
         <form id="{{ taskweek.get_key }}" action="/taskweek/update/optimistic" method="post">
-            <textarea rows="{{ taskweek.optimistic|length }}">{{ taskweek.optimistic_as_str }}</textarea>
+            {% for tuple in taskweek.optimistic_as_tuples %}
+                <input type="text" id="task-{{ forloop.counter }}"value="{{ tuple.0 }}"/>
+                    {% if tuple.1 %}
+                        {% for tag in tuple.1 %}
+                            <input type="text" id="task-{{ forloop.parentloop.counter }}-tag-{{ forloop.counter }}" value="{{ tag }}"/>
+                        {% endfor %}
+                    {% endif %}
+                <br/>
+            {% endfor %}
             <input type="submit" class="submit_optimistic" value="Update"/>
             <input type="submit" class="cancel" value="Cancel"/>
         </form>
