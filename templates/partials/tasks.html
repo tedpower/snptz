@@ -1,0 +1,16 @@
+<div id="sidebar">
+    <div class="tasks">
+        Tasks tagged with "{{ tag }}"
+        <ul>
+        {% for task in tasks %}
+            <li>
+            <span class="task">
+            {{ task.created|date:"M j" }}
+            {{ task.owner.name }}
+            {{ task.text }}
+            </span>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>

@@ -142,5 +142,14 @@ $(document).ready(function(){
                });
         event.preventDefault();
     });
+
+    $(".tag-link").click(function(event){
+        var tagPath= $(this).attr('href');
+        $.get(tagPath,
+               function(data){
+                   $("#sidebar").replaceWith(data);
+               });
+        event.preventDefault();
+    });
 });
 

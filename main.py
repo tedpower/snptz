@@ -65,6 +65,13 @@ class Settings(webapp.RequestHandler):
         profile.put()
         self.response.out.write("Your settings have been saved")        
 
+
+class Tag(webapp.RequestHandler):
+    def get(self, tag):
+        tag_list = [tag]
+        tasks = models.Task.tagged_with_all_of(tag_list)
+        return self.response.out.write(template.render('templates/partials/tasks.html', {'tasks': tasks, 'tag': tag_list[0]}))
+
 class Taskweek(webapp.RequestHandler):
 
     def get(self, tw_type, tw_key):
@@ -245,6 +252,7 @@ application = webapp.WSGIApplication([
    ('/', MainPage),
    ('/info', Info),
    ('/settings', Settings),
+   ('/tag/([^/]+)', Tag),
    ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),

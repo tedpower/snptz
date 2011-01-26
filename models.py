@@ -363,6 +363,28 @@ class Task(db.Model):
     tasklist = db.ReferenceProperty(TaskList)
     created = db.DateTimeProperty(auto_now_add=True)
 
+    @property
+    def owner(self):
+        return self.tasklist.taskweek.profile
+
+    @classmethod
+    def tagged_with_all_of(klass, tag_list):
+        query_str = "WHERE tags = '%s'" % (tag_list[0])
+        if len(tag_list) > 1:
+            for tag in tag_list[1:]:
+                query_str = query_str + "AND tags = '%s'" % (tag)
+        tag_q = klass.gql(query_str)
+        tagged_tasks = tag_q.fetch(100)
+        return tagged_tasks
+
+    @classmethod
+    def tagged_with_one_of(klass, tag_list):
+        tag_q = klass.all()
+        tag_q.filter("tags IN", tag_list)
+        tag_q.order("-created")
+        tagged_tasks = tag_q.fetch(100)
+        return tagged_tasks
+
 # A Model for a received email message
 class Message(db.Model):
     sender = db.StringProperty()

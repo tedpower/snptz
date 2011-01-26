@@ -18,12 +18,12 @@
                 {% else %}
                 <ul>
                     {% for tuple in profile.this_weeks_tw.optimistic_as_tuples %}
-                        <li>{{ tuple.0 }}
+                        <li><span class="task-text">{{ tuple.0 }}</span>
                             {% if tuple.1 %}
                             <span class="tags" style="color: red; font-size: 50%;">
                                 {% for tag in tuple.1 %}
                                     <span class="tag">
-                                    {{ tag }}
+                                    <a class="tag-link" href="/tag/{{ tag }}">{{ tag }}</a>
                                     </span>
                                 {% endfor %}
                             {% endif %}
@@ -142,8 +142,8 @@
 </div>
 
 <div id="sidebar">
-    Esteemed Colleagues
     {% if teams %}
+        Esteemed Colleagues
         {% for team in teams %}
             <div class="team" id="team-{{ team.name }}">
                 <h3>esteemed colleages from <a href="/team/show/{{ team.slug }}">{{ team.name }}</a></h3>
