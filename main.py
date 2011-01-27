@@ -204,6 +204,53 @@ class Team(webapp.RequestHandler):
                         old_membership.delete()
                         self.response.out.write("You are no longer a member of %s" % team.name)
 
+
+class Confirm(webapp.RequestHandler):
+    def get(self, slug, hash):
+        network = models.Network.find_by_slug(slug)
+        if network is not None:
+            pc = models.PendingConfirmation.find_by_code(hash)
+            if pc is not None:
+                # TODO check that pc has not expired!
+                prof = pc.profile
+                prof_nets = prof.networks
+                if not network.key() in prof_nets:
+                    prof_nets.append(network.key())
+                    prof.networks = prof_nets
+                    prof.put()
+                pc.delete()
+                self.response.out.write("Thanks! Your affiliation with '%s' is confirmed" % network.name)
+            else:
+                self.response.out.write("Oops. PendingConfirmation not found")
+        else:
+            self.response.out.write("Oops. Network not found")
+
+
+class Network(webapp.RequestHandler):
+    def post(self):
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
+
+        email = self.request.get("networkemail")
+        name = self.request.get("networkname")
+
+        # evan@snptz.com ==> @snptz.com
+        # TODO check that we have a valid email address first!
+        domain_of_email = "@" + email.split('@')[1]
+
+        network = models.Network.find_by_domain(domain_of_email)
+        if network is None:
+            # create and save a new network if this is the first
+            slug_from_name = helpers.slugify(name)
+            network = models.Network(name=name, slug=slug_from_name, email_domain=domain_of_email)
+            network.put()
+
+        domain_of_network = network.email_domain
+        if domain_of_email == domain_of_network:
+            new_pc = models.PendingConfirmation.send_confirmation(email, profile, network)
+            self.response.out.write("Confirmation email has been sent to %s" % email)
+
+
 def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;
     user = users.get_current_user()
@@ -256,6 +303,8 @@ application = webapp.WSGIApplication([
    ('/info', Info),
    ('/settings', Settings),
    ('/tag/([^/]+)', Tag),
+   ('/network/join', Network),
+   ('/confirm/([^/]+)/([^/]+)', Confirm),
    ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),

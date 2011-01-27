@@ -130,6 +130,19 @@ $(document).ready(function(){
                });
         event.preventDefault();
     });
+    $("#networkSubmit").click(function(event){
+        $.post("/network/join",
+               {networkname:$('#networkname').val(),
+               networkemail:$('#networkemail').val()},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                    }, 1500);
+               });
+        event.preventDefault();
+    });
     $("#teams :checkbox").click(function(event){
         $.post("/team/toggle/wtf",
                {teamslug:$(this).attr('name')},

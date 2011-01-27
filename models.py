@@ -3,10 +3,11 @@
 
 from google.appengine.api import memcache
 from google.appengine.api import users
+from google.appengine.api import mail
 from google.appengine.ext import db
 from datetime import datetime, timedelta
 import logging
-import itertools
+import hashlib
 import re
 import datetime
 from timezones import *
@@ -75,7 +76,7 @@ class Profile(db.Model):
     weekly_email = db.BooleanProperty()
     timezone = db.StringProperty()
 
-    # list of Network keys of which user is a confirmed member
+    # list of Network keys of which user is a confirmed affiliate
     networks = db.ListProperty(db.Key)
 
     @classmethod
@@ -447,4 +448,79 @@ class Membership(db.Model):
 class Network(db.Model):
     name = db.StringProperty()
     slug = db.StringProperty()
+    # email domain used to verify affiliated profiles
+    # e.g., '@snptz.com'
     email_domain = db.StringProperty()
+
+    @classmethod
+    def find_by_slug(klass, str):
+        q = klass.all()
+        q.filter("slug = ", str)
+        matches = q.fetch(1)
+        if len(matches) != 0:
+            return matches[0]
+        else:
+            return None
+
+    @classmethod
+    def find_by_domain(klass, str):
+        q = klass.all()
+        q.filter("email_domain = ", str)
+        matches = q.fetch(1)
+        if len(matches) != 0:
+            return matches[0]
+        else:
+            return None
+
+
+class PendingConfirmation(db.Model):
+    email_address = db.EmailProperty()
+    profile = db.ReferenceProperty(Profile)
+    network = db.ReferenceProperty(Network)
+    secret_code = db.StringProperty()
+    expires_at = db.DateTimeProperty()
+
+    @classmethod
+    def find_by_code(klass, str):
+        q = klass.all()
+        q.filter("secret_code = ", str)
+        matches = q.fetch(1)
+        if len(matches) != 0:
+            return matches[0]
+        else:
+            return None
+
+    @classmethod
+    def send_confirmation(klass, email, profile, network):
+        new_PC = klass(email_address=email, profile=profile, network=network)
+        # generate hash unique to this email + network
+        secret = hashlib.sha224(email + network.slug).hexdigest()
+        new_PC.secret_code = secret
+        # set PC to expire in one week
+        new_PC.expires_at = datetime.datetime.now() + timedelta(7)
+        new_PC.put()
+
+        conf_email_template = '''
+Hi %(username)s,
+
+Please click on the link below to confirm
+your affiliation with %(network)s:
+
+%(link)s
+
+Thanks!
+SNPTZ
+        '''
+        secret_link = "http://snptz.com/confirm/%s/%s" % (network.slug, secret)
+        conf_email_body = conf_email_template % {"username": profile.first_name,\
+            "network": network.name, "link": secret_link}
+
+        message = mail.EmailMessage(
+            sender='SNPTZ <weekly@snptz.com>',
+            to=email,
+            reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
+            subject="SNPTZ: confirm your affiliation with '%s' network" % (network.name),
+            body=conf_email_body)
+
+        message.send()
+        return new_PC
