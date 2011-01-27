@@ -6,6 +6,7 @@ from google.appengine.api import users
 from google.appengine.ext import db
 from datetime import datetime, timedelta
 import logging
+import itertools
 import re
 import datetime
 from timezones import *
@@ -73,6 +74,9 @@ class Profile(db.Model):
     last_name = db.StringProperty()
     weekly_email = db.BooleanProperty()
     timezone = db.StringProperty()
+
+    # list of Network keys of which user is a confirmed member
+    networks = db.ListProperty(db.Key)
 
     @classmethod
     def find_by_email(klass, str):
@@ -368,7 +372,7 @@ class Task(db.Model):
         return self.tasklist.taskweek.profile
 
     @classmethod
-    def tagged_with_intersection(klass, tag_list):
+    def tagged_with_intersection(klass, tag_list, network_key_list=None):
         ''' Returns tasks tagged with ALL of the provided tags in tag_list'''
         query_str = "WHERE tags = '%s'" % (tag_list[0])
         if len(tag_list) > 1:
@@ -376,15 +380,33 @@ class Task(db.Model):
                 query_str = query_str + "AND tags = '%s'" % (tag)
         tag_q = klass.gql(query_str)
         tagged_tasks = tag_q.fetch(100)
+        if network_key_list is not None:
+            networks = set(network_key_list)
+            # limit matching tasks (that are tagged with all given tags) to
+            # those whose owner belongs to one of the given networks
+            visible_to_user = [t for t in tagged_tasks if len(set(t.owner.networks).intersection(networks)) > 0]
+            return visible_to_user
+        # if no network_key_list is provided, return all tasks tagged with
+        # given tags irregardless of owner's network affiliation
+        # TODO XXX probably should return None instead?!
         return tagged_tasks
 
     @classmethod
-    def tagged_with_union(klass, tag_list):
+    def tagged_with_union(klass, tag_list, network_key_list=None):
         ''' Returns tasks tagged with at least ONE of the provided tags in tag_list'''
         tag_q = klass.all()
         tag_q.filter("tags IN", tag_list)
         tag_q.order("-created")
         tagged_tasks = tag_q.fetch(100)
+        if network_key_list is not None:
+            networks = set(network_key_list)
+            # limit matching tasks (that are tagged with one of the given tags) to
+            # those whose owner belongs to one of the given networks
+            visible_to_user = [t for t in tagged_tasks if len(set(t.owner.networks).intersection(networks)) > 0]
+            return visible_to_user
+        # if no network_key_list is provided, return all tasks tagged with
+        # a given tag irregardless of owner's network affiliation
+        # TODO XXX probably should return None instead?!
         return tagged_tasks
 
 # A Model for a received email message
@@ -422,3 +444,7 @@ class Membership(db.Model):
         else:
             return None
 
+class Network(db.Model):
+    name = db.StringProperty()
+    slug = db.StringProperty()
+    email_domain = db.StringProperty()

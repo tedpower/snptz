@@ -68,8 +68,11 @@ class Settings(webapp.RequestHandler):
 
 class Tag(webapp.RequestHandler):
     def get(self, tag):
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
+
         tag_list = [tag]
-        tasks = models.Task.tagged_with_intersection(tag_list)
+        tasks = models.Task.tagged_with_intersection(tag_list, profile.networks)
         return self.response.out.write(template.render('templates/partials/tasks.html', {'tasks': tasks, 'tag': tag_list[0]}))
 
 class Taskweek(webapp.RequestHandler):
