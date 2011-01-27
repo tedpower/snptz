@@ -69,7 +69,7 @@ class Settings(webapp.RequestHandler):
 class Tag(webapp.RequestHandler):
     def get(self, tag):
         tag_list = [tag]
-        tasks = models.Task.tagged_with_all_of(tag_list)
+        tasks = models.Task.tagged_with_intersection(tag_list)
         return self.response.out.write(template.render('templates/partials/tasks.html', {'tasks': tasks, 'tag': tag_list[0]}))
 
 class Taskweek(webapp.RequestHandler):

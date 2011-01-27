@@ -368,7 +368,8 @@ class Task(db.Model):
         return self.tasklist.taskweek.profile
 
     @classmethod
-    def tagged_with_all_of(klass, tag_list):
+    def tagged_with_intersection(klass, tag_list):
+        ''' Returns tasks tagged with ALL of the provided tags in tag_list'''
         query_str = "WHERE tags = '%s'" % (tag_list[0])
         if len(tag_list) > 1:
             for tag in tag_list[1:]:
@@ -378,7 +379,8 @@ class Task(db.Model):
         return tagged_tasks
 
     @classmethod
-    def tagged_with_one_of(klass, tag_list):
+    def tagged_with_union(klass, tag_list):
+        ''' Returns tasks tagged with at least ONE of the provided tags in tag_list'''
         tag_q = klass.all()
         tag_q.filter("tags IN", tag_list)
         tag_q.order("-created")
@@ -419,3 +421,4 @@ class Membership(db.Model):
             return matches[0]
         else:
             return None
+
