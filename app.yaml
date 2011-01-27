@@ -41,6 +41,18 @@ handlers:
   static_files: static/favicon.ico
   upload: static/favicon.ico
 
+- url: /tag/([^/]*)
+  script: main.py
+  login: required
+
+- url: /network/join
+  script: main.py
+  login: required
+
+- url: /confirm/([^/]*)
+  script: main.py
+  login: required
+
 - url: /taskweek/show/(realistic|optimistic)/([^/]*)
   script: main.py
   login: required
