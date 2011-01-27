@@ -511,7 +511,7 @@ your affiliation with %(network)s:
 Thanks!
 SNPTZ
         '''
-        secret_link = "http://snptz.com/confirm/%s/%s" % (network.slug, secret)
+        secret_link = "http://snptz.com/confirm/%s" % (secret)
         conf_email_body = conf_email_template % {"username": profile.first_name,\
             "network": network.name, "link": secret_link}
 

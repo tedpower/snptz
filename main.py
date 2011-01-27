@@ -206,24 +206,21 @@ class Team(webapp.RequestHandler):
 
 
 class Confirm(webapp.RequestHandler):
-    def get(self, slug, hash):
-        network = models.Network.find_by_slug(slug)
-        if network is not None:
-            pc = models.PendingConfirmation.find_by_code(hash)
-            if pc is not None:
-                # TODO check that pc has not expired!
-                prof = pc.profile
-                prof_nets = prof.networks
-                if not network.key() in prof_nets:
-                    prof_nets.append(network.key())
-                    prof.networks = prof_nets
-                    prof.put()
-                pc.delete()
-                self.response.out.write("Thanks! Your affiliation with '%s' is confirmed" % network.name)
-            else:
-                self.response.out.write("Oops. PendingConfirmation not found")
+    def get(self, hash):
+        pc = models.PendingConfirmation.find_by_code(hash)
+        if pc is not None:
+            network = pc.network
+            # TODO check that pc has not expired!
+            prof = pc.profile
+            prof_nets = prof.networks
+            if not network.key() in prof_nets:
+                prof_nets.append(network.key())
+                prof.networks = prof_nets
+                prof.put()
+            pc.delete()
+            self.response.out.write("Thanks! Your affiliation with '%s' is confirmed" % network.name)
         else:
-            self.response.out.write("Oops. Network not found")
+            self.response.out.write("Oops. PendingConfirmation not found")
 
 
 class Network(webapp.RequestHandler):
@@ -232,7 +229,8 @@ class Network(webapp.RequestHandler):
         profile = models.Profile.get_by_key_name(user.user_id())
 
         email = self.request.get("networkemail")
-        name = self.request.get("networkname")
+        #name = self.request.get("networkname")
+        name = email.split('@')[1]
 
         # evan@snptz.com ==> @snptz.com
         # TODO check that we have a valid email address first!
@@ -304,7 +302,7 @@ application = webapp.WSGIApplication([
    ('/settings', Settings),
    ('/tag/([^/]+)', Tag),
    ('/network/join', Network),
-   ('/confirm/([^/]+)/([^/]+)', Confirm),
+   ('/confirm/([^/]+)', Confirm),
    ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),

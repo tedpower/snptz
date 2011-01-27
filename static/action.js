@@ -132,8 +132,7 @@ $(document).ready(function(){
     });
     $("#networkSubmit").click(function(event){
         $.post("/network/join",
-               {networkname:$('#networkname').val(),
-               networkemail:$('#networkemail').val()},
+               {networkemail:$('#networkemail').val()},
                function(data){
                    $("#notifications").html(data);
                    $('#notifications').addClass('notificationShow');
