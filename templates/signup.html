@@ -8,19 +8,19 @@
     
     <form action="/signup" method="post" name="signupForm">
 
-		<div class="signupChunk">
+		<div class="settingsChunk">
 	        <div>Your Email</div>
 	        <div><em>{{ user_email }}</em></div>
 		</div>
-		<div class="signupChunk">
+		<div class="settingsChunk">
 	        <div>First name</div>
 	        <div><input type="text" name="firstname" id="firstname" value="{{ profile.first_name }}"/></div>
 		</div>
-		<div class="signupChunk">
+		<div class="settingsChunk">
 	        <div>Last name</div>
 	        <div><input type="text" name="lastname" id="lastname" value="{{ profile.last_name }}"/></div>
 		</div>
-		<div class="signupChunk">
+		<div class="settingsChunk">
 			<div>Time zone</div>
 	        <div>
 	            <select name='timezone' id="timezone">
@@ -31,7 +31,7 @@
 	            </select>
 	        </div>
 		</div>
-        <div class="signupChunk">
+        <div class="settingsChunk">
 		<input type="submit" value="Continue »"></input>
     </form>
 	
