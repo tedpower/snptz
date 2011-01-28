@@ -35,16 +35,8 @@
     <div>My teams</div>
     {% for team in memberships_teams %}
         <div>
-            <label for="{{team.slug}}">{{team.name}}</label>
+            <label for="{{team.slug}}">Uncheck to leave {{team.name}}</label>
             <input type="checkbox" name="{{team.slug}}" checked="yes"/>
-        </div>
-    {% endfor %}
-
-    <div>Other teams</div>
-    {% for team in other_teams %}
-        <div>
-            <label for="{{team.slug}}">{{team.name}}</label>
-            <input type="checkbox" name="{{team.slug}}"/>
         </div>
     {% endfor %}
 </form>

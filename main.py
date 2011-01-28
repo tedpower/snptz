@@ -47,11 +47,8 @@ class Settings(webapp.RequestHandler):
         memberships = profile.membership_set
         # get a list of teams user has membership in
         memberships_teams = [m.team for m in memberships]
-        # get a list of teams user does not have membership in
-        other_teams = [t for t in models.Team.all() if t.key() not in [m.key() for m in memberships_teams]]
 
-        renderMainPage(self, "settings", memberships_teams=memberships_teams,
-            other_teams=other_teams)
+        renderMainPage(self, "settings", memberships_teams=memberships_teams)
 
     def post(self):
         user = users.get_current_user()
@@ -151,6 +148,7 @@ class Team(webapp.RequestHandler):
                 else:
                     self.response.out.write("Oops. That team name is already taken.")
 
+        # TODO get rid of toggle in favor of "leave"
         if verb == "toggle":
             # get the user's team memberships
             memberships = profile.membership_set
@@ -219,7 +217,6 @@ def renderMainPage(handler, selectedPage, **kwargs):
     # if there is not kwarg 'team', assign None to variable team
     team = kwargs.get('team', None)
     memberships_teams = kwargs.get('memberships_teams', None)
-    other_teams = kwargs.get('other_teams', None)
     colleague = kwargs.get('colleague', None)
 
     doRender(handler, 'main.html', {'logoutURL' : logoutURL,
@@ -227,7 +224,6 @@ def renderMainPage(handler, selectedPage, **kwargs):
                                     "teams": teams,
                                     "team": team,
                                     "memberships_teams": memberships_teams,
-                                    "other_teams": other_teams,
                                     "colleague": colleague,
                                     'current_page' : current_page})
                                  
