@@ -88,8 +88,8 @@
 </div>
 
 <div id="sidebar">
-    Esteemed Colleagues
     {% if teams %}
+        Esteemed Colleagues
         {% for team in teams %}
             <div class="team" id="team-{{ team.name }}">
                 <h3>esteemed colleages from <a href="/team/show/{{ team.slug }}">{{ team.name }}</a></h3>
