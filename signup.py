@@ -29,6 +29,16 @@ class Signup(webapp.RequestHandler):
         profile.timezone = self.request.get('timezone')
         profile.get_nickname
         profile.put()
+
+        # see if there are any pending team invitations for this email address
+        invitations = models.Invitation.pending_for_email(user.email())
+        if invitations is not None:
+            for invite in invitations:
+                # add a reference to newly created profile on the invite
+                # so that profile.pending_invitation_set will return
+                # these pending invitations in the sidebar
+                invite.invitee_profile = profile
+                invite.put()
         
         if profile.first_name is not None:
             first_name = profile.first_name

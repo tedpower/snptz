@@ -328,6 +328,18 @@ class Invitation(db.Model):
         return self.key()
 
     @classmethod
+    def pending_for_email(klass, str):
+        # start with all users
+        query = klass.all()
+        query.filter("invitee_email = ", str)
+        # fetch and return matches
+        matches = query.fetch(50)
+        if len(matches) != 0:
+            return matches
+        else:
+            return None
+
+    @classmethod
     def invite_colleague(klass, team, inviter, invitee_email):
         invitation = klass(team=team, inviter=inviter, invitee_email=invitee_email)
         invitee_profile = Profile.find_by_email(invitee_email)
