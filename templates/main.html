@@ -43,4 +43,8 @@
 <div id="settings" class="subPage" {% ifnotequal current_page "settings" %} style="display:none;" {% endifnotequal %}>
     {% include "partials/settings.html" %}
 </div>
+
+<div id="teamform" class="subPage" {% ifnotequal current_page "teamform" %} style="display:none;" {% endifnotequal %}>
+    {% include "partials/teamform.html" %}
+</div>
 {% endblock %}

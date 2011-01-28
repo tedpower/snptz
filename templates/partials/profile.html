@@ -88,6 +88,16 @@
 </div>
 
 <div id="sidebar">
+    {% ifnotequal profile.pending_invitation_set None%}
+        <div id="invitations">
+        {% for invite in profile.pending_invitation_set %}
+            <span class="invitation" id="{{ invite.get_key }}">
+            <p>{{ invite.inviter.first_name }} has invited you to join {{ invite.team.name }} team.</p>
+            <a class="acceptInviteLink" href="#">Accept</a> or <a class="declineInviteLink" href="#">decline</a> the inviation.
+            </span>
+        {% endfor %}
+        </div>
+    {% endifnotequal %}
     {% if teams %}
         Esteemed Colleagues
         {% for team in teams %}
@@ -103,4 +113,5 @@
             </div>
         {% endfor %}
     {% endif %}
+    <a href="#" id="teamformLink">Create new team</a>
 </div>

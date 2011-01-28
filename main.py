@@ -118,13 +118,17 @@ class Team(webapp.RequestHandler):
         renderMainPage(self, "team", team=team)
 
     def post(self, verb, team_slug):
-        assert (verb in ["new", "toggle"]), "POST verb is not supported: %s" % `verb`
+        assert (verb in ["new", "toggle", "join", "leave"]), "POST verb is not supported: %s" % `verb`
         user = users.get_current_user()
         profile = models.Profile.get_by_key_name(user.user_id())
         
         if verb == "new":
             # if user is creating a new team...
             team_name = self.request.get('newteamname')
+            emails_to_invite = self.request.get('colleagues')
+            logging.info(emails_to_invite)
+            list_of_emails = [l.strip() for l in emails_to_invite.split(',')]
+            logging.info(list_of_emails)
             if team_name not in [None, '', ' ']:
                 # make sure it doesnt exist yet
                 team = models.Team.find_by_name(team_name)
@@ -137,6 +141,12 @@ class Team(webapp.RequestHandler):
                     # create a new membership for the user
                     membership = models.Membership(team=team, profile=profile)
                     membership.put()
+                    for email in list_of_emails:
+                        logging.info(email)
+                        invite = models.Invitation.invite_colleague(team,\
+                            profile, email)
+                        logging.info(invite)
+
                     self.response.out.write("You have created and joined %s" % team.name)
                 else:
                     self.response.out.write("Oops. That team name is already taken.")
@@ -159,6 +169,33 @@ class Team(webapp.RequestHandler):
                     if old_membership is not None:
                         old_membership.delete()
                         self.response.out.write("You are no longer a member of %s" % team.name)
+
+        if verb == "join":
+            # get the user's invitations
+            invitations = profile.pending_invitation_set
+            if invitations is None:
+                self.response.out.write("Oops. Can't find any pending invitations.")
+            else:
+                invitations_teams_keys = [i.team.key() for i in invitations]
+
+            # get the user's team memberships
+            memberships = profile.membership_set
+            # get a list of keys of the teams user has membership in
+            memberships_teams_keys = [m.team.key() for m in memberships]
+
+            invitation = models.Invitation.get(self.request.get('invitekey'))
+            if invitation is not None:
+                team = invitation.team
+                if team.key() not in memberships_teams_keys:
+                    if team.key() in invitations_teams_keys:
+                        new_member = models.Membership(team=team, profile=profile)
+                        new_member.put()
+                        invitation.delete()
+                        self.response.out.write("You are now a member of %s" % team.name)
+                    else:
+                        self.response.out.write("Oops. Can't find a pending invitation for %s" % team.name)
+                else:
+                    self.response.out.write("Oops. You are already a member of %s" % team.name)
 
 def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;

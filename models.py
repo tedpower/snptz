@@ -3,10 +3,12 @@
 
 from google.appengine.api import memcache
 from google.appengine.api import users
+from google.appengine.api import mail
 from google.appengine.ext import db
 from datetime import datetime, timedelta
 import logging
 import re
+import hashlib
 import datetime
 from timezones import *
 
@@ -311,3 +313,47 @@ class Membership(db.Model):
             return matches[0]
         else:
             return None
+
+class Invitation(db.Model):
+    team = db.ReferenceProperty(Team)
+    inviter = db.ReferenceProperty(Profile, 
+        collection_name="sent_invitation_set")
+    invitee_email = db.EmailProperty()
+
+    invitee_profile = db.ReferenceProperty(Profile,
+        collection_name="pending_invitation_set")
+
+    @property
+    def get_key(self):
+        return self.key()
+
+    @classmethod
+    def invite_colleague(klass, team, inviter, invitee_email):
+        invitation = klass(team=team, inviter=inviter, invitee_email=invitee_email)
+        invitee_profile = Profile.find_by_email(invitee_email)
+        if invitee_profile is not None:
+            invitation.invitee_profile = invitee_profile
+        invitation.put()
+
+        team_invite_template = '''
+Hi,
+
+Your esteemed colleague %s(inviter)s has invited you
+to join the '%(team)s' team on SNPTZ.
+
+Visit http://snptz.com to accept the invitation.
+
+Thanks!
+SNPTZ
+'''
+        team_invite_body = team_invite_template % {"inviter": inviter.first_name, "team": team.name}
+
+        message = mail.EmailMessage(
+            sender='SNPTZ <weekly@snptz.com>',
+            to=invitee_email,
+            reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
+            subject="SNPTZ: %s has invited you to join '%s' team" % (inviter.first_name, team.name),
+            body=team_invite_body)
+
+        message.send()
+        return invitation

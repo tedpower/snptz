@@ -53,7 +53,7 @@ handlers:
   script: main.py
   login: required
 
-- url: /team/(new|toggle|show)/([^/]*)
+- url: /team/(new|toggle|show|join|leave)/([^/]*)
   script: main.py
   login: required
 
