@@ -10,6 +10,7 @@
 
 <div id="main" {% ifnotequal current_page "main" %} style="display:none;" {% endifnotequal %}>
     {% include "partials/profile.html" %}
+    {% include "partials/sidebar.html" %}
 </div>
 
 <div id="info" class="subPage" {% ifnotequal current_page "info" %} style="display:none;" {% endifnotequal %}>
@@ -42,5 +43,9 @@
 
 <div id="settings" class="subPage" {% ifnotequal current_page "settings" %} style="display:none;" {% endifnotequal %}>
     {% include "partials/settings.html" %}
+</div>
+
+<div id="teamform" class="subPage" {% ifnotequal current_page "teamform" %} style="display:none;" {% endifnotequal %}>
+    {% include "partials/teamform.html" %}
 </div>
 {% endblock %}

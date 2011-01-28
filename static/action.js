@@ -15,6 +15,11 @@ $(document).ready(function(){
         history.pushState("", "settings", "/settings");
         event.preventDefault();
     });
+    $("#teamformLink").click(function(event){
+        showTeamform();
+        history.pushState("", "teamform", "/teamform");
+        event.preventDefault();
+    });
 
     // Makes the back button work
     window.onpopstate = function(event) {
@@ -25,7 +30,10 @@ $(document).ready(function(){
             showInfo();
         }
         if (document.location.pathname == '/settings') {
-            showSettings()
+            showSettings();
+        }
+        if (document.location.pathname == '/teamform') {
+            showTeamform();
         }
     };
     
@@ -34,16 +42,25 @@ $(document).ready(function(){
         $("#main").show();
         $("#info").hide();
         $("#settings").hide();
+        $("#teamform").hide();
     }
     function showInfo() {
         $("#main").hide();
         $("#info").show();
         $("#settings").hide();
+        $("#teamform").hide();
     }
     function showSettings() {
         $("#main").hide();
         $("#info").hide();
         $("#settings").show();
+        $("#teamform").hide();
+    }
+    function showTeamform() {
+        $("#main").hide();
+        $("#info").hide();
+        $("#settings").hide();
+        $("#teamform").show();
     }
 
     // On the settings page, do the post with ajax
@@ -114,7 +131,8 @@ $(document).ready(function(){
     // TODO refactor this
     $("#newteamSubmit").click(function(event){
         $.post("/team/new/wtf",
-               {newteamname:$('#newteamname').val()},
+               {newteamname:$('#newteamname').val(),
+               colleagues:$('#colleagues').val()},
                function(data){
                    $("#notifications").html(data);
                    $('#notifications').addClass('notificationShow');
@@ -136,5 +154,28 @@ $(document).ready(function(){
                });
         event.preventDefault();
     });
+    $(".acceptInviteLink").click(function(event){
+        $.post("/team/join/wtf",
+               {invitekey:$(this).parent().attr('id')},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                    }, 1500);
+               });
+        event.preventDefault();
+    });
+    $(".declineInviteLink").click(function(event){
+        $.post("/team/decline/wtf",
+               {invitekey:$(this).parent().attr('id')},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                    }, 1500);
+               });
+        event.preventDefault();
+    });
 });
-
