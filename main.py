@@ -118,7 +118,7 @@ class Team(webapp.RequestHandler):
         renderMainPage(self, "team", team=team)
 
     def post(self, verb, team_slug):
-        assert (verb in ["new", "toggle", "join", "leave"]), "POST verb is not supported: %s" % `verb`
+        assert (verb in ["new", "toggle", "join", "decline", "leave"]), "POST verb is not supported: %s" % `verb`
         user = users.get_current_user()
         profile = models.Profile.get_by_key_name(user.user_id())
         
@@ -170,7 +170,7 @@ class Team(webapp.RequestHandler):
                         old_membership.delete()
                         self.response.out.write("You are no longer a member of %s" % team.name)
 
-        if verb == "join":
+        if verb in ["join", "decline"]:
             # get the user's invitations
             invitations = profile.pending_invitation_set
             if invitations is None:
@@ -188,14 +188,18 @@ class Team(webapp.RequestHandler):
                 team = invitation.team
                 if team.key() not in memberships_teams_keys:
                     if team.key() in invitations_teams_keys:
-                        new_member = models.Membership(team=team, profile=profile)
-                        new_member.put()
+                        if verb == "join":
+                            new_member = models.Membership(team=team, profile=profile)
+                            new_member.put()
+                            self.response.out.write("You are now a member of %s" % team.name)
+                        else:
+                            self.response.out.write("You declined invitation to %s" % team.name)
                         invitation.delete()
-                        self.response.out.write("You are now a member of %s" % team.name)
                     else:
                         self.response.out.write("Oops. Can't find a pending invitation for %s" % team.name)
                 else:
                     self.response.out.write("Oops. You are already a member of %s" % team.name)
+
 
 def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;

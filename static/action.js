@@ -166,4 +166,16 @@ $(document).ready(function(){
                });
         event.preventDefault();
     });
+    $(".declineInviteLink").click(function(event){
+        $.post("/team/decline/wtf",
+               {invitekey:$(this).parent().attr('id')},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                    }, 1500);
+               });
+        event.preventDefault();
+    });
 });
