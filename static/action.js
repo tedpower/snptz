@@ -41,6 +41,12 @@ $(document).ready(function(){
         if (document.location.pathname == "/teamform") {
             showTeamform();
         }
+        if (document.location.pathname.indexOf("/colleague/") == 0) {
+            showColleague();
+        }
+        if (document.location.pathname.indexOf("/team/") == 0) {
+            showTeam();
+        }
     };
     
     // Some helper functions
@@ -74,6 +80,22 @@ $(document).ready(function(){
         $("#settings").hide();
         $("#teamform").show();
         $("#colleague").hide();
+        $("#team").hide();
+    }
+    function showTeam() {
+        $("#main").hide();
+        $("#info").hide();
+        $("#settings").hide();
+        $("#teamform").hide();
+        $("#colleague").hide();
+        $("#team").show();
+    }
+    function showColleague() {
+        $("#main").hide();
+        $("#info").hide();
+        $("#settings").hide();
+        $("#teamform").hide();
+        $("#colleague").show();
         $("#team").hide();
     }
 
