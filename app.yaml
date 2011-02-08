@@ -53,6 +53,10 @@ handlers:
   script: main.py
   login: required
 
+- url: /teamform
+  script: main.py
+  login: required
+
 - url: /team/(new|toggle|show|join|decline|leave)/([^/]*)
   script: main.py
   login: required

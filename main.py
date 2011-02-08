@@ -105,6 +105,10 @@ class Taskweek(webapp.RequestHandler):
             self.get(tw_type, tw_key)
             # self.response.out.write("Yay. Your tasks have been updated.")
         
+class Teamform(webapp.RequestHandler):
+    def get(self):
+        renderMainPage(self, "teamform")
+
 class Team(webapp.RequestHandler):
     def get(self, verb, team_slug):
         assert (verb == "show"), "GET verb is not show: %s" % `verb`
@@ -248,6 +252,7 @@ application = webapp.WSGIApplication([
    ('/', MainPage),
    ('/info', Info),
    ('/settings', Settings),
+   ('/teamform', Teamform),
    ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),
