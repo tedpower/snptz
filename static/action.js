@@ -1,25 +1,27 @@
 $(document).ready(function(){
+    var savedHistory = window.history;
+
     // Attaches the hide and show actions for the main page
     $("#logo").click(function(event){
-        history.pushState("", "main", "/");
+        savedHistory.pushState("", "main", "/");
         showMain();
         //event.preventDefault();
         return false;
     });
     $("#infoLink").click(function(event){
-        history.pushState("", "info", "/info");
+        savedHistory.pushState("", "info", "/info");
         showInfo();
         //event.preventDefault();
         return false;
     });
     $("#settingsLink").click(function(event){
-        history.pushState("", "settings", "/settings");
+        savedHistory.pushState("", "settings", "/settings");
         showSettings();
         //event.preventDefault();
         return false;
     });
     $("#teamformLink").click(function(event){
-        history.pushState("", "teamform", "/teamform");
+        savedHistory.pushState("", "teamform", "/teamform");
         showTeamform();
         //event.preventDefault();
         return false;
