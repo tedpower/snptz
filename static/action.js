@@ -1,38 +1,42 @@
 $(document).ready(function(){
     // Attaches the hide and show actions for the main page
     $("#logo").click(function(event){
-        showMain();
         history.pushState("", "main", "/");
-        event.preventDefault();
+        showMain();
+        //event.preventDefault();
+        return false;
     });
     $("#infoLink").click(function(event){
-        showInfo();
         history.pushState("", "info", "/info");
-        event.preventDefault();
+        showInfo();
+        //event.preventDefault();
+        return false;
     });
     $("#settingsLink").click(function(event){
-        showSettings();
         history.pushState("", "settings", "/settings");
-        event.preventDefault();
+        showSettings();
+        //event.preventDefault();
+        return false;
     });
     $("#teamformLink").click(function(event){
-        showTeamform();
         history.pushState("", "teamform", "/teamform");
-        event.preventDefault();
+        showTeamform();
+        //event.preventDefault();
+        return false;
     });
 
     // Makes the back button work
     window.onpopstate = function(event) {
-        if (document.location.pathname == '/') {
+        if (document.location.pathname == "/") {
             showMain();
         }
-        if (document.location.pathname == '/info') {
+        if (document.location.pathname == "/info") {
             showInfo();
         }
-        if (document.location.pathname == '/settings') {
+        if (document.location.pathname == "/settings") {
             showSettings();
         }
-        if (document.location.pathname == '/teamform') {
+        if (document.location.pathname == "/teamform") {
             showTeamform();
         }
     };
