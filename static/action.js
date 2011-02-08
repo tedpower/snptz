@@ -49,24 +49,32 @@ $(document).ready(function(){
         $("#info").hide();
         $("#settings").hide();
         $("#teamform").hide();
+        $("#colleague").hide();
+        $("#team").hide();
     }
     function showInfo() {
         $("#main").hide();
         $("#info").show();
         $("#settings").hide();
         $("#teamform").hide();
+        $("#colleague").hide();
+        $("#team").hide();
     }
     function showSettings() {
         $("#main").hide();
         $("#info").hide();
         $("#settings").show();
         $("#teamform").hide();
+        $("#colleague").hide();
+        $("#team").hide();
     }
     function showTeamform() {
         $("#main").hide();
         $("#info").hide();
         $("#settings").hide();
         $("#teamform").show();
+        $("#colleague").hide();
+        $("#team").hide();
     }
 
     // On the settings page, do the post with ajax
