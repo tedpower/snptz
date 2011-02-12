@@ -36,7 +36,7 @@ em{font-weight:bold;font-style:normal;}
 .weekChunk textarea{width:292px;}
 .emptyWeek{padding:6px 8px;border:1px solid gray;color:gray;cursor:text;}
 #signup{text-align:left;padding:50px;}
-.settingsChunk{padding-top:14px;}
+.settingsChunk{padding-top:12px;}
 .settingsChunk input[type="text"]{width:300px;padding:4px;border:1px solid;border-color:#666 #CCC #CCC #CCC;}
 #signup h1{padding-top:24px;}
 .subPage{background-color:white;z-index:2;position:relative;width:880px;margin:51px auto;text-align:left;-webkit-box-shadow:0 1px 0 rgba(0, 0, 0, 0.16);padding:20px;}
