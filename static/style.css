@@ -9,7 +9,7 @@ em{font-weight:bold;font-style:normal;}
 #loggedOut p{font-size:24px;}
 #header{height:51px;color:#fff;box-shadow:0 2px 5px rgba(0, 0, 0, 0.4);-webkit-box-shadow:0 2px 5px rgba(0, 0, 0, 0.4);-moz-box-shadow:0 2px 5px rgba(0, 0, 0, 0.4);position:fixed;top:0;left:0;right:0;background:#000000 url(navbar.png) repeat-x;z-index:4;}
 #nav{width:920px;text-align:left;margin:0 auto;}
-#logo{margin:0 0 0 20px;float:left;}
+#logo{margin:0 0 0 20px;float:left;height:50px;}
 #presence{float:right;text-shadow:0 -1px 0 #000000;line-height:51px;}
 #user{color:#919191;}
 #presence a{color:#CCC;}
