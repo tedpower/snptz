@@ -1,5 +1,5 @@
 <div id="sidebar">
-    {% ifnotequal profile.pending_invitation_set None%}
+    {% ifnotequal profile.pending_invitation_set None %}
         <div id="invitations">
         {% for invite in profile.pending_invitation_set %}
             <span class="invitation" id="{{ invite.get_key }}">

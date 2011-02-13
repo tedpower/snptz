@@ -3,7 +3,7 @@
     <div class="timeStamp">
         <em>This week</em> {{ colleague.this_weeks_tw.created|date:"M j" }} -
     </div>
-    <div class="plans">
+    <div class="colleague-plans">
         <ul>
             {% for t in colleague.this_weeks_tw.optimistic %}
                 <li>{{ t }}</li>
@@ -14,7 +14,7 @@
 
 {% for tw in colleague.all_other_past_taskweeks %}
     <div class="weekChunk clearfix">
-        <div class="plans">
+        <div class="colleague-plans">
             <div class="timeStamp">
                 Week of <em>{{ tw.created|date:"M j" }}</em>
             </div>
@@ -24,7 +24,7 @@
                 {% endfor %}
             </ul>
         </div>
-        <div class="plans">
+        <div class="colleague-plans">
             <div class="timeStamp">
                 How'd it go?
             </div>

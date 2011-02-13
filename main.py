@@ -131,8 +131,15 @@ class Team(webapp.RequestHandler):
             list_of_emails = [l.strip() for l in emails_to_invite.split(',')]
             logging.info(list_of_emails)
             if team_name not in [None, '', ' ']:
-                # make sure it doesnt exist yet
+                # see if team already exists
                 team = models.Team.find_by_name(team_name)
+                if team is not None:
+                    memberships_teams_keys = [m.team.key() for m in profile.membership_set]
+                    # don't allow user to invite others to the team
+                    # if they are not a member of the team
+                    if team.key() not in memberships_teams_keys:
+                        self.response.out.write("Oops. That team name is already taken.")
+                        return
                 if team is None:
                     # create new team
                     team = models.Team(name=team_name)
@@ -142,15 +149,13 @@ class Team(webapp.RequestHandler):
                     # create a new membership for the user
                     membership = models.Membership(team=team, profile=profile)
                     membership.put()
-                    for email in list_of_emails:
-                        logging.info(email)
-                        invite = models.Invitation.invite_colleague(team,\
-                            profile, email)
-                        logging.info(invite)
+                for email in list_of_emails:
+                    logging.info(email)
+                    invite = models.Invitation.invite_colleague(team,\
+                        profile, email)
+                    logging.info(invite)
 
-                    self.response.out.write("You have created and joined %s" % team.name)
-                else:
-                    self.response.out.write("Oops. That team name is already taken.")
+                self.response.out.write("Invitations sent for team '%s'" % team.name)
 
         # TODO get rid of toggle in favor of "leave"
         if verb == "toggle":
@@ -193,15 +198,23 @@ class Team(webapp.RequestHandler):
                         if verb == "join":
                             new_member = models.Membership(team=team, profile=profile)
                             new_member.put()
-                            self.response.out.write("You are now a member of %s" % team.name)
+                            #self.response.out.write("You are now a member of %s" % team.name)
+                            self.redirect("/team/show/%s" % team.slug)
                         else:
                             self.response.out.write("You declined invitation to %s" % team.name)
+                            # TODO sidebar should be reloaded to get rid of accept/decline links
                         invitation.delete()
                     else:
                         self.response.out.write("Oops. Can't find a pending invitation for %s" % team.name)
                 else:
                     self.response.out.write("Oops. You are already a member of %s" % team.name)
 
+class Sidebar(webapp.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
+        teams = [m.team for m in profile.membership_set]
+        return self.response.out.write(template.render('templates/partials/sidebar.html', {'profile':profile, 'teams':teams}))
 
 def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;
@@ -253,6 +266,7 @@ application = webapp.WSGIApplication([
    ('/info', Info),
    ('/settings', Settings),
    ('/teamform', Teamform),
+   ('/sidebar', Sidebar),
    ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),
