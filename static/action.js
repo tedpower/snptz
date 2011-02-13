@@ -1,31 +1,51 @@
 $(document).ready(function(){
+    var savedHistory = window.history;
+
     // Attaches the hide and show actions for the main page
     $("#logo").click(function(event){
+        savedHistory.pushState("", "main", "/");
         showMain();
-        history.pushState("", "main", "/");
-        event.preventDefault();
+        //event.preventDefault();
+        return false;
     });
     $("#infoLink").click(function(event){
+        savedHistory.pushState("", "info", "/info");
         showInfo();
-        history.pushState("", "info", "/info");
-        event.preventDefault();
+        //event.preventDefault();
+        return false;
     });
     $("#settingsLink").click(function(event){
+        savedHistory.pushState("", "settings", "/settings");
         showSettings();
-        history.pushState("", "settings", "/settings");
-        event.preventDefault();
+        //event.preventDefault();
+        return false;
+    });
+    $("#teamformLink").click(function(event){
+        savedHistory.pushState("", "teamform", "/teamform");
+        showTeamform();
+        //event.preventDefault();
+        return false;
     });
 
     // Makes the back button work
     window.onpopstate = function(event) {
-        if (document.location.pathname == '/') {
+        if (document.location.pathname == "/") {
             showMain();
         }
-        if (document.location.pathname == '/info') {
+        if (document.location.pathname == "/info") {
             showInfo();
         }
-        if (document.location.pathname == '/settings') {
-            showSettings()
+        if (document.location.pathname == "/settings") {
+            showSettings();
+        }
+        if (document.location.pathname == "/teamform") {
+            showTeamform();
+        }
+        if (document.location.pathname.indexOf("/colleague/") == 0) {
+            showColleague();
+        }
+        if (document.location.pathname.indexOf("/team/") == 0) {
+            showTeam();
         }
     };
     
@@ -34,16 +54,49 @@ $(document).ready(function(){
         $("#main").show();
         $("#info").hide();
         $("#settings").hide();
+        $("#teamform").hide();
+        $("#colleague").hide();
+        $("#team").hide();
     }
     function showInfo() {
         $("#main").hide();
         $("#info").show();
         $("#settings").hide();
+        $("#teamform").hide();
+        $("#colleague").hide();
+        $("#team").hide();
     }
     function showSettings() {
         $("#main").hide();
         $("#info").hide();
         $("#settings").show();
+        $("#teamform").hide();
+        $("#colleague").hide();
+        $("#team").hide();
+    }
+    function showTeamform() {
+        $("#main").hide();
+        $("#info").hide();
+        $("#settings").hide();
+        $("#teamform").show();
+        $("#colleague").hide();
+        $("#team").hide();
+    }
+    function showTeam() {
+        $("#main").hide();
+        $("#info").hide();
+        $("#settings").hide();
+        $("#teamform").hide();
+        $("#colleague").hide();
+        $("#team").show();
+    }
+    function showColleague() {
+        $("#main").hide();
+        $("#info").hide();
+        $("#settings").hide();
+        $("#teamform").hide();
+        $("#colleague").show();
+        $("#team").hide();
     }
 
     // On the settings page, do the post with ajax
@@ -62,6 +115,13 @@ $(document).ready(function(){
                });
         event.preventDefault();
     });
+
+    function refreshSidebar(){
+        var $sidebar = $("#sidebar");
+        $.get("/sidebar", function(data) {
+            $sidebar.replaceWith(data);
+        });
+    };
         
     // Add the event listeners for the main edit stuff
     hookupAjaxEdit();
@@ -120,7 +180,8 @@ $(document).ready(function(){
     // TODO refactor this
     $("#newteamSubmit").click(function(event){
         $.post("/team/new/wtf",
-               {newteamname:$('#newteamname').val()},
+               {newteamname:$('#newteamname').val(),
+               colleagues:$('#colleagues').val()},
                function(data){
                    $("#notifications").html(data);
                    $('#notifications').addClass('notificationShow');
@@ -129,6 +190,24 @@ $(document).ready(function(){
                     }, 1500);
                });
         event.preventDefault();
+        refreshSidebar();
+        showMain();
+    });
+    // TODO DRY!
+    $("#editteamSubmit").click(function(event){
+        $.post("/team/new/wtf",
+               {newteamname:$('#teamname').val(),
+               colleagues:$('#new-colleagues').val()},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                    }, 1500);
+               });
+        event.preventDefault();
+        refreshSidebar();
+        showMain();
     });
     $("#networkSubmit").click(function(event){
         $.post("/network/join",
@@ -163,5 +242,30 @@ $(document).ready(function(){
                });
         event.preventDefault();
     });
+    $(".acceptInviteLink").click(function(event){
+        $.post("/team/join/wtf",
+               {invitekey:$(this).parent().attr('id')},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                    }, 1500);
+               });
+        event.preventDefault();
+        refreshSidebar();
+    });
+    $(".declineInviteLink").click(function(event){
+        $.post("/team/decline/wtf",
+               {invitekey:$(this).parent().attr('id')},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                    }, 1500);
+               });
+        event.preventDefault();
+        refreshSidebar();
+    });
 });
-

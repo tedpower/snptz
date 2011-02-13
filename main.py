@@ -48,11 +48,8 @@ class Settings(webapp.RequestHandler):
         memberships = profile.membership_set
         # get a list of teams user has membership in
         memberships_teams = [m.team for m in memberships]
-        # get a list of teams user does not have membership in
-        other_teams = [t for t in models.Team.all() if t.key() not in [m.key() for m in memberships_teams]]
 
-        renderMainPage(self, "settings", memberships_teams=memberships_teams,
-            other_teams=other_teams)
+        renderMainPage(self, "settings", memberships_teams=memberships_teams)
 
     def post(self):
         user = users.get_current_user()
@@ -152,6 +149,10 @@ class Taskweek(webapp.RequestHandler):
             self.get(tw_type, tw_key)
             #self.response.out.write("Yay. Your tasks have been updated.")
         
+class Teamform(webapp.RequestHandler):
+    def get(self):
+        renderMainPage(self, "teamform")
+
 class Team(webapp.RequestHandler):
     def get(self, verb, team_slug):
         assert (verb == "show"), "GET verb is not show: %s" % `verb`
@@ -162,16 +163,27 @@ class Team(webapp.RequestHandler):
         renderMainPage(self, "team", team=team)
 
     def post(self, verb, team_slug):
-        assert (verb in ["new", "toggle"]), "POST verb is not supported: %s" % `verb`
+        assert (verb in ["new", "toggle", "join", "decline", "leave"]), "POST verb is not supported: %s" % `verb`
         user = users.get_current_user()
         profile = models.Profile.get_by_key_name(user.user_id())
         
         if verb == "new":
             # if user is creating a new team...
             team_name = self.request.get('newteamname')
+            emails_to_invite = self.request.get('colleagues')
+            logging.info(emails_to_invite)
+            list_of_emails = [l.strip() for l in emails_to_invite.split(',')]
+            logging.info(list_of_emails)
             if team_name not in [None, '', ' ']:
-                # make sure it doesnt exist yet
+                # see if team already exists
                 team = models.Team.find_by_name(team_name)
+                if team is not None:
+                    memberships_teams_keys = [m.team.key() for m in profile.membership_set]
+                    # don't allow user to invite others to the team
+                    # if they are not a member of the team
+                    if team.key() not in memberships_teams_keys:
+                        self.response.out.write("Oops. That team name is already taken.")
+                        return
                 if team is None:
                     # create new team
                     team = models.Team(name=team_name)
@@ -181,10 +193,15 @@ class Team(webapp.RequestHandler):
                     # create a new membership for the user
                     membership = models.Membership(team=team, profile=profile)
                     membership.put()
-                    self.response.out.write("You have created and joined %s" % team.name)
-                else:
-                    self.response.out.write("Oops. That team name is already taken.")
+                for email in list_of_emails:
+                    logging.info(email)
+                    invite = models.Invitation.invite_colleague(team,\
+                        profile, email)
+                    logging.info(invite)
 
+                self.response.out.write("Invitations sent for team '%s'" % team.name)
+
+        # TODO get rid of toggle in favor of "leave"
         if verb == "toggle":
             # get the user's team memberships
             memberships = profile.membership_set
@@ -204,6 +221,44 @@ class Team(webapp.RequestHandler):
                         old_membership.delete()
                         self.response.out.write("You are no longer a member of %s" % team.name)
 
+        if verb in ["join", "decline"]:
+            # get the user's invitations
+            invitations = profile.pending_invitation_set
+            if invitations is None:
+                self.response.out.write("Oops. Can't find any pending invitations.")
+            else:
+                invitations_teams_keys = [i.team.key() for i in invitations]
+
+            # get the user's team memberships
+            memberships = profile.membership_set
+            # get a list of keys of the teams user has membership in
+            memberships_teams_keys = [m.team.key() for m in memberships]
+
+            invitation = models.Invitation.get(self.request.get('invitekey'))
+            if invitation is not None:
+                team = invitation.team
+                if team.key() not in memberships_teams_keys:
+                    if team.key() in invitations_teams_keys:
+                        if verb == "join":
+                            new_member = models.Membership(team=team, profile=profile)
+                            new_member.put()
+                            #self.response.out.write("You are now a member of %s" % team.name)
+                            self.redirect("/team/show/%s" % team.slug)
+                        else:
+                            self.response.out.write("You declined invitation to %s" % team.name)
+                            # TODO sidebar should be reloaded to get rid of accept/decline links
+                        invitation.delete()
+                    else:
+                        self.response.out.write("Oops. Can't find a pending invitation for %s" % team.name)
+                else:
+                    self.response.out.write("Oops. You are already a member of %s" % team.name)
+
+class Sidebar(webapp.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
+        teams = [m.team for m in profile.membership_set]
+        return self.response.out.write(template.render('templates/partials/sidebar.html', {'profile':profile, 'teams':teams}))
 
 class Confirm(webapp.RequestHandler):
     def get(self, hash):
@@ -248,7 +303,6 @@ class Network(webapp.RequestHandler):
             new_pc = models.PendingConfirmation.send_confirmation(email, profile, network)
             self.response.out.write("Confirmation email has been sent to %s" % email)
 
-
 def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;
     user = users.get_current_user()
@@ -267,7 +321,6 @@ def renderMainPage(handler, selectedPage, **kwargs):
     # if there is not kwarg 'team', assign None to variable team
     team = kwargs.get('team', None)
     memberships_teams = kwargs.get('memberships_teams', None)
-    other_teams = kwargs.get('other_teams', None)
     colleague = kwargs.get('colleague', None)
 
     doRender(handler, 'main.html', {'logoutURL' : logoutURL,
@@ -275,7 +328,6 @@ def renderMainPage(handler, selectedPage, **kwargs):
                                     "teams": teams,
                                     "team": team,
                                     "memberships_teams": memberships_teams,
-                                    "other_teams": other_teams,
                                     "colleague": colleague,
                                     'current_page' : current_page})
                                  
@@ -303,6 +355,8 @@ application = webapp.WSGIApplication([
    ('/tag/([^/]+)', Tag),
    ('/network/join', Network),
    ('/confirm/([^/]+)', Confirm),
+   ('/teamform', Teamform),
+   ('/sidebar', Sidebar),
    ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),

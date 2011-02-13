@@ -1,0 +1,28 @@
+<div id="sidebar">
+    {% ifnotequal profile.pending_invitation_set None %}
+        <div id="invitations">
+        {% for invite in profile.pending_invitation_set %}
+            <span class="invitation" id="{{ invite.get_key }}">
+            <p>{{ invite.inviter.first_name }} has invited you to join {{ invite.team.name }} team.</p>
+            <a class="acceptInviteLink" href="/team/join">Accept</a> or <a class="declineInviteLink" href="/team/decline">decline</a> the inviation.
+            </span>
+        {% endfor %}
+        </div>
+    {% endifnotequal %}
+    {% if teams %}
+        Esteemed Colleagues
+        {% for team in teams %}
+            <div class="team" id="team-{{ team.name }}">
+                <h3>esteemed colleages from <a href="/team/show/{{ team.slug }}">{{ team.name }}</a></h3>
+                <ul>
+                    {% for member in team.membership_set %}
+                        {% ifnotequal member.profile.name profile.name %}
+                            <li><a href="/colleague/{{ member.profile.get_nickname }}">{{ member.profile.name }}</a></li>
+                        {% endifnotequal %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <a href="/teamform" id="teamformLink">Create new team</a>
+</div>

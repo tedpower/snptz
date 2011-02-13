@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 import logging
 import hashlib
 import re
+import hashlib
 import datetime
 from timezones import *
 import helpers
@@ -490,6 +491,31 @@ class PendingConfirmation(db.Model):
         else:
             return None
 
+class Invitation(db.Model):
+    team = db.ReferenceProperty(Team)
+    inviter = db.ReferenceProperty(Profile, 
+        collection_name="sent_invitation_set")
+    invitee_email = db.EmailProperty()
+
+    invitee_profile = db.ReferenceProperty(Profile,
+        collection_name="pending_invitation_set")
+
+    @property
+    def get_key(self):
+        return self.key()
+
+    @classmethod
+    def pending_for_email(klass, str):
+        # start with all users
+        query = klass.all()
+        query.filter("invitee_email = ", str)
+        # fetch and return matches
+        matches = query.fetch(50)
+        if len(matches) != 0:
+            return matches
+        else:
+            return None
+
     @classmethod
     def send_confirmation(klass, email, profile, network):
         new_PC = klass(email_address=email, profile=profile, network=network)
@@ -524,3 +550,45 @@ SNPTZ
 
         message.send()
         return new_PC
+
+    @classmethod
+    def invite_colleague(klass, team, inviter, invitee_email):
+        # see if there are any outstanding invitations for this invitee
+        pending_for_invitee = klass.pending_for_email(invitee_email)
+        if pending_for_invitee is not None:
+            if team.key() in (i.team.key() for i in pending_for_invitee):
+                # return a warning if there is already a pending invitation
+                # for this team+email (and do not create invitation)
+                return "'%s' has already been invited to '%s'" % (invitee_email, team.name)
+        invitation = klass(team=team, inviter=inviter, invitee_email=invitee_email)
+        invitee_profile = Profile.find_by_email(invitee_email)
+        if invitee_profile is not None:
+            if team.key() in (m.team.key() for m in invitee_profile.membership_set):
+                # return a warning if invitee is already a member
+                # (and do not create invitation)
+                return "'%s' is already a member of '%s'" % (invitee_email, team.name)
+            invitation.invitee_profile = invitee_profile
+        invitation.put()
+
+        team_invite_template = '''
+Hi,
+
+Your esteemed colleague %s(inviter)s has invited you
+to join the '%(team)s' team on SNPTZ.
+
+Visit http://snptz.com to accept the invitation.
+
+Thanks!
+SNPTZ
+'''
+        team_invite_body = team_invite_template % {"inviter": inviter.first_name, "team": team.name}
+
+        message = mail.EmailMessage(
+            sender='SNPTZ <weekly@snptz.com>',
+            to=invitee_email,
+            reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
+            subject="SNPTZ: %s has invited you to join '%s' team" % (inviter.first_name, team.name),
+            body=team_invite_body)
+
+        message.send()
+        return invitation

@@ -63,9 +63,9 @@ you are planning to slack off all week :)
 HOW DID LAST WEEK GO?<br/>
 Edit your goals from last week:<br/>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
-<br/>
+<pre>
 %(tasks)s
-<br/>
+<pre/>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
 WHAT'RE YOU GOING TO DO THIS WEEK?<br/>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
