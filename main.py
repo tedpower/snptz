@@ -193,15 +193,23 @@ class Team(webapp.RequestHandler):
                         if verb == "join":
                             new_member = models.Membership(team=team, profile=profile)
                             new_member.put()
-                            self.response.out.write("You are now a member of %s" % team.name)
+                            #self.response.out.write("You are now a member of %s" % team.name)
+                            self.redirect("/team/show/%s" % team.slug)
                         else:
                             self.response.out.write("You declined invitation to %s" % team.name)
+                            # TODO sidebar should be reloaded to get rid of accept/decline links
                         invitation.delete()
                     else:
                         self.response.out.write("Oops. Can't find a pending invitation for %s" % team.name)
                 else:
                     self.response.out.write("Oops. You are already a member of %s" % team.name)
 
+class Sidebar(webapp.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
+        teams = [m.team for m in profile.membership_set]
+        return self.response.out.write(template.render('templates/partials/sidebar.html', {'profile':profile, 'teams':teams}))
 
 def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;
@@ -253,6 +261,7 @@ application = webapp.WSGIApplication([
    ('/info', Info),
    ('/settings', Settings),
    ('/teamform', Teamform),
+   ('/sidebar', Sidebar),
    ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),
