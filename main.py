@@ -131,8 +131,15 @@ class Team(webapp.RequestHandler):
             list_of_emails = [l.strip() for l in emails_to_invite.split(',')]
             logging.info(list_of_emails)
             if team_name not in [None, '', ' ']:
-                # make sure it doesnt exist yet
+                # see if team already exists
                 team = models.Team.find_by_name(team_name)
+                if team is not None:
+                    memberships_teams_keys = [m.team.key() for m in profile.membership_set]
+                    # don't allow user to invite others to the team
+                    # if they are not a member of the team
+                    if team.key() not in memberships_teams_keys:
+                        self.response.out.write("Oops. That team name is already taken.")
+                        return
                 if team is None:
                     # create new team
                     team = models.Team(name=team_name)
@@ -142,15 +149,13 @@ class Team(webapp.RequestHandler):
                     # create a new membership for the user
                     membership = models.Membership(team=team, profile=profile)
                     membership.put()
-                    for email in list_of_emails:
-                        logging.info(email)
-                        invite = models.Invitation.invite_colleague(team,\
-                            profile, email)
-                        logging.info(invite)
+                for email in list_of_emails:
+                    logging.info(email)
+                    invite = models.Invitation.invite_colleague(team,\
+                        profile, email)
+                    logging.info(invite)
 
-                    self.response.out.write("You have created and joined %s" % team.name)
-                else:
-                    self.response.out.write("Oops. That team name is already taken.")
+                self.response.out.write("Invitations sent for team '%s'" % team.name)
 
         # TODO get rid of toggle in favor of "leave"
         if verb == "toggle":

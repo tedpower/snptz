@@ -341,9 +341,20 @@ class Invitation(db.Model):
 
     @classmethod
     def invite_colleague(klass, team, inviter, invitee_email):
+        # see if there are any outstanding invitations for this invitee
+        pending_for_invitee = klass.pending_for_email(invitee_email)
+        if pending_for_invitee is not None:
+            if team.key() in (i.team.key() for i in pending_for_invitee):
+                # return a warning if there is already a pending invitation
+                # for this team+email (and do not create invitation)
+                return "'%s' has already been invited to '%s'" % (invitee_email, team.name)
         invitation = klass(team=team, inviter=inviter, invitee_email=invitee_email)
         invitee_profile = Profile.find_by_email(invitee_email)
         if invitee_profile is not None:
+            if team.key() in (m.team.key() for m in invitee_profile.membership_set):
+                # return a warning if invitee is already a member
+                # (and do not create invitation)
+                return "'%s' is already a member of '%s'" % (invitee_email, team.name)
             invitation.invitee_profile = invitee_profile
         invitation.put()
 

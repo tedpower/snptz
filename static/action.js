@@ -187,6 +187,22 @@ $(document).ready(function(){
         refreshSidebar();
         showMain();
     });
+    // TODO DRY!
+    $("#editteamSubmit").click(function(event){
+        $.post("/team/new/wtf",
+               {newteamname:$('#teamname').val(),
+               colleagues:$('#new-colleagues').val()},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                    }, 1500);
+               });
+        event.preventDefault();
+        refreshSidebar();
+        showMain();
+    });
     $("#teams :checkbox").click(function(event){
         $.post("/team/toggle/wtf",
                {teamslug:$(this).attr('name')},
