@@ -14,14 +14,11 @@ plaintext_template = '''
 
 Hi %(username)s,
 
-Please reply to this email and describe
+HIT REPLY to this email and describe
 (inline, below) what you worked on last
-week and what you are going to work on
-this week (one task per line, please).
-
-Be sure to send your reply before lunch...
-otherwise we'll tell your colleagues that
-you are planning to slack off all week :)
+week and what you're going to work on
+this week (one task per line, please).  
+Or visit http://www.snptz.com
 
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~
 HOW DID LAST WEEK GO?
@@ -49,23 +46,20 @@ html_template = '''
 <p>Good morning %(username)s!</p>
 
 <p>
-Please reply to this email and describe
+HIT REPLY to this email and describe
 (inline, below) what you worked on last
-week and what you are going to work on
-this week (one task per line, please).
-
-Be sure to send your reply before lunch...
-otherwise we'll tell your colleagues that
-you are planning to slack off all week :)
+week and what you're going to work on
+this week (one task per line, please).  
+Or visit <a href="http://www.snptz.com">snptz.com</a>.  
 </p>
 
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
 HOW DID LAST WEEK GO?<br/>
 Edit your goals from last week:<br/>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
-<pre>
+<pre style="font-family: arial,sans-serif;">
 %(tasks)s
-<pre/>
+</pre>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
 WHAT'RE YOU GOING TO DO THIS WEEK?<br/>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
