@@ -19,9 +19,9 @@ em{font-weight:bold;font-style:normal;}
 #notifications{z-index:3;color:black;width:920px;line-height:50px;position:fixed;top:0;left:50%;margin-left:-460px;font-weight:bold;background-color:#FFFD64;-webkit-transition:top 0.3s ease-in;}
 .notificationShow{top:50px !important;}
 #bg{position:fixed;top:51px;left:0;right:0;bottom:0;background:#f2f2f2 url(dots.png) repeat;z-index:0;}
-#main{background-color:white;z-index:2;position:relative;width:920px;margin:51px auto;text-align:left;-webkit-box-shadow:0 1px 0 rgba(0, 0, 0, 0.16);}
+#main{background-color:white;z-index:2;position:relative;width:920px;margin:0 auto 51px auto;padding-top:51px;text-align:left;-webkit-box-shadow:0 1px 0 rgba(0, 0, 0, 0.16);}
 #taskWrapper{-webkit-box-shadow:-1px 0 0 rgba(0, 0, 0, 0.1);width:700px;}
-#sidebar{width:180px;position:absolute;top:0;right:0;bottom:0;background-color:#F5F5F5;padding:20px;-webkit-box-shadow:inset 1px 0 0 rgba(0, 0, 0, 0.1),1px 0 0 rgba(0, 0, 0, 0.1);}
+#sidebar{width:180px;position:absolute;top:0;right:0;bottom:0;background-color:#F5F5F5;padding:71px 20px 20px 20px;-webkit-box-shadow:inset 1px 0 0 rgba(0, 0, 0, 0.1),1px 0 0 rgba(0, 0, 0, 0.1);}
 #thisWeek{padding:20px;border-bottom:1px solid #D9D9D9;}
 .weekChunk .optimistic,.weekChunk .realistic{padding:20px;width:310px;float:left;}
 .weekChunk{border-bottom:1px solid #D9D9D9;}
@@ -39,7 +39,7 @@ em{font-weight:bold;font-style:normal;}
 .settingsChunk{padding-top:12px;}
 .settingsChunk input[type="text"]{width:300px;padding:4px;border:1px solid;border-color:#666 #CCC #CCC #CCC;}
 #signup h1{padding-top:24px;}
-.subPage{background-color:white;z-index:2;position:relative;width:880px;margin:51px auto;text-align:left;-webkit-box-shadow:0 1px 0 rgba(0, 0, 0, 0.16);padding:20px;}
+.subPage{background-color:white;z-index:2;position:relative;width:880px;margin:0 auto 51px auto;padding:71px 20px 20px 20px;text-align:left;-webkit-box-shadow:0 1px 0 rgba(0, 0, 0, 0.16);}
 .subPage p,.subPage pre{font-size:14px;padding-top:14px;}
 h1{font-size:24px;font-weight:bold;}
 h2{font-weight:bold;}
