@@ -40,7 +40,7 @@ a img { border: none; }
 --------------------------------------------- */
 
 body {
-    font-family: "Droid Sans", Helvetica, Arial, sans-serif;
+    font-family: Helvetica, Arial, sans-serif;
     text-align: center;
     font-size: 12px;
 }
@@ -90,6 +90,8 @@ em {
 
 #logo {
     margin: 0 0 0 @paddingWidth;
+    float: left;
+    height: 50px;
 }
 
 #presence {
@@ -160,7 +162,8 @@ em {
     z-index: 2;
     position: relative;
     width: @contentWidth;
-    margin: 51px auto;
+    margin: 0 auto 51px auto;
+    padding-top: 51px;
     text-align: left;
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.16);
 }
@@ -177,7 +180,7 @@ em {
     right: 0;
     bottom: 0;
     background-color: #F5F5F5;
-    padding: @paddingWidth;
+    padding: 71px 20px 20px 20px;
     -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), 1px 0 0 rgba(0,0,0,.1);
 }
 
@@ -254,7 +257,7 @@ em {
 }
 
 .settingsChunk {
-	padding-top: 14px;
+	padding-top: 12px;
 }
 
 .settingsChunk input[type="text"] {
@@ -276,10 +279,10 @@ em {
     z-index: 2;
     position: relative;
     width: @contentWidth - (2 * @paddingWidth);
-    margin: 51px auto;
+    margin: 0 auto 51px auto;
+    padding: 71px 20px 20px 20px;
     text-align: left;
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.16);
-    padding: @paddingWidth;
 }
 
 .subPage p, .subPage pre {

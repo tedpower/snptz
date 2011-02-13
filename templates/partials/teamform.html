@@ -1,9 +1,13 @@
+<h1>Create a new team</h1>
+
 <form id="newteam" action="/team/new" method="post">
-    <div>
-        <label for="newteamname">Team name</label>
-        <input type="text" id="newteamname" name="newteamname" value=""/>
-        <label for="colleagues">Invite your esteemed colleagues to join your new team</label>
-        <textarea id="colleagues" rows="5">Comma-separated email addresses</textarea>
+    <div class="settingsChunk">
+        <div><label for="newteamname">Team name</label></div>
+        <div><input type="text" id="newteamname" name="newteamname" value=""/></div>
+	</div>
+	<div class="settingsChunk">
+        <div><label for="colleagues">Invite your esteemed colleagues to your team</label></div>
+        <div><input type="text" id="colleagues" placeholder="Comma-separated email addresses" /></div>
     </div>
-    <div><input type="submit" id="newteamSubmit" value="Create new team"></div>
+    <div class="settingsChunk"><input type="submit" id="newteamSubmit" value="Create new team"></div>
 </form>
