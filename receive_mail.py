@@ -128,6 +128,7 @@ def cleanLines(weekList):
     for i in weekList:
         # remove quote mark
         i = i.replace('>', '')
+        i = i.replace('REPLACE ME!', '')
         # remove any leading/trailing whitespace
         i = i.strip()
         if (len(i) != 0):

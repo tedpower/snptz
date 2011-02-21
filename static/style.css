@@ -5,7 +5,7 @@ a img{border:none;}
 body{font-family:Helvetica,Arial,sans-serif;text-align:center;font-size:12px;}
 body a{text-decoration:none;}
 em{font-weight:bold;font-style:normal;}
-#loggedOut #logoBig{padding:80px 0;}
+#loggedOut #logoBig{padding:80px 0 20px 0;}
 #loggedOut p{font-size:24px;}
 #header{height:51px;color:#fff;box-shadow:0 2px 5px rgba(0, 0, 0, 0.4);-webkit-box-shadow:0 2px 5px rgba(0, 0, 0, 0.4);-moz-box-shadow:0 2px 5px rgba(0, 0, 0, 0.4);position:fixed;top:0;left:0;right:0;background:#000000 url(navbar.png) repeat-x;z-index:4;}
 #nav{width:920px;text-align:left;margin:0 auto;}

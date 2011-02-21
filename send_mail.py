@@ -42,32 +42,31 @@ REPLACE ME!
 
 html_template = '''
 
-<img src="http://www.snptz.com/static/logoMed.png" width="174" height="50" alt="SNPTZ">
+<a href="http://www.snptz.com"><img src="http://www.snptz.com/static/logoMed.png" width="174" height="50" alt="SNPTZ"></a>
 <p>Good morning %(username)s!</p>
 
 <p>
 HIT REPLY to this email and describe
 (inline, below) what you worked on last
 week and what you're going to work on
-this week (one task per line, please).  
+this week (one task per line).  
 Or visit <a href="http://www.snptz.com">snptz.com</a>.  
 </p>
 
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
-HOW DID LAST WEEK GO?<br/>
-Edit your goals from last week:<br/>
+<span style="font-weight:bold;">How'd it go?</b><br/>
+Update this list with what you actually completed<br/>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
 <pre style="font-family: arial,sans-serif;">
 %(tasks)s
 </pre>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
-WHAT'RE YOU GOING TO DO THIS WEEK?<br/>
+<span style="font-weight:bold;">WHAT'RE YOU GOING TO DO THIS WEEK?</span><br/>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
 <br/>
+<br/>
 REPLACE ME!<br/>
-REPLACE ME!<br/>
-REPLACE ME!<br/>
-REPLACE ME!<br/>
+<br/>
 <br/>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
 (list any number of tasks above this line)<br/>
@@ -96,7 +95,7 @@ REPLACE ME!
 '''
 
 first_time_html = '''
-<img src="http://www.snptz.com/static/logoMed.png" width="174" height="50" alt="SNPTZ">
+<a href="http://www.snptz.com"><img src="http://www.snptz.com/static/logoMed.png" width="174" height="50" alt="SNPTZ"></a>
 <p>Hi %(username)s!</p>
 <p>Welcome to SNPTZ!</p>
 <p>
@@ -105,13 +104,12 @@ Or visit <a href="http://www.snptz.com">snptz.com</a>.
 </p>
 
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
-WHAT'RE YOU GOING TO DO THIS WEEK?<br/>
+<span style="font-weight:bold;">WHAT'RE YOU GOING TO DO THIS WEEK?</span><br/>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
 <br/>
+<br/>
 REPLACE ME!<br/>
-REPLACE ME!<br/>
-REPLACE ME!<br/>
-REPLACE ME!<br/>
+<br/>
 <br/>
 --~--~--~--~--~--~--~--~--~--~--~--~--~--~<br/>
 (list any number of tasks above this line)<br/>
