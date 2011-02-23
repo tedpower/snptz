@@ -223,6 +223,8 @@ class Profile(db.Model):
 
     @property
     def esteemed_colleagues(self):
+        ''' Return a list of profiles for users that share
+            membership in this user's teams (not including this user).'''
         # get all of the teams this profile is a member of
         teams = [m.team for m in self.membership_set]
         if len(teams) == 0:
