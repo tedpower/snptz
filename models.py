@@ -216,6 +216,8 @@ class Profile(db.Model):
 
     @property
     def esteemed_colleagues(self):
+        return []
+        '''
         # get all of the teams this profile is a member of
         teams = [m.team for m in self.membership_set]
         if len(teams) == 0:
@@ -231,6 +233,7 @@ class Profile(db.Model):
                         # is not already there (avoid duplicates)
                         esteemed_colleagues.append(mem.profile)
         return esteemed_colleagues
+        '''
 
 
 class TaskWeek(db.Model):
@@ -428,23 +431,6 @@ class Message(db.Model):
         # use the astimezone method to convert the timezone aware datetime
         # to EST timezone (as defined by our EstTzinfo class)
         return created_utc_aware.astimezone(TZINFOS['est'])
-
-class Membership(db.Model):
-    profile = db.ReferenceProperty(Profile)
-    team = db.ReferenceProperty(Team)
-
-    @classmethod
-    def find_by_profile_and_team(klass, prof, t):
-        # start with all users
-        mem_q = klass.all()
-        mem_q.filter("profile = ", prof)
-        mem_q.filter("team = ", t)
-        # fetch and return one match (or None)
-        matches = mem_q.fetch(1)
-        if len(matches) != 0:
-            return matches[0]
-        else:
-            return None
 
 class Network(db.Model):
     name = db.StringProperty()
