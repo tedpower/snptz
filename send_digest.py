@@ -61,10 +61,7 @@ Here's what your esteemed colleagues are up to this week:
                         "colleague_tasks": prof_tasks}
     return personalized_digest_plaintext
 
-# XXX TODO this is for testing purposes. change to models.Profile.all() for production
-user_list = []
-user_list.append(models.Profile.find_by_email('evanmwheeler@gmail.com'))
-user_list.append(models.Profile.find_by_email('tedpower@gmail.com'))
+user_list = models.Profile.all()
 
 for user in user_list:
 
