@@ -115,6 +115,13 @@ $(document).ready(function(){
                });
         event.preventDefault();
     });
+
+    function refreshSidebar(){
+        var $sidebar = $("#sidebar");
+        $.get("/sidebar", function(data) {
+            $sidebar.replaceWith(data);
+        });
+    };
         
     // Add the event listeners for the main edit stuff
     hookupAjaxEdit();
@@ -177,6 +184,24 @@ $(document).ready(function(){
                     }, 1500);
                });
         event.preventDefault();
+        refreshSidebar();
+        showMain();
+    });
+    // TODO DRY!
+    $("#editteamSubmit").click(function(event){
+        $.post("/team/new/wtf",
+               {newteamname:$('#teamname').val(),
+               colleagues:$('#new-colleagues').val()},
+               function(data){
+                   $("#notifications").html(data);
+                   $('#notifications').addClass('notificationShow');
+                   setTimeout(function(){
+                       $('#notifications').removeClass('notificationShow');
+                    }, 1500);
+               });
+        event.preventDefault();
+        refreshSidebar();
+        showMain();
     });
     $("#teams :checkbox").click(function(event){
         $.post("/team/toggle/wtf",
@@ -201,6 +226,7 @@ $(document).ready(function(){
                     }, 1500);
                });
         event.preventDefault();
+        refreshSidebar();
     });
     $(".declineInviteLink").click(function(event){
         $.post("/team/decline/wtf",
@@ -213,5 +239,6 @@ $(document).ready(function(){
                     }, 1500);
                });
         event.preventDefault();
+        refreshSidebar();
     });
 });
