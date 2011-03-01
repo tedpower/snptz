@@ -155,7 +155,7 @@ Otherwise, we hope you will continue using SNPTZ on the web.
             sender='SNPTZ <weekly@snptz.com>',
             to=user.email,
             reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
-            subject='You have unsubscribed to SNPTZ weekly emails :(',
+            subject='You have unsubscribed to SNPTZ weekly emails',
             body= unsub_template % {"username": user.first_name})
 
             message.send()
