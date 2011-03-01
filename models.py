@@ -363,7 +363,7 @@ class Invitation(db.Model):
         team_invite_template = '''
 Hi,
 
-Your esteemed colleague %s(inviter)s has invited you
+Your esteemed colleague %(inviter)s has invited you
 to join the '%(team)s' team on SNPTZ.
 
 Visit http://snptz.com to accept the invitation.

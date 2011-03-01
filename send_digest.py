@@ -2,6 +2,7 @@
 # vim: ai ts=4 sts=4 et sw=4 coding=utf-8
 
 import logging
+import time
 import datetime
 import random
 from google.appengine.api import mail
@@ -61,10 +62,7 @@ Here's what your esteemed colleagues are up to this week:
                         "colleague_tasks": prof_tasks}
     return personalized_digest_plaintext
 
-# XXX TODO this is for testing purposes. change to models.Profile.all() for production
-user_list = []
-user_list.append(models.Profile.find_by_email('evanmwheeler@gmail.com'))
-user_list.append(models.Profile.find_by_email('tedpower@gmail.com'))
+user_list = models.Profile.all()
 
 for user in user_list:
 
@@ -89,3 +87,10 @@ for user in user_list:
         body=digest_message_body)
 
         digest.send()
+        # as far as i can tell from http://code.google.com/appengine/docs/quotas.html#Mail
+        # up to 8 email recipients per minute is free.
+        # 60 seconds / 8 recipients = 7.5 seconds between each
+        # so, sleep for 8 seconds after sending
+        # before continuing in the for loop
+        # TODO maybe using task queue is better?
+        time.sleep(8)

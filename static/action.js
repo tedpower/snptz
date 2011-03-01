@@ -217,7 +217,7 @@ $(document).ready(function(){
     });
     $(".acceptInviteLink").click(function(event){
         $.post("/team/join/wtf",
-               {invitekey:$(this).parent().attr('id')},
+               {invitekey:$(this).parent().parent().attr('id')},
                function(data){
                    $("#notifications").html(data);
                    $('#notifications').addClass('notificationShow');
@@ -230,7 +230,7 @@ $(document).ready(function(){
     });
     $(".declineInviteLink").click(function(event){
         $.post("/team/decline/wtf",
-               {invitekey:$(this).parent().attr('id')},
+               {invitekey:$(this).parent().parent().attr('id')},
                function(data){
                    $("#notifications").html(data);
                    $('#notifications').addClass('notificationShow');

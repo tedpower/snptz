@@ -166,22 +166,37 @@ em {
     padding-top: 51px;
     text-align: left;
     -webkit-box-shadow: 0 1px 0 rgba(0,0,0,.16);
+	min-height: 240px;
 }
 
 #taskWrapper {
     -webkit-box-shadow: -1px 0 0 rgba(0,0,0,.1);
     width: @contentWidth - @sidebarWidth - (2 * @paddingWidth);
+	float:left;
+	background-color: #FFF;
 }
 
 #sidebar {
     width: @sidebarWidth;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
     background-color: #F5F5F5;
     padding: 71px 20px 20px 20px;
     -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), 1px 0 0 rgba(0,0,0,.1);
+}
+
+.sidebarChunk {
+	padding-bottom: 10px;
+}
+
+.sidebarChunk em {
+	text-transform: uppercase;
+}
+
+.sidebarChunk ul {
+	list-style:none;
 }
 
 #thisWeek {
@@ -246,6 +261,19 @@ em {
     border: 1px solid gray;
     color: gray;
     cursor: text;
+}
+
+#teamformLink {
+	background-color: #DCDCDC;
+	display:block;
+	padding: 8px;
+	text-align: center;
+	margin-top: 8px;
+	color: black;
+}
+
+#teamformLink:hover {
+	background-color: #C4C4C4;
 }
 
 /* Signup styles
