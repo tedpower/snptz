@@ -65,6 +65,8 @@ Here's what your esteemed colleagues are up to this week:
 user_list = models.Profile.all()
 
 for user in user_list:
+    if not user.weekly_email:
+        continue
 
     # get a list of this user's esteemed_colleagues
     esteemed_colleagues = user.esteemed_colleagues
