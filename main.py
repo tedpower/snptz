@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # vim: ai ts=4 sts=4 et sw=4 coding=utf-8
 
+from google.appengine.api import mail
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -218,7 +219,15 @@ class Sidebar(webapp.RequestHandler):
 
 class SendMail(webapp.RequestHandler):
     def post(self):
-        self.request.get('message').send()
+        params = dict()
+        params.update({'sender': self.request.get('sender')})
+        params.update({'to': self.request.get('to')})
+        params.update({'reply_to': self.request.get('reply_to')})
+        params.update({'subject': self.request.get('subject')})
+        params.update({'body': self.request.get('body')})
+        params.update({'html': self.request.get('html')})
+        message = mail.EmailMessage(**params)
+        message.send()
 
     def get(self):
         post(self)

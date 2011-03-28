@@ -138,12 +138,11 @@ for user in user_list:
         personalized_html_message = first_time_html % {"username": first_name}
         personalized_plaintext_message = first_time_plaintext % {"username": first_name}
 
-    message = mail.EmailMessage(
-      sender='SNPTZ <weekly@snptz.com>',
-      to=user.email,
-      reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
-      subject='SNPTZ for %s' % datetime.datetime.now().strftime("%b %d"),
-      body=personalized_plaintext_message,
-      html=personalized_html_message)
+    sender='SNPTZ <weekly@snptz.com>'
+    to=user.email
+    reply_to='SNPTZ <mail@snptzapp.appspotmail.com>'
+    subject='SNPTZ for %s' % datetime.datetime.now().strftime("%b %d")
+    body=personalized_plaintext_message
+    html=personalized_html_message
 
-    taskqueue.add(url='/sendmail', params={'message': message})
+    taskqueue.add(url='/sendmail', params={'sender': sender,'to': to,'reply_to': reply_to,'subject': subject,'html':personalized_html_message,'body': personalized_plaintext_message})

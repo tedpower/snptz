@@ -81,12 +81,11 @@ for user in user_list:
         # construct a personalized message body
         digest_message_body = construct_digest(nick, esteemed_colleagues)
 
-        digest = mail.EmailMessage(
-        sender='SNPTZ <weekly@snptz.com>',
-        to=user.email,
-        reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
+        sender='SNPTZ <weekly@snptz.com>'
+        to=user.email
+        reply_to='SNPTZ <mail@snptzapp.appspotmail.com>'
         # TODO make the subject of the email include the date
-        subject='SNPTZ Esteemed Colleagues digest for %s' % datetime.datetime.now().strftime("%b %d"),
-        body=digest_message_body)
+        subject='SNPTZ Esteemed Colleagues digest for %s' % datetime.datetime.now().strftime("%b %d")
+        body=digest_message_body
 
-        taskqueue.add(url='/sendmail', params={'message': digest})
+        taskqueue.add(url='/sendmail', params={'sender': sender,'to': user.email,'reply_to': reply_to,'subject': subject,'body': digest_message_body})

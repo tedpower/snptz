@@ -1,7 +1,7 @@
 cron:
 - description: Weekly reminders
   url: /qreminders
-  schedule: every monday 13:05
+  schedule: every monday 09:00
   timezone: America/New_York
 
 - description: Weekly digests
