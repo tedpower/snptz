@@ -145,11 +145,4 @@ for user in user_list:
       body=personalized_plaintext_message,
       html=personalized_html_message)
 
-    message.send()
-    # as far as i can tell from http://code.google.com/appengine/docs/quotas.html#Mail
-    # up to 8 email recipients per minute is free.
-    # 60 seconds / 8 recipients = 7.5 seconds between each
-    # so, sleep for 8 seconds after sending
-    # before continuing in the for loop
-    # TODO maybe using task queue is better?
-    time.sleep(8)
+    taskqueue.add(url='/sendmail', params={'message': message})

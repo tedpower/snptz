@@ -88,11 +88,4 @@ for user in user_list:
         subject='SNPTZ Esteemed Colleagues digest for %s' % datetime.datetime.now().strftime("%b %d"),
         body=digest_message_body)
 
-        digest.send()
-        # as far as i can tell from http://code.google.com/appengine/docs/quotas.html#Mail
-        # up to 8 email recipients per minute is free.
-        # 60 seconds / 8 recipients = 7.5 seconds between each
-        # so, sleep for 8 seconds after sending
-        # before continuing in the for loop
-        # TODO maybe using task queue is better?
-        time.sleep(8)
+        taskqueue.add(url='/sendmail', params={'message': digest})

@@ -1,10 +1,10 @@
 cron:
-- description: Daily email
-  url: /scheduledtask
-  schedule: every monday 9:00
+- description: Weekly reminders
+  url: /qreminders
+  schedule: every monday 13:05
   timezone: America/New_York
 
-- description: test digest
-  url: /testdigest
+- description: Weekly digests
+  url: /qdigests
   schedule: every monday 16:00
   timezone: America/New_York

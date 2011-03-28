@@ -10,12 +10,16 @@ handlers:
 - url: /_ah/mail/.+
   script: receive_mail.py
 
-- url: /scheduledtask
-  script: send_mail.py
+- url: /qreminders
+  script: queue_reminders.py
   login: admin
 
-- url: /testdigest
-  script: send_digest.py
+- url: /qdigests
+  script: queue_digests.py
+  login: admin
+
+- url: /sendmail
+  script: main.py
   login: admin
 
 - url: /signup

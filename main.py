@@ -216,6 +216,13 @@ class Sidebar(webapp.RequestHandler):
         teams = [m.team for m in profile.membership_set]
         return self.response.out.write(template.render('templates/partials/sidebar.html', {'profile':profile, 'teams':teams}))
 
+class SendMail(webapp.RequestHandler):
+    def post(self):
+        self.request.get('message').send()
+
+    def get(self):
+        post(self)
+
 def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;
     user = users.get_current_user()
@@ -267,6 +274,7 @@ application = webapp.WSGIApplication([
    ('/settings', Settings),
    ('/teamform', Teamform),
    ('/sidebar', Sidebar),
+   ('/sendmail', SendMail),
    ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),
