@@ -8,7 +8,7 @@
 <!-- Empty div for notifications -->
 <div id="notifications"></div>
 
-<div id="main" {% ifnotequal current_page "main" %} style="display:none;" {% endifnotequal %}>
+<div id="main" {% ifnotequal current_page "main" %} style="display:none;" {% endifnotequal %} class="clearfix">
     {% include "partials/profile.html" %}
     {% include "partials/sidebar.html" %}
 </div>

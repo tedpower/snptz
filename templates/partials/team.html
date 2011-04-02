@@ -2,16 +2,14 @@
     <h1>{{ team.name }}</h1>
         <em>Keeping esteemed colleagues in the loop since {{ team.created|date:"M j" }}</em>
     {% for member in team.membership_set %}
-        {% ifnotequal member.profile.name profile.name %}
-            <div>
-                <a href="/colleague/{{ member.profile.get_nickname}}">{{ member.profile.name }}</a>
-                <ul>
-                    {% for t in member.profile.this_weeks_tw.optimistic %}
-                        <li>{{ t }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endifnotequal %}
+	<div>
+	    <a href="/colleague/{{ member.profile.get_nickname}}">{{ member.profile.name }}</a>
+	    <ul>
+		{% for t in member.profile.this_weeks_tw.optimistic %}
+		    <li>{{ t }}</li>
+		{% endfor %}
+	    </ul>
+	</div>
     {% endfor %}
     <h1>Invite colleagues to join team {{ team.name }}</h1>
 

@@ -2,6 +2,8 @@
 # vim: ai ts=4 sts=4 et sw=4 coding=utf-8
 import os
 import logging
+
+from google.appengine.api import mail
 from google.appengine.api import users
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -194,6 +196,21 @@ class Network(webapp.RequestHandler):
             new_pc = models.PendingConfirmation.send_confirmation(email, profile, network)
             self.response.out.write("Confirmation email has been sent to %s" % email)
 
+class SendMail(webapp.RequestHandler):
+    def post(self):
+        params = dict()
+        params.update({'sender': self.request.get('sender')})
+        params.update({'to': self.request.get('to')})
+        params.update({'reply_to': self.request.get('reply_to')})
+        params.update({'subject': self.request.get('subject')})
+        params.update({'body': self.request.get('body')})
+        params.update({'html': self.request.get('html')})
+        message = mail.EmailMessage(**params)
+        message.send()
+
+    def get(self):
+        post(self)
+
 def renderMainPage(handler, selectedPage, **kwargs):
     current_page = selectedPage;
     user = users.get_current_user()
@@ -235,6 +252,8 @@ application = webapp.WSGIApplication([
    ('/network/join', Network),
    ('/confirm/([^/]+)', Confirm),
    ('/sidebar', Sidebar),
+   ('/sendmail', SendMail),
+   ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),
    ('/colleague/([^/]+)', Colleague)],

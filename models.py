@@ -216,8 +216,8 @@ class Profile(db.Model):
 
     @property
     def esteemed_colleagues(self):
-        return []
-        '''
+        ''' Return a list of profiles for users that share
+            membership in this user's teams (not including this user).'''
         # get all of the teams this profile is a member of
         teams = [m.team for m in self.membership_set]
         if len(teams) == 0:
@@ -233,7 +233,6 @@ class Profile(db.Model):
                         # is not already there (avoid duplicates)
                         esteemed_colleagues.append(mem.profile)
         return esteemed_colleagues
-        '''
 
 
 class TaskWeek(db.Model):
@@ -559,7 +558,7 @@ SNPTZ
         team_invite_template = '''
 Hi,
 
-Your esteemed colleague %s(inviter)s has invited you
+Your esteemed colleague %(inviter)s has invited you
 to join the '%(team)s' team on SNPTZ.
 
 Visit http://snptz.com to accept the invitation.

@@ -2,9 +2,11 @@
 # vim: ai ts=4 sts=4 et sw=4 coding=utf-8
 
 import logging
+import time
 import datetime
 import random
 from google.appengine.api import mail
+from google.appengine.api import taskqueue
 from google.appengine.api import users
 from google.appengine.ext import db
 import models
@@ -61,12 +63,11 @@ Here's what your esteemed colleagues are up to this week:
                         "colleague_tasks": prof_tasks}
     return personalized_digest_plaintext
 
-# XXX TODO this is for testing purposes. change to models.Profile.all() for production
-user_list = []
-user_list.append(models.Profile.find_by_email('evanmwheeler@gmail.com'))
-user_list.append(models.Profile.find_by_email('tedpower@gmail.com'))
+user_list = models.Profile.all()
 
 for user in user_list:
+    if not user.weekly_email:
+        continue
 
     # get a list of this user's esteemed_colleagues
     esteemed_colleagues = user.esteemed_colleagues
@@ -80,12 +81,11 @@ for user in user_list:
         # construct a personalized message body
         digest_message_body = construct_digest(nick, esteemed_colleagues)
 
-        digest = mail.EmailMessage(
-        sender='SNPTZ <weekly@snptz.com>',
-        to=user.email,
-        reply_to='SNPTZ <mail@snptzapp.appspotmail.com>',
+        sender='SNPTZ <weekly@snptz.com>'
+        to=user.email
+        reply_to='SNPTZ <mail@snptzapp.appspotmail.com>'
         # TODO make the subject of the email include the date
-        subject='SNPTZ Esteemed Colleagues digest for %s' % datetime.datetime.now().strftime("%b %d"),
-        body=digest_message_body)
+        subject='SNPTZ Esteemed Colleagues digest for %s' % datetime.datetime.now().strftime("%b %d")
+        body=digest_message_body
 
-        digest.send()
+        taskqueue.add(url='/sendmail', params={'sender': sender,'to': user.email,'reply_to': reply_to,'subject': subject,'body': digest_message_body})
