@@ -212,7 +212,7 @@ class SendMail(webapp.RequestHandler):
         post(self)
 
 def renderMainPage(handler, selectedPage, **kwargs):
-    current_page = selectedPage;
+    current_page = selectedPage
     user = users.get_current_user()
     profile = models.Profile.get_by_key_name(user.user_id())
     
@@ -253,7 +253,6 @@ application = webapp.WSGIApplication([
    ('/confirm/([^/]+)', Confirm),
    ('/sidebar', Sidebar),
    ('/sendmail', SendMail),
-   ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),
    ('/colleague/([^/]+)', Colleague)],
