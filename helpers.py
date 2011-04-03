@@ -27,6 +27,7 @@ def extract_tags(text):
     if matches is not None:
         for match in matches:
             tag_list.append(match)
-        t_no_tags, num = re.subn(tag_pattern, "", t)
-        return t_no_tags.strip(), tag_list
+#        t_no_tags, num = re.subn(tag_pattern, "", t)
+#        return t_no_tags.strip(), tag_list
+        return t, tag_list
     return t, tag_list
