@@ -102,6 +102,8 @@ class Taskweek(webapp.RequestHandler):
         if params.has_key('twkey'):
             tw_key = params['twkey']
 
+        edited = self.request.get('twedit')
+
         tw_attr = tw_type
 
         taskweek = models.TaskWeek.get(tw_key)
@@ -109,39 +111,7 @@ class Taskweek(webapp.RequestHandler):
             logging.info('OOPS. TASKWEEK FOR EDITING NOT FOUND')
             self.response.out.write("Oops. FAIL!")
         else:
-            # lists for keeping track of tasks (task text) and tags
-            tasks = list()
-            tags = list()
-            for k, v in params.iteritems():
-                if k == 'twkey':
-                    continue
-                # split GET parameter keys on '-'
-                id = k.split('-')
-                if len(id) == 2:
-                    # if id is split into two, we have a task like: 'task-4'
-                    # so add a tuple to the tasks list like: (4, 'text of task 4')
-                    tasks.append((id[1], v))
-                if len(id) == 4:
-                    # if id is split into four, we have a tag like: 'task-4-tag-2'
-                    # so add a tuple to the tags list like: (4, (2, 'tag 2 text'))
-                    tags.append((id[1], (id[3], v)))
-
-            # TODO this is a dodgy hack because i didn't feel like refactoring
-            # Taskweek.update_tasklist_tasks to accept tags as separate parameter
-            # ... instead i'm tacking on all the tags to the text of the task
-            # so its formatted as if it were coming from an email
-            # e.g., 'this is my task text [one tag, two tag]'
-            edited_as_lines = list()
-            for task in tasks:
-                line = task[1]
-                line_tags = ' ['
-                for tag in tags:
-                    if tag[0] == task[0]:
-                        if not tag[1][1] == '':
-                            line_tags = line_tags + tag[1][1] + ','
-                line_tags = line_tags + ']'
-                line = line + line_tags
-                edited_as_lines.append(line)
+            edited_as_lines = [l.strip() for l in edited.splitlines()]
             taskweek.update_tasklist_tasks(tw_attr, edited_as_lines)
             taskweek.put()
             self.get(tw_type, tw_key)

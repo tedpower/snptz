@@ -2,31 +2,13 @@
     <div class="plans">
         <ul>
             {% for tuple in taskweek.realistic_as_tuples %}
-                <li>{{ tuple.0 }}
-                    {% if tuple.1 %}
-                    <span class="tags" style="color: red; font-size: 50%;">
-                        {% for tag in tuple.1 %}
-                            <span class="tag">
-                            {{ tag }}
-                            </span>
-                        {% endfor %}
-                    {% endif %}
-                    </span>
-                </li>
+                <li>{{ tuple.0 }}</li>
             {% endfor %}
         </ul>
     </div>
     <div class="edit" style="display:none;">
         <form id="{{ taskweek.get_key }}" action="/taskweek/update/realistic" method="post">
-            {% for tuple in taskweek.realistic_as_tuples %}
-                <input type="text" id="task-{{ forloop.counter }}"value="{{ tuple.0 }}"/>
-                    {% if tuple.1 %}
-                        {% for tag in tuple.1 %}
-                            <input type="text" id="task-{{ forloop.parentloop.counter }}-tag-{{ forloop.counter }}" value="{{ tag }}"/>
-                        {% endfor %}
-                    {% endif %}
-                <br/>
-            {% endfor %}
+            <textarea rows="{{ taskweek.realistic|length }}">{{ taskweek.realistic_as_str }}</textarea>
             <input type="submit" class="submit_realistic" value="Update"/>
             <input type="submit" class="cancel" value="Cancel"/>
         </form>

@@ -144,11 +144,8 @@ $(document).ready(function(){
             var $planWrap = $(this).parent().parent().parent();
             var params = {}
             params.twkey = $(this).parent().attr('id');
+            params.twedit = $(this).parent().children("textarea").val();
 
-            var textInputs = $(this).parent().children("input:text");
-            $.each(textInputs, function(index, item) {
-                params[item.id] = item.value;
-            });
             $.post("/taskweek/update/optimistic",
                    params,
                    function(data){

@@ -13,37 +13,19 @@
         </div>
         <div class="planWrap">
             <div class="plans">
-                {% if profile.this_weeks_tw.optimistic_as_tuples|length_is:"0" %}
+                {% if profile.this_weeks_tw.optimistic|length_is:"0" %}
                     <div class="emptyWeek">This week I'm gonna...</div>
                 {% else %}
                 <ul>
                     {% for tuple in profile.this_weeks_tw.optimistic_as_tuples %}
-                        <li><span class="task-text">{{ tuple.0 }}</span>
-                            {% if tuple.1 %}
-                            <span class="tags" style="color: red; font-size: 50%;">
-                                {% for tag in tuple.1 %}
-                                    <span class="tag">
-                                    <a class="tag-link" href="/tag/{{ tag }}">{{ tag }}</a>
-                                    </span>
-                                {% endfor %}
-                            {% endif %}
-                            </span>
-                        </li>
+                        <li><span class="task-text">{{ tuple.0 }}</span></li>
                     {% endfor %}
                 </ul>
                 {% endif %}
             </div>
             <div class="edit" style="display:none;">
                 <form id="{{ profile.this_weeks_tw.get_key }}" action="/taskweek/update/optimistic" method="post">
-                    {% for tuple in profile.this_weeks_tw.optimistic_as_tuples %}
-                        <input type="text" id="task-{{ forloop.counter }}"value="{{ tuple.0 }}"/>
-                            {% if tuple.1 %}
-                                {% for tag in tuple.1 %}
-                                    <input type="text" id="task-{{ forloop.parentloop.counter }}-tag-{{ forloop.counter }}" value="{{ tag }}"/>
-                                {% endfor %}
-                            {% endif %}
-                        <br/>
-                    {% endfor %}
+                    <textarea rows="{{ profile.this_weeks_tw.optimistic|length }}">{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
                     <input type="submit" class="submit_optimistic" value="Update"/>
                     <input type="submit" class="cancel" value="Cancel"/>
                 </form>
@@ -61,31 +43,13 @@
                         <div class="plans">
                             <ul>
                                 {% for tuple in tw.optimistic_as_tuples %}
-                                    <li>{{ tuple.0 }}
-                                        {% if tuple.1 %}
-                                        <span class="tags" style="color: red; font-size: 50%;">
-                                            {% for tag in tuple.1 %}
-                                                <span class="tag">
-                                                {{ tag }}
-                                                </span>
-                                            {% endfor %}
-                                        {% endif %}
-                                        </span>
-                                    </li>
+                                    <li>{{ tuple.0 }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
                         <div class="edit" style="display:none;">
                             <form id="{{ tw.get_key }}" action="/taskweek/update/optimistic" method="post">
-                                {% for tuple in tw.optimistic_as_tuples %}
-                                    <input type="text" id="task-{{ forloop.counter }}"value="{{ tuple.0 }}"/>
-                                        {% if tuple.1 %}
-                                            {% for tag in tuple.1 %}
-                                                <input type="text" id="task-{{ forloop.parentloop.counter }}-tag-{{ forloop.counter }}" value="{{ tag }}"/>
-                                            {% endfor %}
-                                        {% endif %}
-                                    <br/>
-                                {% endfor %}
+                                <textarea rows="{{ profile.this_weeks_tw.optimistic|length }}">{{ profile.this_weeks_tw.optimistic_as_str }}</textarea>
                                 <input type="submit" class="submit_optimistic" value="Update"/>
                                 <input type="submit" class="cancel" value="Cancel"/>
                             </form>
@@ -99,37 +63,19 @@
                     </div>
                     <div class="planWrap">
                         <div class="plans">
-                            {% if forloop.first and tw.realistic_as_tuples|length_is:"0" %}
+                            {% if forloop.first and tw.realistic_as_str|length_is:"0" %}
                                     <div class="emptyWeek">Last week I...</div>
                             {% else %}
                             <ul>
                                 {% for tuple in tw.realistic_as_tuples %}
-                                    <li>{{ tuple.0 }}
-                                        {% if tuple.1 %}
-                                        <span class="tags" style="color: red; font-size: 50%;">
-                                            {% for tag in tuple.1 %}
-                                                <span class="tag">
-                                                {{ tag }}
-                                                </span>
-                                            {% endfor %}
-                                        {% endif %}
-                                        </span>
-                                    </li>
+                                    <li>{{ tuple.0 }}</li>
                                 {% endfor %}
                             </ul>
                             {% endif %}
                         </div>
                         <div class="edit" style="display:none;">
                             <form id="{{ tw.get_key }}" action="/taskweek/update/realistic" method="post">
-                                {% for tuple in tw.realistic_as_tuples %}
-                                    <input type="text" id="task-{{ forloop.counter }}"value="{{ tuple.0 }}"/>
-                                        {% if tuple.1 %}
-                                            {% for tag in tuple.1 %}
-                                                <input type="text" id="task-{{ forloop.parentloop.counter }}-tag-{{ forloop.counter }}" value="{{ tag }}"/>
-                                            {% endfor %}
-                                        {% endif %}
-                                    <br/>
-                                {% endfor %}
+                                <textarea rows="{{ profile.this_weeks_tw.realistic|length }}">{{ profile.this_weeks_tw.realistic_as_str }}</textarea>
                                 <input type="submit" class="submit_realistic" value="Update"/>
                                 <input type="submit" class="cancel" value="Cancel"/>
                             </form>
