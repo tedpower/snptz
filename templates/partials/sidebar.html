@@ -10,27 +10,26 @@
         </div>
         {% endfor %}
 
-    {% if teams %}
+    {% if profile.profile_followings %}
 		<div class="sidebarChunk">
-	        <em>Teams</em>
+	        <em>Esteemed colleagues</em>
 			<ul>
-	        {% for team in teams %}
-	            <li id="team-{{ team.name }}"><a href="/team/show/{{ team.slug }}">{{ team.name }}</a></li>
+	        {% for pfollow in profile.profile_followings %}
+		         <li><a href="/colleague/{{ pfollow.followee.get_nickname }}">{{ pfollow.followee.name }}</a></li>
 	        {% endfor %}
 			</ul>
 		</div>
     {% endif %}
 
-	{% if profile.esteemed_colleagues %}
-		<div class="sidebarChunk">	
-			<em>Esteemed Colleagues</em>
+    {% if profile.tag_followings %}
+		<div class="sidebarChunk">
+	        <em>Tags you follow</em>
 			<ul>
-		    {% for profile in profile.esteemed_colleagues %}
-		         <li><a href="/colleague/{{ profile.get_nickname }}">{{ profile.name }}</a></li>
-		    {% endfor %}
+	        {% for tfollow in profile.tag_followings %}
+		         <li><a href="/tag/{{ tfollow.followee }}">{{ tfollow.followee }}</a></li>
+	        {% endfor %}
 			</ul>
 		</div>
-	{% endif %}
+    {% endif %}
 	
-    <a href="/teamform" id="teamformLink">Create New Team</a>
 </div>
