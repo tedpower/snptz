@@ -5,6 +5,7 @@ from google.appengine.api import memcache
 from google.appengine.api import users
 from google.appengine.api import mail
 from google.appengine.ext import db
+from google.appengine.ext.db import polymodel
 from datetime import datetime, timedelta
 import logging
 import hashlib
@@ -64,6 +65,34 @@ class Team(db.Model):
             return matches[0]
         else:
             return None
+
+    @classmethod
+    def migrate_to_followings(klass):
+        t = klass.all()
+        teams = t.fetch(100)
+        for team in teams:
+            new_tag = team.slug
+            for p in team.membership_set:
+                new_tag_following = Tagfollowing(followee=new_tag, follower=p.profile)
+                tags_already_following = [f.followee for f in p.profile.follower_set]
+                if new_tag_following not in tags_already_following:
+                    new_tag_following.put()
+                for c in team.membership_set:
+                    if c.profile.email != p.profile.email:
+                        if c.profile not in p.profile.follower_set:
+                            profile_following = Profilefollowing(followee=c.profile, follower=p.profile)
+                            profile_following.put()
+
+class Following(polymodel.PolyModel):
+    follower = db.ReferenceProperty(None,
+        collection_name="follower_set")
+
+class Profilefollowing(Following):
+    followee = db.ReferenceProperty(None,
+        collection_name="followed_set")
+
+class Tagfollowing(Following):
+    followee = db.StringProperty()
 
 class Profile(db.Model):
     user = db.UserProperty(auto_current_user_add=True)
@@ -214,9 +243,40 @@ class Profile(db.Model):
         else:
             return results
 
+    # XXX TODO refactor after migration!
     @property
     def esteemed_colleagues(self):
-        return []
+        ''' Return a list of profiles for users that share
+            membership in this user's teams (not including this user).'''
+        # get all of the teams this profile is a member of
+        teams = [m.team for m in self.membership_set]
+        if len(teams) == 0:
+            return None
+        esteemed_colleagues = []
+        for team in teams:
+            # loop through all the members of all the teams
+            for mem in team.membership_set:
+                if mem.profile.email != self.email:
+                    # avoid adding self (by checking if emails are equal)
+                    if mem.profile not in esteemed_colleagues:
+                        # add to esteemed_colleagues if the profile
+                        # is not already there (avoid duplicates)
+                        esteemed_colleagues.append(mem.profile)
+        return esteemed_colleagues
+
+    @property
+    def profile_followings(self):
+        pfq = Profilefollowing.all()
+        pfq.filter("follower = ", self)
+        prof_followings = pfq.fetch(100)
+        return prof_followings
+
+    @property
+    def tag_followings(self):
+        tfq = Tagfollowing.all()
+        tfq.filter("follower = ", self)
+        tag_followings = tfq.fetch(100)
+        return tag_followings
 
 class TaskWeek(db.Model):
     profile = db.ReferenceProperty(Profile)
@@ -414,6 +474,24 @@ class Message(db.Model):
         # to EST timezone (as defined by our EstTzinfo class)
         return created_utc_aware.astimezone(TZINFOS['est'])
 
+# XXX TODO remove after migration!
+class Membership(db.Model):
+    profile = db.ReferenceProperty(Profile)
+    team = db.ReferenceProperty(Team)
+
+    @classmethod
+    def find_by_profile_and_team(klass, prof, t):
+        # start with all users
+        mem_q = klass.all()
+        mem_q.filter("profile = ", prof)
+        mem_q.filter("team = ", t)
+        # fetch and return one match (or None)
+        matches = mem_q.fetch(1)
+        if len(matches) != 0:
+            return matches[0]
+        else:
+            return None
+
 class Network(db.Model):
     name = db.StringProperty()
     slug = db.StringProperty()
@@ -560,3 +638,4 @@ SNPTZ
 
         message.send()
         return invitation
+
