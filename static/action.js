@@ -125,6 +125,13 @@ $(document).ready(function(){
         
     // Add the event listeners for the main edit stuff
     hookupAjaxEdit();
+
+    var tasks = $('.plans ul li');
+    $.each(tasks, function(i, task) {
+        var new_item = "<span class='task-text'>" + task.textContent.hashify() + "</span>";
+        task.innerHTML = new_item;
+    });
+
     
     // Putting this in a function so we can add the listeners to new dom elements
     function hookupAjaxEdit() {
@@ -166,7 +173,7 @@ $(document).ready(function(){
                    });
         event.preventDefault();
         });
-    }
+    };
     
     // This will allow you to close the edit area by clicking the background
     $("#bg").click(function(event){
