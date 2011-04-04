@@ -5,8 +5,8 @@
     </div>
     <div class="colleague-plans">
         <ul>
-            {% for t in colleague.this_weeks_tw.optimistic %}
-                <li>{{ t }}</li>
+            {% for t in colleague.this_weeks_tw.optimistic_as_tuples %}
+                <li>{{ t.0 }}</li>
             {% endfor %}
         </ul>
     </div>
@@ -19,8 +19,8 @@
                 Week of <em>{{ tw.created|date:"M j" }}</em>
             </div>
             <ul>
-                {% for t in tw.optimistic %}
-                    <li>{{ t }}</li>
+                {% for t in tw.optimistic_as_tuples %}
+                    <li>{{ t.0 }}</li>
                 {% endfor %}
             </ul>
         </div>
@@ -29,8 +29,8 @@
                 How'd it go?
             </div>
             <ul>
-                {% for t in tw.realistic %}
-                    <li>{{ t }}</li>
+                {% for t in tw.realistic_as_tuples %}
+                    <li>{{ t.0 }}</li>
                 {% endfor %}
             </ul>
         </div>
