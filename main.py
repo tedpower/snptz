@@ -116,7 +116,113 @@ class Taskweek(webapp.RequestHandler):
             taskweek.put()
             self.get(tw_type, tw_key)
             #self.response.out.write("Yay. Your tasks have been updated.")
+
+# XXX TODO remove after migration!
+class Teamform(webapp.RequestHandler):
+    def get(self):
+        renderMainPage(self, "teamform")
+
+# XXX TODO remove after migration!
+class Team(webapp.RequestHandler):
+    def get(self, verb, team_slug):
+        assert (verb == "show"), "GET verb is not show: %s" % `verb`
+        team = models.Team.find_by_slug(team_slug)
+        # if team is None, give 'em a 404
+        if team is None:
+            self.redirect("/404")
+        renderMainPage(self, "team", team=team)
+
+    def post(self, verb, team_slug):
+        assert (verb in ["new", "toggle", "join", "decline", "leave"]), "POST verb is not supported: %s" % `verb`
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
         
+        if verb == "new":
+            # if user is creating a new team...
+            team_name = self.request.get('newteamname')
+            emails_to_invite = self.request.get('colleagues')
+            logging.info(emails_to_invite)
+            list_of_emails = [l.strip() for l in emails_to_invite.split(',')]
+            logging.info(list_of_emails)
+            if team_name not in [None, '', ' ']:
+                # see if team already exists
+                team = models.Team.find_by_name(team_name)
+                if team is not None:
+                    memberships_teams_keys = [m.team.key() for m in profile.membership_set]
+                    # don't allow user to invite others to the team
+                    # if they are not a member of the team
+                    if team.key() not in memberships_teams_keys:
+                        self.response.out.write("Oops. That team name is already taken.")
+                        return
+                if team is None:
+                    # create new team
+                    team = models.Team(name=team_name)
+                    # make a slug from the supplied team name
+                    team.slug = helpers.slugify(team_name)
+                    team.put()
+                    # create a new membership for the user
+                    membership = models.Membership(team=team, profile=profile)
+                    membership.put()
+                for email in list_of_emails:
+                    logging.info(email)
+                    invite = models.Invitation.invite_colleague(team,\
+                        profile, email)
+                    logging.info(invite)
+
+                self.response.out.write("Invitations sent for team '%s'" % team.name)
+
+        # TODO get rid of toggle in favor of "leave"
+        if verb == "toggle":
+            # get the user's team memberships
+            memberships = profile.membership_set
+            # get a list of keys of the teams user has membership in
+            memberships_teams_keys = [m.team.key() for m in memberships]
+
+            team_slug = self.request.get('teamslug')
+            team = models.Team.find_by_slug(team_slug)
+            if team.key() not in memberships_teams_keys:
+                new_member = models.Membership(team=team, profile=profile)
+                new_member.put()
+                self.response.out.write("You are now a member of %s" % team.name)
+            else:
+                if team.key() in memberships_teams_keys:
+                    old_membership = models.Membership.find_by_profile_and_team(profile, team)
+                    if old_membership is not None:
+                        old_membership.delete()
+                        self.response.out.write("You are no longer a member of %s" % team.name)
+
+        if verb in ["join", "decline"]:
+            # get the user's invitations
+            invitations = profile.pending_invitation_set
+            if invitations is None:
+                self.response.out.write("Oops. Can't find any pending invitations.")
+            else:
+                invitations_teams_keys = [i.team.key() for i in invitations]
+
+            # get the user's team memberships
+            memberships = profile.membership_set
+            # get a list of keys of the teams user has membership in
+            memberships_teams_keys = [m.team.key() for m in memberships]
+
+            invitation = models.Invitation.get(self.request.get('invitekey'))
+            if invitation is not None:
+                team = invitation.team
+                if team.key() not in memberships_teams_keys:
+                    if team.key() in invitations_teams_keys:
+                        if verb == "join":
+                            new_member = models.Membership(team=team, profile=profile)
+                            new_member.put()
+                            #self.response.out.write("You are now a member of %s" % team.name)
+                            self.redirect("/team/show/%s" % team.slug)
+                        else:
+                            self.response.out.write("You declined invitation to %s" % team.name)
+                            # TODO sidebar should be reloaded to get rid of accept/decline links
+                        invitation.delete()
+                    else:
+                        self.response.out.write("Oops. Can't find a pending invitation for %s" % team.name)
+                else:
+                    self.response.out.write("Oops. You are already a member of %s" % team.name)
+
 class Sidebar(webapp.RequestHandler):
     def get(self):
         user = users.get_current_user()
@@ -223,6 +329,7 @@ application = webapp.WSGIApplication([
    ('/confirm/([^/]+)', Confirm),
    ('/sidebar', Sidebar),
    ('/sendmail', SendMail),
+   ('/team/([^/]+)/([^/]+)', Team),
    ('/taskweek/show/([^/]+)/([^/]+)', Taskweek),
    ('/taskweek/update/([^/]+)', Taskweek),
    ('/colleague/([^/]+)', Colleague)],
