@@ -2,11 +2,11 @@
 {% block bodycontent %}
 <div id="loggedOut">
     
-    <img src="/static/logoBig.png" width="349" height="100" alt="SNPTZ" id="logoBig">
+	<a href="/"><img src="/static/logoBig.png" width="349" height="100" alt="SNPTZ" id="logoBig"></a>
     
     {% ifnotequal loginURL None %}
 		<p><a href="/signup">Sign Up</a> or <a href="{{ loginURL }}">Sign In</a></p>
 	{% endifnotequal %}
-	<img src="../static/screenshots.png" width="600" height="372" alt="Screenshots" style="padding-top: 40px;">
+	<a href="/"><img src="../static/screenshots.png" width="600" height="372" alt="Screenshots" style="padding-top: 40px;"></a>
 </div>
 {% endblock %}

@@ -49,3 +49,4 @@ em{font-weight:bold;font-style:normal;}
 h1{font-size:24px;font-weight:bold;}
 h2{font-weight:bold;}
 .clearfix:after{content:".";display:block;clear:both;visibility:hidden;line-height:0;height:0;}
+.message{font-size:200%;color: #FF4229;border: 1px solid #FF4229;background: #FFFFFF;padding: 1em;}

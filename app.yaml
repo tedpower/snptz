@@ -33,6 +33,10 @@ handlers:
   script: main.py
   login: required
 
+- url: /account/delete
+  script: main.py
+  login: required
+
 - url: /info
   script: main.py
   login: required

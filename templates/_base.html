@@ -25,7 +25,9 @@
 
 </head>
 <body>
-
+		{% if message %}
+			<div class="message"><p>{{ message }}</p></div>
+		{% endif %}
     {% block bodycontent %}
     {% endblock %}
     

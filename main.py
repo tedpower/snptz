@@ -60,7 +60,17 @@ class Settings(webapp.RequestHandler):
         profile.weekly_email = self.request.get('weeklyEmailsToggle', '').lower() in ['true', 'yes', 't', '1', 'on', 'checked']
         profile.timezone = self.request.get('timezone')
         profile.put()
-        self.response.out.write("Your settings have been saved")        
+        self.response.out.write("Your settings have been saved")
+
+class DeleteAccount(webapp.RequestHandler):
+    def post(self):
+        user = users.get_current_user()
+        profile = models.Profile.get_by_key_name(user.user_id())
+        if profile:
+            profile.delete()
+            self.response.out.write(template.render('templates/index.html', {'message': 'Your profile has been deleted'}))
+        else:
+            self.redirect("/404")
 
 class Taskweek(webapp.RequestHandler):
 
@@ -281,6 +291,7 @@ application = webapp.WSGIApplication([
    ('/', MainPage),
    ('/info', Info),
    ('/settings', Settings),
+   ('/account/delete', DeleteAccount),
    ('/teamform', Teamform),
    ('/sidebar', Sidebar),
    ('/sendmail', SendMail),

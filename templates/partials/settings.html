@@ -54,4 +54,6 @@
 </form>
 -->
 
-<div class="settingsChunk"><a href="#">Delete account</a> (this cannot be undone)</div>
+<form action="/account/delete" method="post">
+	<div class="settingsChunk"><input type="submit" id="deleteAccount" value="Delete account" onclick="return confirm('This will permanently delete your profile. Are you sure you want to proceed?');">(this cannot be undone)</div>
+</form>
